@@ -6,7 +6,11 @@ import Link from "next/link";
 export const revalidate = 3600; // Revalidate every hour
 
 export default async function Home() {
-  const posts = await getPublishedPosts();
+  const posts = (await getPublishedPosts()).filter((post) => {
+    const slug = post.slug?.toLowerCase?.() ?? "";
+    const title = post.name?.toLowerCase?.() ?? "";
+    return !slug.includes("about") && !title.includes("about");
+  });
   const featuredPosts = posts.filter((post) => post.featured).slice(0, 3);
   const latestPosts = posts.slice(0, 5);
 
@@ -59,14 +63,7 @@ export default async function Home() {
               >
                 <Link href="/articles">Articles</Link>
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                asChild
-                className="border-orange text-orange hover:bg-orange hover:text-white text-[9px] px-1 py-0.5 h-6 min-w-0"
-              >
-                <Link href="/series">Series</Link>
-              </Button>
+              {/* Removed Series button per request */}
             </div>
           </div>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

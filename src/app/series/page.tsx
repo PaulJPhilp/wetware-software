@@ -29,9 +29,9 @@ export default async function SeriesPage() {
     return (
       <main className="max-w-6xl mx-auto px-4 py-8">
         <div className="space-y-8">
-          <div className="space-y-4">
-            <h1 className="text-4xl font-bold text-charcoal">Series</h1>
-            <p className="text-lg text-charcoal/80 max-w-2xl">
+          <div className="space-y-2">
+            <h1 className="text-xl font-sans font-bold text-charcoal leading-tight">Series</h1>
+            <p className="text-xs text-charcoal/80 max-w-2xl leading-snug">
               Deep explorations into complex topics through structured, multi-part series. Each
               series builds understanding progressively, from foundational concepts to advanced
               applications.
@@ -123,9 +123,9 @@ export default async function SeriesPage() {
     return (
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="space-y-8">
-          <div className="space-y-4">
-            <h1 className="text-4xl font-bold text-charcoal">Series</h1>
-            <p className="text-lg text-charcoal/80 max-w-2xl">
+          <div className="space-y-2">
+            <h1 className="text-xl font-sans font-bold text-charcoal leading-tight">Series</h1>
+            <p className="text-xs text-charcoal/80 max-w-2xl leading-snug">
               Deep explorations into complex topics through structured, multi-part series.
             </p>
           </div>

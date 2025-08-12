@@ -50,8 +50,10 @@ export default async function AboutPage() {
               <AvatarFallback>PP</AvatarFallback>
             </Avatar>
             <div className="mt-4 space-y-1">
-              <h1 className="text-2xl font-sans font-bold text-charcoal">Paul Philp</h1>
-              <p className="text-sm font-serif text-charcoal/70">
+              <h1 className="text-xl font-sans font-bold text-charcoal leading-tight">
+                Paul Philp
+              </h1>
+              <p className="text-xs font-serif text-charcoal/70 leading-snug">
                 Software/AI Engineer, Founder, Executive
               </p>
             </div>
@@ -99,17 +101,19 @@ export default async function AboutPage() {
 
       <div className="space-y-12">
         {/* Header Section (mobile/tablet) */}
-        <section className="lg:hidden text-center space-y-6">
+        <section className="lg:hidden text-center space-y-4">
           <Avatar className="w-32 h-32 mx-auto">
             <AvatarImage src="/images/avatar.jpeg" alt="Paul Philp" />
             <AvatarFallback>PP</AvatarFallback>
           </Avatar>
-          <div className="space-y-3">
-            <h1 className="text-3xl md:text-4xl font-sans font-bold text-charcoal">Paul Philp</h1>
-            <p className="text-lg font-serif text-charcoal/80">
+          <div className="space-y-2">
+            <h1 className="text-xl md:text-2xl font-sans font-bold text-charcoal leading-tight">
+              Paul Philp
+            </h1>
+            <p className="text-sm font-serif text-charcoal/80 leading-snug">
               Software/AI Engineer, Founder, Executive
             </p>
-            <p className="text-base text-charcoal/60 max-w-2xl mx-auto">
+            <p className="text-xs text-charcoal/60 max-w-2xl mx-auto leading-snug">
               Engineering human-AI collaboration at the intersection of complex systems and emerging
               technology
             </p>

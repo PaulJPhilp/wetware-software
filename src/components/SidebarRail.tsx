@@ -27,7 +27,7 @@ export function SidebarRail({ seriesList }: SidebarRailProps) {
   }, [isCollapsed]);
 
   const widthClass = isCollapsed ? "w-5" : "w-32";
-  const iconClass = "h-3 w-3";
+  const iconClass = "h-2 w-2";
 
   // Keyboard shortcut: press "s" to toggle (ignore when typing)
   useEffect(() => {
@@ -50,21 +50,25 @@ export function SidebarRail({ seriesList }: SidebarRailProps) {
         aria-label="Site navigation sidebar"
         data-collapsed={isCollapsed ? "true" : "false"}
       >
-        {/* Toggle handle */}
-        <button
-          type="button"
-          aria-expanded={!isCollapsed}
-          aria-controls="series-sidebar-content"
-          onClick={() => setIsCollapsed((v) => !v)}
-          className="absolute -right-3 top-4 z-10 h-5 w-5 rounded-full border border-silver bg-white shadow-sm flex items-center justify-center hover:text-orange transition-colors"
-          title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {isCollapsed ? (
-            <ChevronsRight className={iconClass} />
-          ) : (
-            <ChevronsLeft className={iconClass} />
-          )}
-        </button>
+        {/* Always-visible compact title row with toggle */}
+        <div className="sticky top-4 z-0 mb-2 h-[14px] flex items-center gap-1 px-1">
+          <h2 className="m-0 p-0 text-[8px] leading-[14px] font-semibold text-charcoal">Series</h2>
+          <span className="text-[6px] leading-[14px] text-charcoal/60">({seriesList.length})</span>
+          <button
+            type="button"
+            aria-expanded={!isCollapsed}
+            aria-controls="series-sidebar-content"
+            onClick={() => setIsCollapsed((v) => !v)}
+            className="ml-auto h-[14px] w-[14px] flex items-center justify-center text-charcoal/80 hover:text-orange focus:outline-none"
+            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {isCollapsed ? (
+              <ChevronsRight className={iconClass} />
+            ) : (
+              <ChevronsLeft className={iconClass} />
+            )}
+          </button>
+        </div>
 
         {/* Content */}
         <div
@@ -73,7 +77,7 @@ export function SidebarRail({ seriesList }: SidebarRailProps) {
           aria-hidden={isCollapsed}
         >
           <div className="sticky top-20 self-start max-h-[calc(100vh-5rem)] overflow-y-auto">
-            <SeriesSidebar seriesList={seriesList} />
+            <SeriesSidebar seriesList={seriesList} showTitle={false} />
           </div>
         </div>
       </aside>
@@ -99,7 +103,15 @@ export function SidebarRail({ seriesList }: SidebarRailProps) {
           aria-modal="true"
           className="md:hidden fixed inset-0 z-50 flex"
         >
-          <div className="absolute inset-0 bg-black/30" onClick={() => setIsMobileOpen(false)} />
+          <button
+            type="button"
+            aria-label="Close sidebar"
+            className="absolute inset-0 bg-black/30"
+            onClick={() => setIsMobileOpen(false)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") setIsMobileOpen(false);
+            }}
+          />
           <div className="relative h-full w-64 max-w-[calc(100vw-3rem)] bg-white border-r border-silver shadow-xl">
             <button
               type="button"

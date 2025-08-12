@@ -15,9 +15,10 @@ export interface Series {
 
 interface SeriesSidebarProps {
   seriesList: Series[];
+  showTitle?: boolean;
 }
 
-export const SeriesSidebar: React.FC<SeriesSidebarProps> = ({ seriesList }) => {
+export const SeriesSidebar: React.FC<SeriesSidebarProps> = ({ seriesList, showTitle = true }) => {
   const [openSeries, setOpenSeries] = useState<Record<string, boolean>>({});
   const [query, setQuery] = useState("");
 
@@ -33,10 +34,12 @@ export const SeriesSidebar: React.FC<SeriesSidebarProps> = ({ seriesList }) => {
 
   return (
     <aside className="w-32">
-      <div className="flex items-center gap-2 mb-3">
-        <h2 className="text-[8px] font-semibold text-charcoal">Series</h2>
-        <span className="ml-auto text-[6px] text-charcoal/60">{seriesList.length}</span>
-      </div>
+      {showTitle && (
+        <div className="flex items-center gap-2 mb-3">
+          <h2 className="text-[8px] font-semibold text-charcoal">Series</h2>
+          <span className="ml-auto text-[6px] text-charcoal/60">{seriesList.length}</span>
+        </div>
+      )}
 
       <label className="relative block mb-3">
         <span className="absolute inset-y-0 left-2 flex items-center text-charcoal/50">

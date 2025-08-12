@@ -1,6 +1,7 @@
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { SidebarRail } from "@/components/SidebarRail";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { firaCode, merriweather, montserrat } from "@/lib/fonts";
 import { getSeriesList } from "@/lib/getSeriesList";
 import type { Metadata } from "next";
@@ -47,17 +48,25 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${montserrat.variable} ${merriweather.variable} ${firaCode.variable}`}
     >
-      <body className="bg-silver text-charcoal font-serif">
-        <Header />
-        <main className="max-w-6xl mx-auto px-2 py-2">
-          <div className="md:grid md:grid-cols-[auto_minmax(0,1fr)] gap-4 md:gap-6 items-start">
-            <SidebarRail seriesList={seriesList} />
-            <div className="w-full min-w-0">{children}</div>
-          </div>
-        </main>
-        <Footer />
+      <body className="font-serif">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Header />
+          <main className="max-w-6xl mx-auto px-2 py-2">
+            <div className="md:grid md:grid-cols-[auto_minmax(0,1fr)] gap-4 md:gap-6 items-start">
+              <SidebarRail seriesList={seriesList} />
+              <div className="w-full min-w-0">{children}</div>
+            </div>
+          </main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
