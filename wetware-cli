@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+
+
+# Resolve the real directory of this script (follow symlinks)
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+  TARGET="$(readlink "$SOURCE")"
+  if [[ "$TARGET" == /* ]]; then
+    SOURCE="$TARGET"
+  else
+    SOURCE="$DIR/$TARGET"
+  fi
+done
+SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+
+if ! command -v bun >/dev/null 2>&1; then
+  echo "Error: bun is required to run wetware-cli. Install from https://bun.sh" 1>&2
+  exit 127
+fi
+
+REPO_DIR="$SCRIPT_DIR"
+cd "$REPO_DIR/cli"
+
+# after REPO_DIR is set
+if [[ -f "$REPO_DIR/.env.local" ]]; then
+  set -a
+  . "$REPO_DIR/.env.local"
+  set +a
+elif [[ -f "$REPO_DIR/env.local" ]]; then
+  set -a
+  . "$REPO_DIR/env.local"
+  set +a
+elif [[ -f "$REPO_DIR/.env" ]]; then
+  set -a
+  . "$REPO_DIR/.env"
+  set +a
+fi
+
+# Prefer local env files; allow overriding via DOTENV_CONFIG_PATH
+if [[ -z "${DOTENV_CONFIG_PATH:-}" ]]; then
+  # Search order (first win): repo/.env.local, repo/env.local, repo/.env,
+  # then cli/.env.local, cli/env.local, cli/.env
+  for CANDIDATE in \
+    "$REPO_DIR/.env.local" \
+    "$REPO_DIR/env.local" \
+    "$REPO_DIR/.env" \
+    "$REPO_DIR/cli/.env.local" \
+    "$REPO_DIR/cli/env.local" \
+    "$REPO_DIR/cli/.env"; do
+    if [[ -f "$CANDIDATE" ]]; then
+      export DOTENV_CONFIG_PATH="$CANDIDATE"
+      break
+    fi
+  done
+fi
+
+exec bun --reload run src/index.ts "$@"
+
+

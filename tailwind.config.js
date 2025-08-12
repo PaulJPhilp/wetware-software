@@ -1,14 +1,19 @@
-// tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: [
-        './pages/**/*.{js,ts,jsx,tsx,mdx}',
-        './components/**/*.{js,ts,jsx,tsx,mdx}',
-        './app/**/*.{js,ts,jsx,tsx,mdx}',
-        './src/**/*.{js,ts,jsx,tsx,mdx}', // Add this line
-    ],
-    theme: {
-        extend: {},
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
+  theme: {
+    extend: {
+      colors: {
+        silver: "#f8f8f8",
+        charcoal: "#212121",
+        orange: "#ff7a00",
+      },
+      fontFamily: {
+        sans: ["Montserrat", "system-ui", "sans-serif"],
+        serif: ["Merriweather", "Georgia", "serif"],
+        mono: ["Fira Code", "monospace"],
+      },
     },
-    plugins: [],
-}
+  },
+  plugins: [],
+};

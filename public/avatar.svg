@@ -1,0 +1,5 @@
+<!-- A simple placeholder avatar SVG -->
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none">
+  <rect width="120" height="120" rx="60" fill="#FF7A00"/>
+  <path d="M60 40C52.268 40 46 46.268 46 54C46 61.732 52.268 68 60 68C67.732 68 74 61.732 74 54C74 46.268 67.732 40 60 40ZM85 80C85 80 85 76 85 76C85 70 79.6 64 69 64L51 64C40.4 64 35 70 35 76C35 76 35 80 35 80H85Z" fill="white"/>
+</svg>

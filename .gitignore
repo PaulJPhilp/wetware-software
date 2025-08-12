@@ -18,6 +18,9 @@ yarn-error.log*
 
 # Biome ignores
 # Biome's own cache
+
+# Environment Variables
+.env*.local
 /.biome/
 
 # Environment variables
@@ -59,3 +62,4 @@ yarn-debug.log*
 
 # Mac specific files
 .DS_Store
+.vercel
