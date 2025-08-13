@@ -59,7 +59,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          <main className="max-w-6xl mx-auto px-2 py-2">
+          <main className="max-w-screen-2xl mx-auto px-4 md:px-6 py-2">
             <div className="md:grid md:grid-cols-[auto_minmax(0,1fr)] gap-4 md:gap-6 items-start">
               <SidebarRail seriesList={seriesList} />
               <div className="w-full min-w-0">{children}</div>

@@ -17,7 +17,7 @@ export default async function EssaysPage() {
     });
 
     return (
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="max-w-6xl xl:max-w-7xl mx-auto px-4 md:px-6 py-8">
         <div className="space-y-8">
           <div className="space-y-2">
             <h1 className="text-xl font-sans font-bold text-charcoal leading-tight">Essays</h1>
