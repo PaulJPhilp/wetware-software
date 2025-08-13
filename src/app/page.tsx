@@ -1,6 +1,6 @@
+import { LatestPosts } from "@/components/LatestPosts";
 import { PostCard } from "@/components/PostCard";
-import { Button } from "@/components/ui/button";
-import { getPublishedPosts } from "@/lib/notion-utils";
+import { getPublishedPosts, getSeries } from "@/lib/notion-utils";
 import Link from "next/link";
 
 export const revalidate = 3600; // Revalidate every hour
@@ -11,8 +11,14 @@ export default async function Home() {
     const title = post.name?.toLowerCase?.() ?? "";
     return !slug.includes("about") && !title.includes("about");
   });
-  const featuredPosts = posts.filter((post) => post.featured).slice(0, 3);
-  const latestPosts = posts.slice(0, 5);
+  const series = await getSeries();
+  const seriesIdToName: Record<string, string> = Object.fromEntries(
+    series.map((s) => [s.id, s.name]),
+  );
+  const postsWithSeriesName = posts.map((p) =>
+    p.seriesId ? { ...p, seriesName: seriesIdToName[p.seriesId] } : p,
+  );
+  const featuredPosts = postsWithSeriesName.filter((post) => post.featured).slice(0, 3);
 
   return (
     <div className="space-y-12 px-2 sm:px-4 md:px-8 min-h-screen">
@@ -36,44 +42,7 @@ export default async function Home() {
           </div>
         )}
 
-        <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-            <div className="space-y-1">
-              <h2 className="text-[11px] font-sans font-bold text-charcoal leading-tight">
-                Latest Posts
-              </h2>
-              <p className="text-[9px] text-charcoal/60 leading-tight">
-                Recent explorations in technology and human systems
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-1 lg:space-x-2 sm:mt-1">
-              <Button
-                variant="outline"
-                size="sm"
-                asChild
-                className="border-orange text-orange hover:bg-orange hover:text-white text-[9px] px-1 py-0.5 h-6 min-w-0"
-              >
-                <Link href="/essays">Essays</Link>
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                asChild
-                className="border-orange text-orange hover:bg-orange hover:text-white text-[9px] px-1 py-0.5 h-6 min-w-0"
-              >
-                <Link href="/articles">Articles</Link>
-              </Button>
-              {/* Removed Series button per request */}
-            </div>
-          </div>
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {latestPosts.map((post) => (
-              <Link key={post.id} href={`/posts/${post.slug}`} className="block group">
-                <PostCard post={post} />
-              </Link>
-            ))}
-          </div>
-        </div>
+        <LatestPosts posts={postsWithSeriesName} />
       </section>
     </div>
   );

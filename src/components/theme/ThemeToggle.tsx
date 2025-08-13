@@ -32,9 +32,9 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
     >
       {isMounted ? (
         isDark ? (
-          <Sun className="h-3.5 w-3.5" />
+          <Sun className="h-3 w-3" />
         ) : (
-          <Moon className="h-3.5 w-3.5" />
+          <Moon className="h-3 w-3" />
         )
       ) : (
         <span className="sr-only">Theme</span>
