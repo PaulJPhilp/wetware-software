@@ -3,7 +3,7 @@ import { PostCard } from "@/components/PostCard";
 import { getPublishedPosts, getSeries } from "@/lib/notion-utils";
 import Link from "next/link";
 
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = 60; // Revalidate every minute to avoid stale cache
 
 export default async function Home() {
   const posts = (await getPublishedPosts()).filter((post) => {
