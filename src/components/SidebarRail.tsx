@@ -17,13 +17,13 @@ export function SidebarRail({ seriesList }: SidebarRailProps) {
     try {
       const stored = window.localStorage.getItem("sidebar-collapsed");
       if (stored != null) setIsCollapsed(stored === "1");
-    } catch {}
+    } catch { }
   }, []);
 
   useEffect(() => {
     try {
       window.localStorage.setItem("sidebar-collapsed", isCollapsed ? "1" : "0");
-    } catch {}
+    } catch { }
   }, [isCollapsed]);
 
   const widthClass = isCollapsed ? "w-5" : "w-32";
@@ -46,20 +46,20 @@ export function SidebarRail({ seriesList }: SidebarRailProps) {
     <>
       {/* Desktop rail */}
       <aside
-        className={`relative hidden md:block pr-3 border-r border-silver transition-[width] duration-200 ${widthClass}`}
+        className={`relative hidden md:block pr-3 transition-[width] duration-200 ${widthClass}`}
         aria-label="Site navigation sidebar"
         data-collapsed={isCollapsed ? "true" : "false"}
       >
         {/* Always-visible compact title row with toggle */}
         <div className="sticky top-4 z-0 mb-2 h-[14px] flex items-center gap-1 px-1">
-          <h2 className="m-0 p-0 text-[8px] leading-[14px] font-semibold text-charcoal">Series</h2>
-          <span className="text-[6px] leading-[14px] text-charcoal/60">({seriesList.length})</span>
+          <h2 className="m-0 p-0 text-[10px] leading-[14px] font-semibold text-foreground dark:text-white/90">Series</h2>
+          <span className="text-[8px] leading-[14px] text-muted-foreground dark:text-white/70">({seriesList.length})</span>
           <button
             type="button"
             aria-expanded={!isCollapsed}
             aria-controls="series-sidebar-content"
             onClick={() => setIsCollapsed((v) => !v)}
-            className="ml-auto h-[14px] w-[14px] flex items-center justify-center text-charcoal/80 hover:text-orange focus:outline-none"
+            className="ml-auto h-[14px] w-[14px] flex items-center justify-center text-muted-foreground dark:text-white/70 hover:text-orange focus:outline-none"
             title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isCollapsed ? (
