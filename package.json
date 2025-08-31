@@ -12,11 +12,11 @@
     "check": "bunx biome check ./src"
   },
   "dependencies": {
-    "@notionhq/client": "^4.0.1",
+    "@notionhq/client": "^4.0.2",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-slot": "^1.2.3",
-    "@tailwindcss/postcss": "^4.1.11",
-    "ai": "^5.0.8",
+    "@tailwindcss/postcss": "^4.1.12",
+    "ai": "^5.0.22",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.536.0",
@@ -29,15 +29,15 @@
     "vercel": "^44.7.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.1.4",
+    "@biomejs/biome": "^2.2.0",
     "@shadcn/ui": "^0.0.4",
-    "@types/node": "^20.19.10",
+    "@types/node": "^20.19.11",
     "@types/node-fetch": "^2.6.13",
-    "@types/react": "^19.1.9",
+    "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.7",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
-    "tw-animate-css": "^1.3.6",
+    "tw-animate-css": "^1.3.7",
     "typescript": "^5.9.2"
   }
 }

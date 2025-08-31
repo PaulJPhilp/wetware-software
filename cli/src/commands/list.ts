@@ -74,7 +74,7 @@ export const listSeriesTop = pipe(
   )
 );
 
-function listResources(limitOpt: number | undefined) {
+export function listResources(limitOpt: number | undefined) {
   return Effect.gen(function* () {
     const notion = yield* Notion;
     const rows = yield* notion.listResources({ limit: limitOpt });
@@ -88,7 +88,7 @@ function listResources(limitOpt: number | undefined) {
   }).pipe(Effect.catchAll((e) => Console.error(String(e))));
 }
 
-function listSources(limitOpt: number | undefined) {
+export function listSources(limitOpt: number | undefined) {
   return Effect.gen(function* () {
     const notion = yield* Notion;
     const rows = yield* notion.listSourceEntities({ limit: limitOpt });
@@ -102,7 +102,7 @@ function listSources(limitOpt: number | undefined) {
   }).pipe(Effect.catchAll((e) => Console.error(String(e))));
 }
 
-function listSeries(limitOpt: number | undefined) {
+export function listSeries(limitOpt: number | undefined) {
   return Effect.gen(function* () {
     const notion = yield* Notion;
     const rows = yield* notion.listResourceSeries({ limit: limitOpt });

@@ -67,7 +67,7 @@ function handler(resourceUrl: string, isVerbose: boolean) {
         res.url ? ` at ${res.url}` : ""
       }`
     );
-  }).pipe(Effect.catchAll((err) => Console.error(`Error: ${String(err)}`)));
+  });
 }
 
 export const runAddResource = handler;

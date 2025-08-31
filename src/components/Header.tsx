@@ -1,13 +1,44 @@
 "use client";
 
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
 export function Header() {
   const [isContentOpen, setIsContentOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleLinkClick = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  const contentLinks = (
+    <>
+      <Link
+        href="/series"
+        className="block px-4 py-2 text-sm hover:text-orange hover:bg-muted/50 transition-colors"
+        onClick={handleLinkClick}
+      >
+        Series
+      </Link>
+      <Link
+        href="/essays"
+        className="block px-4 py-2 text-sm hover:text-orange hover:bg-muted/50 transition-colors"
+        onClick={handleLinkClick}
+      >
+        Essays
+      </Link>
+      <Link
+        href="/articles"
+        className="block px-4 py-2 text-sm hover:text-orange hover:bg-muted/50 transition-colors"
+        onClick={handleLinkClick}
+      >
+        Articles
+      </Link>
+    </>
+  );
 
   return (
     <header className="sticky top-0 z-50 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/75 border-b border-border">
@@ -24,7 +55,7 @@ export function Header() {
           <div className="flex flex-col leading-tight">
             <Link
               href="/"
-              className="font-bold text-sm md:text-base lg:text-lg hover:text-orange transition-colors leading-none"
+              className="font-bold text-sm md:text-base hover:text-orange transition-colors leading-none"
             >
               Wetware & Software
             </Link>
@@ -33,73 +64,77 @@ export function Header() {
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-2 flex-nowrap">
-          <Link
-            href="/about"
-            className="text-[9px] md:text-[11px] hover:text-orange transition-colors whitespace-nowrap"
-          >
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-2 flex-nowrap">
+          <Link href="/about" className="text-xs hover:text-orange transition-colors whitespace-nowrap px-2">
             About
           </Link>
-          <Link
-            href="/projects"
-            className="text-[9px] md:text-[11px] hover:text-orange transition-colors whitespace-nowrap"
-          >
+          <Link href="/projects" className="text-xs hover:text-orange transition-colors whitespace-nowrap px-2">
             Projects
           </Link>
           <div className="relative">
             <button
               type="button"
               onClick={() => setIsContentOpen(!isContentOpen)}
-              className="flex items-center gap-1 text-[9px] md:text-[11px] hover:text-orange transition-colors whitespace-nowrap px-1"
+              className="flex items-center gap-1 text-xs hover:text-orange transition-colors whitespace-nowrap px-2"
               onBlur={() => setTimeout(() => setIsContentOpen(false), 150)}
             >
               Content
               <ChevronDown
-                className={`w-3 h-3 md:w-4 md:h-4 transition-transform ${isContentOpen ? "rotate-180" : ""}`}
+                className={`w-4 h-4 transition-transform ${isContentOpen ? "rotate-180" : ""}`}
               />
             </button>
-
             {isContentOpen && (
-              <div className="absolute top-full left-0 mt-1 bg-card border border-border rounded-lg shadow-lg py-2 min-w-[80px] z-10">
-                <Link
-                  href="/series"
-                  className="block px-2 py-1 text-xs md:text-sm hover:text-orange hover:bg-muted/50 transition-colors"
-                  onClick={() => setIsContentOpen(false)}
-                >
-                  Series
-                </Link>
-                <Link
-                  href="/essays"
-                  className="block px-2 py-1 text-xs md:text-sm hover:text-orange hover:bg-muted/50 transition-colors"
-                  onClick={() => setIsContentOpen(false)}
-                >
-                  Essays
-                </Link>
-                <Link
-                  href="/articles"
-                  className="block px-2 py-1 text-xs md:text-sm hover:text-orange hover:bg-muted/50 transition-colors"
-                  onClick={() => setIsContentOpen(false)}
-                >
-                  Articles
-                </Link>
+              <div className="absolute top-full left-0 mt-1 bg-card border border-border rounded-lg shadow-lg py-2 min-w-[120px] z-10">
+                {contentLinks}
               </div>
             )}
           </div>
-          <Link
-            href="/resources"
-            className="text-[9px] md:text-[11px] hover:text-orange transition-colors whitespace-nowrap"
-          >
+          <Link href="/resources" className="text-xs hover:text-orange transition-colors whitespace-nowrap px-2">
             Resources
           </Link>
-          <Link
-            href="/connect"
-            className="text-[9px] md:text-[11px] hover:text-orange transition-colors whitespace-nowrap"
-          >
+          <Link href="/connect" className="text-xs hover:text-orange transition-colors whitespace-nowrap px-2">
             Connect
           </Link>
           <ThemeToggle className="ml-2" />
         </div>
+
+        {/* Mobile Navigation */}
+        <div className="md:hidden flex items-center">
+          <ThemeToggle className="mr-2" />
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2"
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </nav>
+
+      {/* Mobile Menu Drawer */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-card border-t border-border">
+          <div className="flex flex-col px-2 py-4">
+            <Link href="/about" className="block px-4 py-2 text-sm hover:text-orange transition-colors" onClick={handleLinkClick}>
+              About
+            </Link>
+            <Link href="/projects" className="block px-4 py-2 text-sm hover:text-orange transition-colors" onClick={handleLinkClick}>
+              Projects
+            </Link>
+            <div className="px-4 py-2 text-sm font-semibold">Content</div>
+            <div className="pl-4">{contentLinks}</div>
+            <Link href="/resources" className="block px-4 py-2 text-sm hover:text-orange transition-colors" onClick={handleLinkClick}>
+              Resources
+            </Link>
+            <Link href="/connect" className="block px-4 py-2 text-sm hover:text-orange transition-colors" onClick={handleLinkClick}>
+              Connect
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

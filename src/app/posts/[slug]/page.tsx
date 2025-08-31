@@ -107,7 +107,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </header>
 
         {/* Content */}
-        <section className="prose prose-lg xl:prose-xl 2xl:prose-2xl prose-charcoal max-w-none text-left leading-relaxed">
+        <section className="prose prose-lg xl:prose-xl 2xl:prose-2xl prose-charcoal text-left leading-relaxed">
           <p className="text-xl text-charcoal/80 mb-8 font-serif italic leading-relaxed">
             {post.description}
           </p>

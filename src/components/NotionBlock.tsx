@@ -1,10 +1,13 @@
+"use client";
+
 import type {
 	BlockObjectResponse,
 	RichTextItemResponse,
 } from "@notionhq/client/build/src/api-endpoints";
+import { Check, Copy } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import type { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 
 interface NotionBlockProps {
 	block: BlockObjectResponse;
@@ -70,7 +73,7 @@ const RichText: FC<{ text: RichTextItemResponse }> = ({ text }) => {
 				url ? (
 					<Link
 						href={url}
-						className="text-orange hover:text-orange/80 transition-colors"
+						className="text-orange hover:text-orange/80 transition-colors underline underline-offset-4"
 					>
 						<PrevElement>{children}</PrevElement>
 					</Link>
@@ -83,6 +86,47 @@ const RichText: FC<{ text: RichTextItemResponse }> = ({ text }) => {
 	}
 
 	return <>{content}</>;
+};
+
+const CodeBlock: FC<{ block: BlockObjectResponse }> = ({ block }) => {
+	const [isCopied, setIsCopied] = useState(false);
+
+	// @ts-ignore
+	const code = block.code.rich_text.map((text) => text.plain_text).join("");
+
+	const handleCopy = () => {
+		navigator.clipboard.writeText(code);
+		setIsCopied(true);
+	};
+
+	useEffect(() => {
+		if (isCopied) {
+			const timer = setTimeout(() => {
+				setIsCopied(false);
+			}, 2000);
+			return () => clearTimeout(timer);
+		}
+	}, [isCopied]);
+
+	return (
+		<div className="relative">
+			<button
+				type="button"
+				onClick={handleCopy}
+				className="absolute top-2 right-2 p-1.5 rounded-lg bg-gray-700 text-gray-200 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-colors"
+				aria-label="Copy code to clipboard"
+			>
+				{isCopied ? (
+					<Check className="w-4 h-4" />
+				) : (
+					<Copy className="w-4 h-4" />
+				)}
+			</button>
+			<pre className="bg-charcoal/5 p-4 rounded-lg overflow-auto text-base">
+				<code>{code}</code>
+			</pre>
+		</div>
+	);
 };
 
 export function NotionBlock({ block }: NotionBlockProps) {
@@ -154,21 +198,10 @@ export function NotionBlock({ block }: NotionBlockProps) {
 				</li>
 			);
 		case "code":
-			return (
-				<pre className="bg-charcoal/5 p-4 rounded-lg overflow-auto">
-					<code>
-						{block.code.rich_text.map((text, idx) => (
-							<RichText
-								key={`${block.id}-${idx}-${text.plain_text}`}
-								text={text}
-							/>
-						))}
-					</code>
-				</pre>
-			);
+			return <CodeBlock block={block} />;
 		case "quote":
 			return (
-				<blockquote className="border-l-4 border-orange pl-4 italic">
+				<blockquote className="border-l-4 border-orange pl-4 italic bg-muted p-4 rounded-r-lg">
 					{block.quote.rich_text.map((text, idx) => (
 						<RichText
 							key={`${block.id}-${idx}-${text.plain_text}`}
@@ -186,7 +219,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
 							alt={block.image.caption && block.image.caption.length > 0
 								? block.image.caption.map((text) => text.plain_text).join(' ')
 								: "Content illustration"}
-							className="w-full rounded-lg shadow-md"
+							className="w-full h-auto rounded-lg shadow-md"
 							width={800}
 							height={400}
 						/>
@@ -211,7 +244,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
 							alt={block.image.caption && block.image.caption.length > 0
 								? block.image.caption.map((text) => text.plain_text).join(' ')
 								: "Content illustration"}
-							className="w-full rounded-lg shadow-md"
+							className="w-full h-auto rounded-lg shadow-md"
 							width={800}
 							height={400}
 						/>

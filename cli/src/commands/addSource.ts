@@ -80,7 +80,7 @@ function handler(
         res.url ? ` at ${res.url}` : ""
       }`
     );
-  }).pipe(Effect.catchAll((err) => Console.error(`Error: ${String(err)}`)));
+  });
 }
 
 export const runAddSource = handler;
