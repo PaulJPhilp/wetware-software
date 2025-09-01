@@ -8,6 +8,7 @@ import * as Layer from "effect/Layer";
 import type { z } from "zod";
 import { buildSchema } from "./schema";
 import type { SourceEntityInput } from "./sourceEntitySchema";
+import type { SeriesInput } from "./seriesSchema";
 
 const schema = buildSchema();
 export type ResourceInput = z.infer<typeof schema>;
@@ -48,13 +49,18 @@ export interface NotionService {
     }>,
     Error
   >;
+  addSeries: (
+    data: SeriesInput,
+    opts?: { verbose?: boolean }
+  ) => Effect.Effect<{ pageId: string; url?: string }, Error>;
+  deletePage: (pageId: string) => Effect.Effect<void, Error>;
 }
 
 export class Notion extends Effect.Service<NotionService>()("Notion", {
   succeed: {},
 }) {}
 
-export const { addResource } = Effect.serviceFunctions(Notion);
+export const { addResource, deletePage } = Effect.serviceFunctions(Notion);
 
 function mapResourceToProperties(
   input: ResourceInput
@@ -116,6 +122,22 @@ function mapSourceEntityToProperties(
     "Focus Area": {
       multi_select: input.focus_area.map((name) => ({ name })),
     },
+  } as CreatePageParameters["properties"];
+}
+
+function mapSeriesToProperties(
+  input: SeriesInput
+): CreatePageParameters["properties"] {
+  return {
+    Name: {
+      title: [{ type: "text", text: { content: input.name } }],
+    },
+    Description: {
+      rich_text: [{ type: "text", text: { content: input.description } }],
+    },
+    "Series Goal": {
+        rich_text: [{ type: "text", text: { content: input.goal } }],
+    }
   } as CreatePageParameters["properties"];
 }
 
@@ -379,6 +401,39 @@ export const NotionClientLayer = Layer.effect(
           },
           catch: (e) => new Error(`Notion API error: ${String(e)}`),
         }),
+      addSeries: (input, opts) =>
+        pipe(
+          Effect.tryPromise({
+            try: async () => {
+              if (!resourceSeriesDatabaseId) {
+                throw new Error("Missing NOTION_RESOURCE_SERIES_DATABASE_ID");
+              }
+              const properties = mapSeriesToProperties(input);
+              const page = await notion.pages.create({
+                parent: { database_id: resourceSeriesDatabaseId },
+                properties,
+              });
+              return {
+                pageId: page.id,
+                url: (page as unknown as { url?: string }).url,
+              };
+            },
+            catch: (e) => new Error(`Notion API error: ${String(e)}`),
+          }),
+          Effect.tap(() =>
+            opts?.verbose ? Console.log("Notion series page created") : Effect.void
+          )
+        ),
+      deletePage: (pageId: string) =>
+        pipe(
+          Effect.tryPromise({
+            try: async () => {
+              await notion.pages.update({ page_id: pageId, archived: true });
+            },
+            catch: (e) => new Error(`Notion API error: ${String(e)}`),
+          }),
+          Effect.tap(() => Console.log(`Page ${pageId} archived.`))
+        ),
     });
   })
 );

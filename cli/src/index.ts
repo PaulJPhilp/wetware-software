@@ -6,6 +6,8 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import { resourceCommand } from "./commands/addResource";
 import { sourceCommand } from "./commands/addSource";
+import { seriesCommand } from "./commands/addSeries";
+import { deleteCommand } from "./commands/delete";
 import {
   listCommand,
   listResourcesTop,
@@ -16,7 +18,7 @@ import { OpenAIProviderLayer } from "./lib/ai";
 import { NotionClientLayer } from "./lib/notion";
 
 const add = Command.make("add").pipe(
-  Command.withSubcommands([resourceCommand, sourceCommand])
+  Command.withSubcommands([resourceCommand, sourceCommand, seriesCommand])
 );
 
 const root = Command.withSubcommands(Command.make("wetware-cli"), [
@@ -25,6 +27,7 @@ const root = Command.withSubcommands(Command.make("wetware-cli"), [
   listResourcesTop,
   listSourcesTop,
   listSeriesTop,
+  deleteCommand,
 ]);
 
 const layer = Layer.mergeAll(
