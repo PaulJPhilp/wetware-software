@@ -84,11 +84,15 @@ export interface NotionService {
   getResourceById: (pageId: string) => Effect.Effect<ResourceDetails, Error>;
   getSourceEntityById: (pageId: string) => Effect.Effect<SourceEntityDetails, Error>;
   getSeriesById: (pageId: string) => Effect.Effect<SeriesDetails, Error>;
+  updateResource: (pageId: string, updates: Partial<ResourceDetails>) => Effect.Effect<void, Error>;
+  updateSourceEntity: (pageId: string, updates: Partial<SourceEntityDetails>) => Effect.Effect<void, Error>;
+  updateSeries: (pageId: string, updates: Partial<SeriesDetails>) => Effect.Effect<void, Error>;
   addSeries: (
     data: SeriesInput,
     opts?: { verbose?: boolean }
   ) => Effect.Effect<{ pageId: string; url?: string }, Error>;
   deletePage: (pageId: string) => Effect.Effect<void, Error>;
+  updatePage: (pageId: string, properties: Record<string, any>) => Effect.Effect<void, Error>;
   getPage: (pageId: string) => Effect.Effect<any, Error>;
 }
 
@@ -96,7 +100,7 @@ export class Notion extends Effect.Service<NotionService>()("Notion", {
   succeed: {},
 }) {}
 
-export const { addResource, deletePage, getPage, getResourceById, getSourceEntityById, getSeriesById } = Effect.serviceFunctions(Notion);
+export const { addResource, deletePage, getPage, getResourceById, getSourceEntityById, getSeriesById, updatePage } = Effect.serviceFunctions(Notion);
 
 function mapResourceToProperties(
   input: ResourceInput
@@ -470,6 +474,16 @@ export const NotionClientLayer = Layer.effect(
           }),
           Effect.tap(() => Console.log(`Page ${pageId} archived.`))
         ),
+      updatePage: (pageId: string, properties: Record<string, any>) =>
+        pipe(
+          Effect.tryPromise({
+            try: async () => {
+              await notion.pages.update({ page_id: pageId, properties });
+            },
+            catch: (e) => new Error(`Notion API error: ${String(e)}`),
+          }),
+          Effect.tap(() => Console.log(`Page ${pageId} updated.`))
+        ),
       getPage: (pageId: string) =>
         Effect.tryPromise({
           try: async () => {
@@ -636,6 +650,87 @@ export const NotionClientLayer = Layer.effect(
               description,
               goal,
             };
+          },
+          catch: (e) => new Error(`Notion API error: ${String(e)}`),
+        }),
+      updateResource: (pageId: string, updates: Partial<ResourceDetails>) =>
+        Effect.tryPromise({
+          try: async () => {
+            const properties: Record<string, any> = {};
+            if (updates.name !== undefined) {
+              properties["Name"] = { title: [{ type: "text", text: { content: updates.name } }] };
+            }
+            if (updates.url !== undefined) {
+              properties["Resource URL"] = { url: updates.url };
+            }
+            if (updates.type !== undefined) {
+              properties["Type"] = { select: { name: updates.type } };
+            }
+            if (updates.icon !== undefined) {
+              properties["Icon"] = { rich_text: [{ type: "text", text: { content: updates.icon } }] };
+            }
+            if (updates.curatorNote !== undefined) {
+              properties["Curator's Note"] = { rich_text: [{ type: "text", text: { content: updates.curatorNote } }] };
+            }
+            if (updates.focusArea !== undefined) {
+              properties["Focus Area"] = { multi_select: updates.focusArea.map((name) => ({ name })) };
+            }
+            if (updates.tags !== undefined) {
+              properties["Tags"] = { multi_select: updates.tags.map((name) => ({ name })) };
+            }
+            if (updates.readTimeMinutes !== undefined) {
+              properties["Read Time (min)"] = { number: updates.readTimeMinutes };
+            }
+            if (updates.seriesName !== undefined) {
+              properties["Series"] = { rich_text: [{ type: "text", text: { content: updates.seriesName } }] };
+            }
+            if (updates.sourceEntityName !== undefined) {
+              properties["Source Entity"] = { rich_text: [{ type: "text", text: { content: updates.sourceEntityName } }] };
+            }
+            await notion.pages.update({ page_id: pageId, properties });
+          },
+          catch: (e) => new Error(`Notion API error: ${String(e)}`),
+        }),
+      updateSourceEntity: (pageId: string, updates: Partial<SourceEntityDetails>) =>
+        Effect.tryPromise({
+          try: async () => {
+            const properties: Record<string, any> = {};
+            if (updates.name !== undefined) {
+              properties["Name"] = { title: [{ type: "text", text: { content: updates.name } }] };
+            }
+            if (updates.url !== undefined) {
+              properties["URL"] = { url: updates.url };
+            }
+            if (updates.type !== undefined) {
+              properties["Type"] = { select: { name: updates.type } };
+            }
+            if (updates.description !== undefined) {
+              properties["Description"] = { rich_text: [{ type: "text", text: { content: updates.description } }] };
+            }
+            if (updates.endorsement !== undefined) {
+              properties["Paul's Endorsement"] = { rich_text: [{ type: "text", text: { content: updates.endorsement } }] };
+            }
+            if (updates.focusArea !== undefined) {
+              properties["Focus Area"] = { multi_select: updates.focusArea.map((name) => ({ name })) };
+            }
+            await notion.pages.update({ page_id: pageId, properties });
+          },
+          catch: (e) => new Error(`Notion API error: ${String(e)}`),
+        }),
+      updateSeries: (pageId: string, updates: Partial<SeriesDetails>) =>
+        Effect.tryPromise({
+          try: async () => {
+            const properties: Record<string, any> = {};
+            if (updates.name !== undefined) {
+              properties["Name"] = { title: [{ type: "text", text: { content: updates.name } }] };
+            }
+            if (updates.description !== undefined) {
+              properties["Description"] = { rich_text: [{ type: "text", text: { content: updates.description } }] };
+            }
+            if (updates.goal !== undefined) {
+              properties["Series Goal"] = { rich_text: [{ type: "text", text: { content: updates.goal } }] };
+            }
+            await notion.pages.update({ page_id: pageId, properties });
           },
           catch: (e) => new Error(`Notion API error: ${String(e)}`),
         }),
