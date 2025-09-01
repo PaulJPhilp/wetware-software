@@ -1,0 +1,29 @@
+{
+  "name": "wetware-cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "bun --hot run src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "start": "bun run dist/index.js",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@wetware/shared": "workspace:*",
+    "@effect/cli": "*",
+    "@effect/platform": "*",
+    "@effect/platform-node": "*",
+    "effect": "*",
+    "@notionhq/client": "^2.3.0",
+    "zod": "^3.25.76",
+    "dotenv": "^16.6.1",
+    "ai": "^5.0.8",
+    "@ai-sdk/google": "^2.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0",
+    "vitest": "^1.6.0"
+  }
+}

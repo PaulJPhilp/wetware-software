@@ -63,3 +63,10 @@ yarn-debug.log*
 # Mac specific files
 .DS_Store
 .vercel
+
+# Monorepo-specific ignores
+# Ignore nested package builds and lockfiles
+/packages/*/dist
+/apps/*/.next
+/cli/bun.lock
+/packages/*/bun.lock
