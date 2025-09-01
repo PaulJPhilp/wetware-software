@@ -8,6 +8,7 @@ import { resourceCommand } from "./commands/addResource";
 import { sourceCommand } from "./commands/addSource";
 import { seriesCommand } from "./commands/addSeries";
 import { deleteCommand } from "./commands/delete";
+import { getCommand } from "./commands/get";
 import {
   listCommand,
   listResourcesTop,
@@ -28,6 +29,7 @@ const root = Command.withSubcommands(Command.make("wetware-cli"), [
   listSourcesTop,
   listSeriesTop,
   deleteCommand,
+  getCommand,
 ]);
 
 const layer = Layer.mergeAll(

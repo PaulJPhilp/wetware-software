@@ -13,6 +13,38 @@ import type { SeriesInput } from "./seriesSchema";
 const schema = buildSchema();
 export type ResourceInput = z.infer<typeof schema>;
 
+export type ResourceDetails = {
+  id: string;
+  url?: string;
+  name: string;
+  type?: string | null;
+  sourceEntityName?: string | null;
+  icon?: string | null;
+  curatorNote?: string | null;
+  focusArea?: string[];
+  tags?: string[];
+  readTimeMinutes?: number | null;
+  seriesName?: string | null;
+};
+
+export type SourceEntityDetails = {
+  id: string;
+  url?: string;
+  name: string;
+  type?: string | null;
+  description?: string | null;
+  endorsement?: string | null;
+  focusArea?: string[];
+};
+
+export type SeriesDetails = {
+  id: string;
+  url?: string;
+  name: string;
+  description?: string | null;
+  goal?: string | null;
+};
+
 export interface NotionService {
   addResource: (
     data: ResourceInput,
@@ -49,18 +81,22 @@ export interface NotionService {
     }>,
     Error
   >;
+  getResourceById: (pageId: string) => Effect.Effect<ResourceDetails, Error>;
+  getSourceEntityById: (pageId: string) => Effect.Effect<SourceEntityDetails, Error>;
+  getSeriesById: (pageId: string) => Effect.Effect<SeriesDetails, Error>;
   addSeries: (
     data: SeriesInput,
     opts?: { verbose?: boolean }
   ) => Effect.Effect<{ pageId: string; url?: string }, Error>;
   deletePage: (pageId: string) => Effect.Effect<void, Error>;
+  getPage: (pageId: string) => Effect.Effect<any, Error>;
 }
 
 export class Notion extends Effect.Service<NotionService>()("Notion", {
   succeed: {},
 }) {}
 
-export const { addResource, deletePage } = Effect.serviceFunctions(Notion);
+export const { addResource, deletePage, getPage, getResourceById, getSourceEntityById, getSeriesById } = Effect.serviceFunctions(Notion);
 
 function mapResourceToProperties(
   input: ResourceInput
@@ -434,6 +470,175 @@ export const NotionClientLayer = Layer.effect(
           }),
           Effect.tap(() => Console.log(`Page ${pageId} archived.`))
         ),
+      getPage: (pageId: string) =>
+        Effect.tryPromise({
+          try: async () => {
+            const page = await notion.pages.retrieve({ page_id: pageId });
+            return page;
+          },
+          catch: (e) => new Error(`Notion API error: ${String(e)}`),
+        }),
+      getResourceById: (pageId: string) =>
+        Effect.tryPromise({
+          try: async () => {
+            const p = await notion.pages.retrieve({ page_id: pageId });
+            const props =
+              (p as { properties?: Record<string, unknown> }).properties ?? {};
+            const name =
+              (
+                (props as Record<string, unknown>)["Name"] as
+                  | { title?: Array<{ plain_text?: string }> }
+                  | undefined
+              )?.title?.[0]?.plain_text?.trim?.() ?? "";
+            const type =
+              (
+                (props as Record<string, unknown>)["Type"] as
+                  | { select?: { name?: string } }
+                  | undefined
+              )?.select?.name ?? null;
+            const sourceEntityName =
+              (
+                (props as Record<string, unknown>)["Source Entity"] as
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
+              )?.rich_text?.[0]?.plain_text ?? null;
+            const icon =
+              (
+                (props as Record<string, unknown>)["Icon"] as
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
+              )?.rich_text?.[0]?.plain_text ?? null;
+            const curatorNote =
+              (
+                (props as Record<string, unknown>)["Curator's Note"] as
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
+              )?.rich_text?.[0]?.plain_text ?? null;
+            const focusArea =
+              (
+                (props as Record<string, unknown>)["Focus Area"] as
+                  | { multi_select?: Array<{ name?: string }> }
+                  | undefined
+              )?.multi_select?.map((s) => s.name ?? "") ?? [];
+            const tags =
+              (
+                (props as Record<string, unknown>)["Tags"] as
+                  | { multi_select?: Array<{ name?: string }> }
+                  | undefined
+              )?.multi_select?.map((s) => s.name ?? "") ?? [];
+            const readTimeMinutes =
+              (
+                (props as Record<string, unknown>)["Read Time (min)"] as
+                  | { number?: number }
+                  | undefined
+              )?.number ?? null;
+            const seriesName =
+              (
+                (props as Record<string, unknown>)["Series"] as
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
+              )?.rich_text?.[0]?.plain_text ?? null;
+            const url = (p as { url?: string }).url;
+            return {
+              id: (p as { id: string }).id,
+              url,
+              name,
+              type,
+              sourceEntityName,
+              icon,
+              curatorNote,
+              focusArea,
+              tags,
+              readTimeMinutes,
+              seriesName,
+            };
+          },
+          catch: (e) => new Error(`Notion API error: ${String(e)}`),
+        }),
+      getSourceEntityById: (pageId: string) =>
+        Effect.tryPromise({
+          try: async () => {
+            const p = await notion.pages.retrieve({ page_id: pageId });
+            const props =
+              (p as { properties?: Record<string, unknown> }).properties ?? {};
+            const name =
+              (
+                (props as Record<string, unknown>)["Name"] as
+                  | { title?: Array<{ plain_text?: string }> }
+                  | undefined
+              )?.title?.[0]?.plain_text?.trim?.() ?? "";
+            const type =
+              (
+                (props as Record<string, unknown>)["Type"] as
+                  | { select?: { name?: string } }
+                  | undefined
+              )?.select?.name ?? null;
+            const description =
+              (
+                (props as Record<string, unknown>)["Description"] as
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
+              )?.rich_text?.[0]?.plain_text ?? null;
+            const endorsement =
+              (
+                (props as Record<string, unknown>)["Paul's Endorsement"] as
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
+              )?.rich_text?.[0]?.plain_text ?? null;
+            const focusArea =
+              (
+                (props as Record<string, unknown>)["Focus Area"] as
+                  | { multi_select?: Array<{ name?: string }> }
+                  | undefined
+              )?.multi_select?.map((s) => s.name ?? "") ?? [];
+            const url = (p as { url?: string }).url;
+            return {
+              id: (p as { id: string }).id,
+              url,
+              name,
+              type,
+              description,
+              endorsement,
+              focusArea,
+            };
+          },
+          catch: (e) => new Error(`Notion API error: ${String(e)}`),
+        }),
+      getSeriesById: (pageId: string) =>
+        Effect.tryPromise({
+          try: async () => {
+            const p = await notion.pages.retrieve({ page_id: pageId });
+            const props =
+              (p as { properties?: Record<string, unknown> }).properties ?? {};
+            const name =
+              (
+                (props as Record<string, unknown>)["Name"] as
+                  | { title?: Array<{ plain_text?: string }> }
+                  | undefined
+              )?.title?.[0]?.plain_text?.trim?.() ?? "";
+            const description =
+              (
+                (props as Record<string, unknown>)["Description"] as
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
+              )?.rich_text?.[0]?.plain_text ?? null;
+            const goal =
+              (
+                (props as Record<string, unknown>)["Series Goal"] as
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
+              )?.rich_text?.[0]?.plain_text ?? null;
+            const url = (p as { url?: string }).url;
+            return {
+              id: (p as { id: string }).id,
+              url,
+              name,
+              description,
+              goal,
+            };
+          },
+          catch: (e) => new Error(`Notion API error: ${String(e)}`),
+        }),
     });
   })
 );
