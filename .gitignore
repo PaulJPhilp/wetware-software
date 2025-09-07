@@ -70,3 +70,11 @@ yarn-debug.log*
 /apps/*/.next
 /cli/bun.lock
 /packages/*/bun.lock
+
+# Ignore nested node_modules anywhere in the repo
+**/node_modules
+
+# Ignore nested lockfiles that may appear in workspaces
+**/bun.lock
+**/package-lock.json
+**/pnpm-lock.yaml
