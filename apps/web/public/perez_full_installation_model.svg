@@ -1,0 +1,164 @@
+
+<svg width="1400" height="600" viewBox="-100 0 1500 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Core AI installation-period system: Core Technology, Expected TAM, Financial Capital, Inference Efficiency, AI Factory Capacity; with source inflows">
+  <style>
+    .frame{fill:none;stroke:#212121;stroke-width:1}
+    .stock{fill:#f8f8f8;stroke:#ff7a00;stroke-width:3}
+    .variable{fill:#f8f8f8;stroke:#ff7a00;stroke-width:2}
+    .label{fill:#212121;font:600 16px Montserrat, system-ui, -apple-system, Segoe UI, Roboto, sans-serif}
+    .small{fill:#212121;font:400 13px Merriweather, Georgia, serif}
+    .flow{fill:none;stroke:#ffffff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}
+    .dashed{fill:none;stroke:#ffffff;stroke-dasharray:6 5;stroke-width:1.6;marker-end:url(#arrow)}
+    .dashed-no-arrow{fill:none;stroke:#ffffff;stroke-dasharray:6 5;stroke-width:1.6}
+    .accent{stroke:#ff7a00;fill:#ff7a00}
+    .positive-valence{fill:#22c55e;stroke:#22c55e}
+    .negative-valence{fill:#ff0000;stroke:#ff0000}
+    .source{fill:#f8f8f8;stroke:#ff7a00;stroke-width:2}
+    @media (prefers-color-scheme: dark){
+      .frame,.stock,.variable,.source,.flow,.dashed,.dashed-no-arrow{stroke:#f8f8f8}
+      .label,.small{fill:#f8f8f8}
+      #arrow {fill:#f8f8f8}
+    }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+      <polygon points="0,0 10,4 0,8" fill="#ffffff"/>
+    </marker>
+    <!-- The variable's visual representation -->
+    <circle id="variableCircle" r="8" class="variable"/>
+    <!-- Source cloud shape -->
+    <path id="sourceCloud" d="M0,0 C-15,-10 -25,-5 -25,5 C-30,10 -25,20 -15,20 C-10,25 0,25 10,20 C20,25 30,20 30,10 C35,5 30,-5 20,-5 C15,-10 5,-10 0,0 Z" class="source"/>
+  </defs>
+  
+  <!-- Background -->
+  <rect x="-100" y="0" width="1500" height="600" fill="#2d3748"/>
+  
+  
+  <!-- Source clouds (outside frame) -->
+  
+  
+  
+
+  <!-- Stocks -->
+  <!-- Market Demand (top-left) -->
+  <rect x="-40" y="300" width="240" height="70" rx="10" class="stock"/>
+  <text x="80" y="342" text-anchor="middle" class="label">Market Demand</text>
+  <text x="80" y="360" text-anchor="middle" class="small">Units: $/year</text>
+  
+  <!-- Center: Financial Capital -->
+  <rect x="560" y="300" width="240" height="70" rx="10" class="stock"/>
+  <text x="680" y="342" text-anchor="middle" class="label">Financial Capital</text>
+  <text x="680" y="360" text-anchor="middle" class="small">Units: $</text>
+  
+  <!-- Left column: Expected TAM (top-left) -->
+  <rect x="260" y="180" width="240" height="70" rx="10" class="stock"/>
+  <text x="380" y="222" text-anchor="middle" class="label">Expected TAM</text>
+  <text x="380" y="240" text-anchor="middle" class="small">Units: $/year</text>
+  
+  <!-- Left column: Core Technology (bottom-left) -->
+  <rect x="260" y="420" width="240" height="70" rx="10" class="stock"/>
+  <text x="380" y="462" text-anchor="middle" class="label">Core Technology</text>
+  <text x="380" y="480" text-anchor="middle" class="small">Units: tokens/sec/GW</text>
+  
+  <!-- Right column: AI Supply (top-right) -->
+  <rect x="560" y="50" width="240" height="70" rx="10" class="stock"/>
+  <text x="680" y="92" text-anchor="middle" class="label">AI Supply</text>
+  <text x="680" y="110" text-anchor="middle" class="small">Units: tokens/sec</text>
+  
+  <!-- Right column: AI Factory Capacity (top-right) -->
+  <rect x="860" y="180" width="240" height="70" rx="10" class="stock"/>
+  <text x="980" y="222" text-anchor="middle" class="label">AI Factory Capacity</text>
+  <text x="980" y="240" text-anchor="middle" class="small">Units: GW</text>
+  
+  <!-- Right column: Inference Efficiency (bottom-right) -->
+  <rect x="860" y="420" width="240" height="70" rx="10" class="stock"/>
+  <text x="980" y="462" text-anchor="middle" class="label">Inference Efficiency</text>
+  <text x="980" y="480" text-anchor="middle" class="small">Units: tokens/sec/W</text>
+
+  <!-- Inflow arrows -->
+  <!-- Market Demand -> Expected TAM -->
+  <line x1="80" y1="300" x2="260" y2="215" class="flow"/>
+  <text x="120" y="247.5" text-anchor="middle" class="small" style="fill: #22c55e; paint-order: stroke; stroke: #212121; stroke-width: 1">Revenue</text>
+  <g class="positive-valence">
+    <line x1="240" y1="205" x2="250" y2="205" stroke-width="2"/>
+    <line x1="245" y1="200" x2="245" y2="210" stroke-width="2"/>
+  </g>
+  
+  <!-- Core Technology -> Market Demand -->
+  <line x1="260" y1="455" x2="80" y2="370" class="flow"/>
+  <text x="110" y="422.5" text-anchor="middle" class="small" style="fill: #22c55e; paint-order: stroke; stroke: #212121; stroke-width: 1">Capabilities</text>
+  <g class="positive-valence">
+    <line x1="70" y1="385" x2="80" y2="385" stroke-width="2"/>
+    <line x1="75" y1="380" x2="75" y2="390" stroke-width="2"/>
+  </g>
+  
+  
+  
+  
+  <!-- Internal flows between stocks -->
+  <!-- Core Technology -> Inference Efficiency -->
+  <line x1="500" y1="455" x2="860" y2="455" class="flow"/>
+  <text x="680" y="445" text-anchor="middle" class="small" style="fill: #22c55e; paint-order: stroke; stroke: #212121; stroke-width: 1">Technology Advancement</text>
+  <g class="positive-valence">
+    <line x1="845" y1="440" x2="855" y2="440" stroke-width="2"/>
+    <line x1="850" y1="435" x2="850" y2="445" stroke-width="2"/>
+  </g>
+  
+  <!-- Inference Efficiency -> AI Factory Capacity -->
+  <line x1="980" y1="420" x2="980" y2="250" class="flow"/>
+  <text x="990" y="335" text-anchor="start" class="small" style="fill: #22c55e; paint-order: stroke; stroke: #212121; stroke-width: 1">Efficiency Gains</text>
+  <g class="positive-valence">
+    <line x1="960" y1="260" x2="970" y2="260" stroke-width="2"/>
+    <line x1="965" y1="255" x2="965" y2="265" stroke-width="2"/>
+  </g>
+  
+  <!-- AI Factory Capacity -> AI Supply -->
+  <line x1="860" y1="180" x2="800" y2="120" class="flow"/>
+  <text x="900" y="150" text-anchor="middle" class="small" style="fill: #22c55e; paint-order: stroke; stroke: #212121; stroke-width: 1">Capacity Expansion</text>
+  <g class="positive-valence">
+    <line x1="825" y1="125" x2="835" y2="125" stroke-width="2"/>
+    <line x1="830" y1="120" x2="830" y2="130" stroke-width="2"/>
+  </g>
+  
+  <!-- AI Supply -> (−) AI Access Price (auxiliary) -->
+  <line x1="560" y1="120" x2="508" y2="120" class="flow"/>
+  <g class="negative-valence">
+    <line x1="512" y1="105" x2="522" y2="105" stroke-width="2"/>
+  </g>
+
+  <!-- AI Access Price -> (−) Expected TAM -->
+  <line x1="500" y1="120" x2="500" y2="180" class="flow"/>
+  <g class="negative-valence">
+    <line x1="475" y1="165" x2="485" y2="165" stroke-width="2"/>
+  </g>
+  
+  <!-- Auxiliary node: AI Access Price -->
+  <g transform="translate(500,120)">
+    <use href="#variableCircle"/>
+    <title>AI Access Price</title>
+    <text x="-70" y="0" text-anchor="middle" class="label" style="fill:#ff0000;font-size:13px">AI Access Price</text>
+  </g>
+  
+  <!-- Expected TAM -> Financial Capital -->
+  <line x1="500" y1="250" x2="560" y2="300" class="flow"/>
+  <text x="450" y="275" text-anchor="middle" class="small" style="fill: #22c55e; paint-order: stroke; stroke: #212121; stroke-width: 1">Market Attractiveness</text>
+  <g class="positive-valence">
+    <line x1="540" y1="305" x2="550" y2="305" stroke-width="2"/>
+    <line x1="545" y1="300" x2="545" y2="310" stroke-width="2"/>
+  </g>
+  
+  <!-- Financial Capital -> Core Technology -->
+  <line x1="560" y1="370" x2="500" y2="420" class="flow"/>
+  <text x="470" y="390" text-anchor="middle" class="small" style="fill: #22c55e; paint-order: stroke; stroke: #212121; stroke-width: 1">R&amp;D Investment</text>
+  <g class="positive-valence">
+    <line x1="505" y1="425" x2="515" y2="425" stroke-width="2"/>
+    <line x1="510" y1="420" x2="510" y2="430" stroke-width="2"/>
+  </g>
+  
+  <!-- Financial Capital -> AI Factory Capacity -->
+  <line x1="800" y1="300" x2="860" y2="250" class="flow"/>
+  <text x="750" y="275" text-anchor="middle" class="small" style="fill: #22c55e; paint-order: stroke; stroke: #212121; stroke-width: 1">Infrastructure Investment</text>
+  <g class="positive-valence">
+    <line x1="835" y1="245" x2="845" y2="245" stroke-width="2"/>
+    <line x1="840" y1="240" x2="840" y2="250" stroke-width="2"/>
+  </g>
+</svg>

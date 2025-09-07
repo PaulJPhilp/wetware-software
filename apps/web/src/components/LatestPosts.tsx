@@ -1,12 +1,17 @@
 "use client";
 
 import { PostCard } from "@/components/PostCard";
-import { PostListItem } from "@/components/PostListItem";
 import { Button } from "@/components/ui/button";
 import type { Post } from "@/lib/notion-utils";
 import { LayoutGrid, List } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
+
+// Lazy load PostListItem since it's only used in list view
+const PostListItem = dynamic(() =>
+  import("@/components/PostListItem").then((mod) => ({ default: mod.PostListItem }))
+);
 
 interface LatestPostsProps {
   posts: Post[];
@@ -52,6 +57,7 @@ export function LatestPosts({ posts }: LatestPostsProps) {
               size="sm"
               asChild
               className="border-orange text-orange hover:bg-orange hover:text-white text-[9px] px-1 py-0.5 h-4 min-w-0"
+              title="Reflective essays on technology, human systems, and the intersection of AI and society."
             >
               <Link href="/essays">Essays</Link>
             </Button>
@@ -60,6 +66,7 @@ export function LatestPosts({ posts }: LatestPostsProps) {
               size="sm"
               asChild
               className="border-orange text-orange hover:bg-orange hover:text-white text-[9px] px-1 py-0.5 h-4 min-w-0"
+              title="Technical articles covering software engineering, AI development, and practical implementation patterns for human-AI collaboration systems."
             >
               <Link href="/articles">Articles</Link>
             </Button>
@@ -68,7 +75,7 @@ export function LatestPosts({ posts }: LatestPostsProps) {
       </div>
 
       {view === "card" ? (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {latestPosts.map((post) => (
             <Link key={post.id} href={`/posts/${post.slug}`} className="block group">
               <PostCard post={post} />
@@ -77,9 +84,9 @@ export function LatestPosts({ posts }: LatestPostsProps) {
         </div>
       ) : (
         <div className="flex flex-col rounded-md border border-border overflow-hidden">
-          <div className="grid grid-cols-[110px_1fr_90px_1fr_60px] items-center gap-2 px-1 py-0.5 h-6 bg-muted/40 text-[11px] leading-none text-muted-foreground">
-            <div>Date</div>
+          <div className="grid grid-cols-[1fr_110px_90px_1fr_60px] items-center gap-2 px-1 py-0.5 h-6 bg-muted/40 text-[10px] leading-none text-muted-foreground">
             <div>Title</div>
+            <div>Date</div>
             <div>Type</div>
             <div>Series</div>
             <div className="text-right">Read</div>

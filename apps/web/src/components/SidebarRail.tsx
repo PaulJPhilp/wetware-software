@@ -1,14 +1,16 @@
 "use client";
 import type { Series } from "@/components/SeriesSidebar";
 import { SeriesSidebar } from "@/components/SeriesSidebar";
-import { ChevronsLeft, ChevronsRight, PanelLeft, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { PanelLeftIcon, XIcon } from "@/components/ui/icons";
+import { useEffect, useId, useState } from "react";
 
 interface SidebarRailProps {
   seriesList: Series[];
 }
 
 export function SidebarRail({ seriesList }: SidebarRailProps) {
+  const seriesContentId = useId();
+  const mobileDrawerId = useId();
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [isMobileOpen, setIsMobileOpen] = useState<boolean>(false);
 
@@ -17,17 +19,16 @@ export function SidebarRail({ seriesList }: SidebarRailProps) {
     try {
       const stored = window.localStorage.getItem("sidebar-collapsed");
       if (stored != null) setIsCollapsed(stored === "1");
-    } catch {}
+    } catch { }
   }, []);
 
   useEffect(() => {
     try {
       window.localStorage.setItem("sidebar-collapsed", isCollapsed ? "1" : "0");
-    } catch {}
+    } catch { }
   }, [isCollapsed]);
 
-  const widthClass = isCollapsed ? "w-5" : "w-32";
-  const iconClass = "h-2 w-2";
+  const widthClass = isCollapsed ? "w-4" : "w-40";
 
   // Keyboard shortcut: press "s" to toggle (ignore when typing)
   useEffect(() => {
@@ -46,37 +47,32 @@ export function SidebarRail({ seriesList }: SidebarRailProps) {
     <>
       {/* Desktop rail */}
       <aside
-        className={`relative hidden md:block pr-3 transition-[width] duration-200 ${widthClass}`}
+        className={`relative hidden md:block pr-0 transition-[width] duration-200 ${widthClass}`}
         aria-label="Site navigation sidebar"
         data-collapsed={isCollapsed ? "true" : "false"}
       >
         {/* Always-visible compact title row with toggle */}
-        <div className="sticky top-4 z-0 mb-2 h-[14px] flex items-center gap-1 px-1">
-          <h2 className="m-0 p-0 text-[10px] leading-[14px] font-semibold text-foreground dark:text-white/90">
-            Series
-          </h2>
-          <span className="text-[8px] leading-[14px] text-muted-foreground dark:text-white/70">
-            ({seriesList.length})
-          </span>
+        <div className="sticky top-4 z-0 mb-2 h-auto flex items-center gap-1 pl-0 pr-0">
           <button
             type="button"
             aria-expanded={!isCollapsed}
-            aria-controls="series-sidebar-content"
+            aria-controls={seriesContentId}
             onClick={() => setIsCollapsed((v) => !v)}
-            className="ml-auto h-[14px] w-[14px] flex items-center justify-center text-muted-foreground dark:text-white/70 hover:text-orange focus:outline-none"
+            className="flex items-center gap-1 text-muted-foreground dark:text-white/70 hover:text-orange focus:outline-none"
             title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
-            {isCollapsed ? (
-              <ChevronsRight className={iconClass} />
-            ) : (
-              <ChevronsLeft className={iconClass} />
-            )}
+            <h2 className="m-0 p-0 text-xs leading-none font-semibold text-foreground dark:text-white/90">
+              Series
+            </h2>
+            <span className="text-xs leading-none text-muted-foreground dark:text-white/70">
+              ({seriesList.length})
+            </span>
           </button>
         </div>
 
         {/* Content */}
         <div
-          id="series-sidebar-content"
+          id={seriesContentId}
           className={`transition-opacity duration-150 ${isCollapsed ? "opacity-0 pointer-events-none select-none" : "opacity-100"}`}
           aria-hidden={isCollapsed}
         >
@@ -89,20 +85,20 @@ export function SidebarRail({ seriesList }: SidebarRailProps) {
       {/* Mobile toggle button */}
       <button
         type="button"
-        className="md:hidden fixed bottom-4 left-4 z-40 h-9 px-3 rounded-full border border-silver bg-white shadow-sm flex items-center gap-2 text-[12px] hover:text-orange"
+        className="md:hidden fixed bottom-4 left-4 z-40 h-11 px-4 rounded-full border border-silver bg-white shadow-sm flex items-center gap-2 text-sm hover:text-orange"
         onClick={() => setIsMobileOpen(true)}
-        aria-controls="mobile-sidebar-drawer"
+        aria-controls={mobileDrawerId}
         aria-expanded={isMobileOpen}
         aria-label="Open sidebar"
       >
-        <PanelLeft className="h-4 w-4" />
+        <PanelLeftIcon className="h-4 w-4" />
         Menu
       </button>
 
       {/* Mobile drawer */}
       {isMobileOpen && (
         <div
-          id="mobile-sidebar-drawer"
+          id={mobileDrawerId}
           role="dialog"
           aria-modal="true"
           className="md:hidden fixed inset-0 z-50 flex"
@@ -116,14 +112,14 @@ export function SidebarRail({ seriesList }: SidebarRailProps) {
               if (e.key === "Enter" || e.key === " ") setIsMobileOpen(false);
             }}
           />
-          <div className="relative h-full w-64 max-w-[calc(100vw-3rem)] bg-white border-r border-silver shadow-xl">
+          <div className="relative h-full w-auto max-w-[calc(100vw-3rem)] bg-white border-r border-silver shadow-xl">
             <button
               type="button"
               className="absolute right-2 top-2 h-8 w-8 rounded-full border border-silver bg-white shadow-sm flex items-center justify-center hover:text-orange"
               aria-label="Close sidebar"
               onClick={() => setIsMobileOpen(false)}
             >
-              <X className="h-4 w-4" />
+              <XIcon className="h-4 w-4" />
             </button>
             <div className="pt-12 pb-4 px-2 h-full overflow-y-auto">
               <SeriesSidebar seriesList={seriesList} />

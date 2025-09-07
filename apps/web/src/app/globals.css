@@ -1,17 +1,16 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  --font-family-sans: "Montserrat", system-ui, sans-serif;
-  --font-family-serif: "Merriweather", Georgia, serif;
-  --font-family-mono: "Fira Code", monospace;
-
-  --color-silver: #f8f8f8;
-  --color-charcoal: #212121;
-  --color-orange: #ff7a00;
-}
+/* Tailwind v3: remove v4 @theme; fonts are configured via next/font */
 
 @layer base {
   :root {
+    /* Brand colors - RGB values for alpha support */
+    --color-silver: 248 248 248; /* #f8f8f8 */
+    --color-charcoal: 33 33 33; /* #212121 */
+    --color-orange: 255 122 0; /* #ff7a00 */
+
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -42,6 +41,13 @@
     --radius: 0.5rem;
   }
 
+  .dark {
+    /* Dark theme brand colors - adjust for contrast */
+    --color-silver: 24 24 24; /* dark bg */
+    --color-charcoal: 248 248 248; /* light text */
+    --color-orange: 255 150 60; /* warmer accent in dark */
+  }
+
   /* Base typography styles */
   h1,
   h2,
@@ -52,20 +58,96 @@
     @apply font-sans font-bold tracking-tight;
   }
 
-  h1 {
-    @apply text-4xl md:text-5xl mb-6;
+  /* Prose styling with brand colors */
+  .prose {
+    @apply max-w-none dark:prose-invert;
   }
 
-  h2 {
-    @apply text-3xl md:text-4xl mt-12 mb-4;
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    @apply font-sans;
   }
 
-  h3 {
-    @apply text-2xl md:text-3xl mt-10 mb-3;
+  .prose h1 {
+    @apply text-3xl md:text-4xl;
   }
 
-  p {
-    @apply mb-4 leading-loose;
+  .prose h2 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  .prose p {
+    @apply font-serif;
+  }
+
+  /* Code blocks */
+  .prose pre {
+    @apply bg-[#111] text-silver border border-white/10 rounded-lg px-4 py-3 font-mono;
+  }
+
+  .prose code {
+    @apply bg-orange/10 text-charcoal dark:text-silver rounded px-1 py-0.5 text-sm font-mono;
+  }
+
+  .prose pre code {
+    @apply bg-transparent text-silver p-0;
+  }
+
+  /* Brand color utilities */
+  .text-brand {
+    @apply text-charcoal dark:text-silver;
+  }
+
+  .text-muted {
+    @apply text-charcoal/60 dark:text-silver/60;
+  }
+
+  .text-subtle {
+    @apply text-charcoal/40 dark:text-silver/40;
+  }
+
+  .bg-brand {
+    @apply bg-silver dark:bg-charcoal;
+  }
+
+  .bg-elevated {
+    @apply bg-white dark:bg-charcoal/50;
+  }
+
+  .border-brand {
+    @apply border-charcoal/20 dark:border-white/20;
+  }
+
+  .border-subtle {
+    @apply border-charcoal/5 dark:border-white/5;
+  }
+
+  /* Link styling */
+  .link-brand {
+    @apply text-orange hover:underline underline-offset-4 hover:opacity-80;
+  }
+
+  .link-brand-subtle {
+    @apply text-orange/90 hover:text-orange underline underline-offset-4 decoration-orange/40 hover:decoration-orange/60;
+  }
+
+  /* Inline emphasis */
+  .emphasis-brand {
+    @apply bg-orange/10 text-charcoal dark:text-silver rounded px-1;
+  }
+
+  /* Dividers */
+  .divider-brand {
+    @apply border-t border-charcoal/20 dark:border-white/20;
+  }
+
+  /* Focus states */
+  .focus-ring {
+    @apply outline-none ring-2 ring-orange/70 ring-offset-2 ring-offset-silver dark:ring-offset-charcoal;
   }
 
   /* Smooth scrolling */
@@ -82,7 +164,7 @@
   body {
     color: var(--foreground);
     background: var(--background);
-    font-family: Arial, Helvetica, sans-serif;
+    @apply font-sans;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -105,43 +187,7 @@
   }
 }
 
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
+/* Tailwind v3: remove v4 inline theme map */
 
 :root {
   --radius: 0.625rem;
@@ -194,8 +240,8 @@
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
+  --border: oklch(0.3 0 0);
+  --input: oklch(0.25 0 0);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
@@ -208,7 +254,7 @@
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-border: oklch(0.3 0 0);
   --sidebar-ring: oklch(0.556 0 0);
 }
 

@@ -1,19 +1,12 @@
 import { PostCard } from "@/components/PostCard";
 import { Badge } from "@/components/ui/badge";
-import type { FocusArea } from "@/lib/notion-utils";
+import { focusAreaIcons } from "@/lib/icons";
 import { getSeriesWithPosts } from "@/lib/notion-utils";
-import { Bot, Brain, Briefcase, Code, Users } from "lucide-react";
+import { Brain } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-// Map Focus Areas to Lucide icons
-const focusAreaIcons: Record<FocusArea, typeof Brain> = {
-  "Human-Centric": Brain,
-  "Tech-Centric": Bot,
-  "Human-AI Collaboration": Users,
-  Coding: Code,
-  "Business of AI": Briefcase,
-};
+export const revalidate = 300; // Revalidate every 5 minutes
 
 type Props = {
   params: Promise<{ slug: string }>;

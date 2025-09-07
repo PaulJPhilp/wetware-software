@@ -38,8 +38,8 @@
   font-family: var(--font-geist-mono);
   padding-left: 0;
   margin: 0;
-  font-size: 14px;
-  line-height: 24px;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
   letter-spacing: -0.01em;
   list-style-position: inside;
 }
@@ -75,8 +75,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 1rem;
+  line-height: 1.25rem;
   font-weight: 500;
 }
 
@@ -144,7 +144,7 @@ a.secondary {
   }
 
   .ctas a {
-    font-size: 14px;
+    font-size: 0.875rem;
     height: 40px;
     padding: 0 16px;
   }

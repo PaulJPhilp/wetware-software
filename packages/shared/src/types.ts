@@ -64,6 +64,8 @@ export interface Post {
   // Resource-specific
   curatorsNote?: string;
   customIcon?: string;
+  // Cover image
+  coverImage?: string;
 }
 
 /**

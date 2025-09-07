@@ -41,7 +41,7 @@ export function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-50 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/75 border-b border-border">
+    <header className="sticky top-0 z-50 bg-card border-b border-border">
       <nav className="max-w-screen-2xl mx-auto px-4 md:px-6 py-1 flex items-center justify-between font-sans min-h-0">
         <div className="flex items-center gap-2">
           <Image
@@ -69,13 +69,13 @@ export function Header() {
         <div className="hidden md:flex items-center gap-2 flex-nowrap">
           <Link
             href="/about"
-            className="text-xs hover:text-orange transition-colors whitespace-nowrap px-2"
+            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-4 py-2"
           >
             About
           </Link>
           <Link
             href="/projects"
-            className="text-xs hover:text-orange transition-colors whitespace-nowrap px-2"
+            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-4 py-2"
           >
             Projects
           </Link>
@@ -83,7 +83,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setIsContentOpen(!isContentOpen)}
-              className="flex items-center gap-1 text-xs hover:text-orange transition-colors whitespace-nowrap px-2"
+              className="flex items-center gap-1 text-sm hover:text-orange transition-colors whitespace-nowrap px-4 py-2"
               onBlur={() => setTimeout(() => setIsContentOpen(false), 150)}
             >
               Content
@@ -92,20 +92,20 @@ export function Header() {
               />
             </button>
             {isContentOpen && (
-              <div className="absolute top-full left-0 mt-1 bg-card border border-border rounded-lg shadow-lg py-2 min-w-[120px] z-10">
+              <div className="absolute top-full left-0 mt-1 bg-white dark:bg-black border border-border rounded-lg shadow-lg py-2 min-w-[120px] z-10">
                 {contentLinks}
               </div>
             )}
           </div>
           <Link
             href="/resources"
-            className="text-xs hover:text-orange transition-colors whitespace-nowrap px-2"
+            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-4 py-2"
           >
             Resources
           </Link>
           <Link
             href="/connect"
-            className="text-xs hover:text-orange transition-colors whitespace-nowrap px-2"
+            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-4 py-2"
           >
             Connect
           </Link>
@@ -118,7 +118,7 @@ export function Header() {
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2"
+            className="p-3"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

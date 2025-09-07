@@ -1,5 +1,6 @@
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import type { ContentType, FocusArea, Post, Series } from "@wetware/shared";
+import { unstable_cache } from "next/cache";
 import { blogPostsDatabaseId, notion, seriesDatabaseId } from "./notion";
 
 // Re-export shared types for backward compatibility
@@ -8,204 +9,360 @@ export type { ContentType, FocusArea, Post, Series };
 /**
  * Fetches all series from the Series database
  */
-export async function getSeries(): Promise<Series[]> {
-  console.log("Attempting to fetch series with database ID:", seriesDatabaseId);
-  // Extra debug: print the database ID from env
-  console.log(
-    "DEBUG: seriesDatabaseId from env:",
-    process.env.NOTION_DATABASE_ID_SERIES
-  );
-
-  try {
-    const response = await notion.databases.query({
-      database_id: seriesDatabaseId,
-      filter: {
-        property: "Status",
-        status: {
-          does_not_equal: "Draft",
+export const getSeries = unstable_cache(
+  async (): Promise<Series[]> => {
+    try {
+      const response = await notion.databases.query({
+        database_id: seriesDatabaseId,
+        filter: {
+          property: "Status",
+          status: {
+            does_not_equal: "Draft",
+          },
         },
-      },
-      sorts: [
-        {
-          property: "Name",
-          direction: "ascending",
-        },
-      ],
-    });
+        sorts: [
+          {
+            property: "Name",
+            direction: "ascending",
+          },
+        ],
+      });
 
-    console.log(
-      "Series query successful, found",
-      response.results.length,
-      "results"
-    );
-    console.log(
-      "DEBUG: Raw series query results:",
-      JSON.stringify(response.results, null, 2)
-    );
-    return parseSeriesFromResponse(response.results as PageObjectResponse[]);
-  } catch (error) {
-    console.error("Error accessing Series database:", error);
-    throw error;
-  }
-}
+      return parseSeriesFromResponse(response.results as PageObjectResponse[]);
+    } catch (error) {
+      console.error("Error accessing Series database:", error);
+      throw error;
+    }
+  },
+  ["published-series"],
+  { revalidate: 600 } // Cache for 10 minutes (series change less frequently)
+);
 
 /**
  * Fetches a single series with its posts
  */
-export async function getSeriesWithPosts(
-  seriesSlug: string
-): Promise<{ series: Series; posts: Post[] } | null> {
-  try {
-    // First get the series
-    const seriesResponse = await notion.databases.query({
-      database_id: seriesDatabaseId,
-      filter: {
-        property: "Slug",
-        rich_text: {
-          equals: seriesSlug,
+export const getSeriesWithPosts = unstable_cache(
+  async (
+    seriesSlug: string
+  ): Promise<{ series: Series; posts: Post[] } | null> => {
+    try {
+      // First get the series
+      const seriesResponse = await notion.databases.query({
+        database_id: seriesDatabaseId,
+        filter: {
+          property: "Slug",
+          rich_text: {
+            equals: seriesSlug,
+          },
         },
-      },
-    });
+      });
 
-    if (seriesResponse.results.length === 0) {
-      return null;
+      if (seriesResponse.results.length === 0) {
+        return null;
+      }
+
+      const series = parseSeriesFromResponse(
+        seriesResponse.results as PageObjectResponse[]
+      )[0];
+
+      // Then get posts for this series
+      const postsResponse = await notion.databases.query({
+        database_id: blogPostsDatabaseId,
+        filter: {
+          and: [
+            {
+              property: "Published",
+              checkbox: {
+                equals: true,
+              },
+            },
+            {
+              property: "Blog Series",
+              relation: {
+                contains: series.id,
+              },
+            },
+          ],
+        },
+        sorts: [
+          {
+            property: "Part Number",
+            direction: "ascending",
+          },
+        ],
+      });
+
+      const posts = parsePostsFromResponse(
+        postsResponse.results as PageObjectResponse[]
+      );
+
+      return { series, posts };
+    } catch (error) {
+      console.error("Error fetching series with posts:", error);
+      throw error;
     }
-
-    const series = parseSeriesFromResponse(
-      seriesResponse.results as PageObjectResponse[]
-    )[0];
-
-    // Then get posts for this series
-    const postsResponse = await notion.databases.query({
-      database_id: blogPostsDatabaseId,
-      filter: {
-        and: [
-          {
-            property: "Published",
-            checkbox: {
-              equals: true,
-            },
-          },
-          {
-            property: "Blog Series",
-            relation: {
-              contains: series.id,
-            },
-          },
-        ],
-      },
-      sorts: [
-        {
-          property: "Part Number",
-          direction: "ascending",
-        },
-      ],
-    });
-
-    const posts = parsePostsFromResponse(
-      postsResponse.results as PageObjectResponse[]
-    );
-
-    return { series, posts };
-  } catch (error) {
-    console.error("Error fetching series with posts:", error);
-    throw error;
-  }
-}
+  },
+  ["series-with-posts"],
+  { revalidate: 600 } // Cache for 10 minutes (series content changes less frequently)
+);
 
 /**
- * Fetches published posts from the Blog Posts database
+ * Fetches published posts from the Blog Posts database (excluding about pages)
  */
-export async function getPublishedPosts(): Promise<Post[]> {
-  console.log(
-    "Attempting to fetch posts with database ID:",
-    blogPostsDatabaseId
-  );
-  try {
-    // First, verify we can access the database
-    const database = await notion.databases.retrieve({
-      database_id: blogPostsDatabaseId,
-    });
-    console.log("Successfully connected to database:", database.id);
-
-    const response = await notion.databases.query({
-      database_id: blogPostsDatabaseId,
-      filter: {
-        and: [
-          {
-            property: "Published",
-            checkbox: {
-              equals: true,
+export const getPublishedPosts = unstable_cache(
+  async (): Promise<Post[]> => {
+    try {
+      const response = await notion.databases.query({
+        database_id: blogPostsDatabaseId,
+        filter: {
+          and: [
+            {
+              property: "Published",
+              checkbox: {
+                equals: true,
+              },
             },
+            {
+              property: "Slug",
+              rich_text: {
+                does_not_contain: "about",
+              },
+            },
+            {
+              property: "Title",
+              title: {
+                does_not_contain: "about",
+              },
+            },
+          ],
+        },
+        sorts: [
+          {
+            property: "Published Date",
+            direction: "descending",
           },
         ],
-      },
-      sorts: [
-        {
-          property: "Published Date",
-          direction: "descending",
-        },
-      ],
-    });
+      });
 
-    console.log("Query successful, found", response.results.length, "results");
-    return parsePostsFromResponse(response.results as PageObjectResponse[]);
-  } catch (error) {
-    console.error("Error accessing Notion:", error);
-    throw error;
-  }
-}
+      return parsePostsFromResponse(response.results as PageObjectResponse[]);
+    } catch (error) {
+      console.error("Error accessing Notion:", error);
+      throw error;
+    }
+  },
+  ["published-posts-excluding-about"],
+  { revalidate: 300 } // Cache for 5 minutes
+);
 
 /**
- * Fetches posts by content type
+ * Fetches posts by content type (excluding about pages)
  */
-export async function getPostsByType(
-  contentType: ContentType
-): Promise<Post[]> {
-  try {
-    const response = await notion.databases.query({
-      database_id: blogPostsDatabaseId,
-      filter: {
-        and: [
-          {
-            property: "Published",
-            checkbox: {
-              equals: true,
+export const getPostsByType = unstable_cache(
+  async (contentType: ContentType): Promise<Post[]> => {
+    try {
+      const response = await notion.databases.query({
+        database_id: blogPostsDatabaseId,
+        filter: {
+          and: [
+            {
+              property: "Published",
+              checkbox: {
+                equals: true,
+              },
             },
-          },
-          {
-            property: "Content Type",
-            select: {
-              equals: contentType,
+            {
+              property: "Content Type",
+              select: {
+                equals: contentType,
+              },
             },
+            {
+              property: "Slug",
+              rich_text: {
+                does_not_contain: "about",
+              },
+            },
+            {
+              property: "Title",
+              title: {
+                does_not_contain: "about",
+              },
+            },
+          ],
+        },
+        sorts: [
+          {
+            property: "Published Date",
+            direction: "descending",
           },
         ],
-      },
-      sorts: [
-        {
-          property: "Published Date",
-          direction: "descending",
-        },
-      ],
-    });
+      });
 
-    return parsePostsFromResponse(response.results as PageObjectResponse[]);
-  } catch (error) {
-    console.error(`Error fetching ${contentType} posts:`, error);
-    throw error;
-  }
-}
+      return parsePostsFromResponse(response.results as PageObjectResponse[]);
+    } catch (error) {
+      console.error(`Error fetching ${contentType} posts:`, error);
+      throw error;
+    }
+  },
+  ["posts-by-type-excluding-about"],
+  { revalidate: 300 } // Cache for 5 minutes
+);
+
+/**
+ * Fetches recent posts with a limit for performance
+ */
+export const getRecentPosts = unstable_cache(
+  async (limit: number = 10): Promise<Post[]> => {
+    try {
+      const response = await notion.databases.query({
+        database_id: blogPostsDatabaseId,
+        filter: {
+          and: [
+            {
+              property: "Published",
+              checkbox: {
+                equals: true,
+              },
+            },
+            {
+              property: "Slug",
+              rich_text: {
+                does_not_contain: "about",
+              },
+            },
+            {
+              property: "Title",
+              title: {
+                does_not_contain: "about",
+              },
+            },
+          ],
+        },
+        sorts: [
+          {
+            property: "Published Date",
+            direction: "descending",
+          },
+        ],
+        page_size: limit,
+      });
+
+      return parsePostsFromResponse(response.results as PageObjectResponse[]);
+    } catch (error) {
+      console.error("Error fetching recent posts:", error);
+      throw error;
+    }
+  },
+  ["recent-posts"],
+  { revalidate: 300 } // Cache for 5 minutes
+);
+
+/**
+ * Fetches featured posts for the home page
+ */
+export const getFeaturedPosts = unstable_cache(
+  async (limit: number = 3): Promise<Post[]> => {
+    try {
+      const response = await notion.databases.query({
+        database_id: blogPostsDatabaseId,
+        filter: {
+          and: [
+            {
+              property: "Published",
+              checkbox: {
+                equals: true,
+              },
+            },
+            {
+              property: "Featured",
+              checkbox: {
+                equals: true,
+              },
+            },
+            {
+              property: "Slug",
+              rich_text: {
+                does_not_contain: "about",
+              },
+            },
+            {
+              property: "Title",
+              title: {
+                does_not_contain: "about",
+              },
+            },
+          ],
+        },
+        sorts: [
+          {
+            property: "Published Date",
+            direction: "descending",
+          },
+        ],
+        page_size: limit,
+      });
+
+      return parsePostsFromResponse(response.results as PageObjectResponse[]);
+    } catch (error) {
+      console.error("Error fetching featured posts:", error);
+      throw error;
+    }
+  },
+  ["featured-posts"],
+  { revalidate: 300 } // Cache for 5 minutes
+);
 
 /**
  * Fetches a single post's content by its page ID
  */
-export async function getPostContent(pageId: string) {
-  const blocks = await notion.blocks.children.list({
-    block_id: pageId,
-  });
+export const getPostContent = unstable_cache(
+  async (pageId: string) => {
+    const blocks = await notion.blocks.children.list({
+      block_id: pageId,
+    });
 
-  return blocks;
-}
+    return blocks;
+  },
+  ["post-content"],
+  { revalidate: 600 } // Cache for 10 minutes (content changes less frequently)
+);
+
+/**
+ * Fetches a single post by its slug
+ */
+export const getPostBySlug = unstable_cache(
+  async (slug: string): Promise<Post | null> => {
+    try {
+      const response = await notion.databases.query({
+        database_id: blogPostsDatabaseId,
+        filter: {
+          and: [
+            {
+              property: "Published",
+              checkbox: {
+                equals: true,
+              },
+            },
+            {
+              property: "Slug",
+              rich_text: {
+                equals: slug,
+              },
+            },
+          ],
+        },
+      });
+
+      const posts = parsePostsFromResponse(response.results as PageObjectResponse[]);
+      return posts.length > 0 ? posts[0] : null;
+    } catch (error) {
+      console.error("Error fetching post by slug:", error);
+      throw error;
+    }
+  },
+  ["post-by-slug"],
+  { revalidate: 300 } // Cache for 5 minutes
+);
 
 /**
  * Helper function to parse series from Notion API response
@@ -218,11 +375,6 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
       }
 
       const props = page.properties;
-      console.log("DEBUG: Series page property keys:", Object.keys(props));
-      // Log all property values for debugging
-      for (const key of Object.keys(props)) {
-        console.log(`DEBUG: Property '${key}':`, props[key]);
-      }
 
       // Use fallback values if properties are missing
       const nameProp = props.Name;
@@ -354,9 +506,6 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
 
     const props = page.properties;
 
-    // Log available properties to help debug
-    console.log("Available properties in Notion page:", Object.keys(props));
-
     // Check for required properties
     if (
       !("Title" in props) ||
@@ -393,6 +542,7 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
     const sourceLinkProp = props["Source Link"];
     const curatorsNoteProp = props["Curator's Note"];
     const customIconProp = props.Icon;
+    const coverImageProp = props["Cover Image"];
 
     // Validate required property types
     if (
@@ -474,6 +624,21 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
       }
     }
 
+    // Parse cover image
+    let coverImage: string | undefined;
+    if (
+      coverImageProp &&
+      coverImageProp.type === "files" &&
+      coverImageProp.files.length > 0
+    ) {
+      const file = coverImageProp.files[0];
+      if (file.type === "file") {
+        coverImage = file.file.url;
+      } else if (file.type === "external") {
+        coverImage = file.external.url;
+      }
+    }
+
     return {
       id: page.id,
       name: nameProp.title[0]?.plain_text || "",
@@ -481,10 +646,10 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
       publishDate:
         dateProp.type === "date" && dateProp.date
           ? new Date(dateProp.date.start).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
           : "",
       type: (typeProp.select?.name as ContentType) || "Article",
       focusArea: (focusAreaProp?.select?.name as FocusArea) || "Tech-Centric",
@@ -504,6 +669,7 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
       sourceLink,
       curatorsNote,
       customIcon,
+      coverImage,
     };
   });
 }

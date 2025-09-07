@@ -8,6 +8,8 @@ export const metadata: Metadata = {
     "Technical articles on software engineering, AI development, and human-AI collaboration patterns.",
 };
 
+export const revalidate = 300; // Revalidate every 5 minutes
+
 export default async function ArticlesPage() {
   try {
     const articles = (await getPostsByType("Article")).filter((post) => {

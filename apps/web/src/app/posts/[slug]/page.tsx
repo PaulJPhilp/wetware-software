@@ -1,22 +1,20 @@
+import { ClientOnly } from "@/components/ClientOnly";
 import { NotionContent } from "@/components/NotionContent";
 import { PostCard } from "@/components/PostCard";
-import { SeriesNavigation } from "@/components/SeriesNavigation";
 import { Badge } from "@/components/ui/badge";
-import { getPostContent, getPublishedPosts, type FocusArea } from "@/lib/notion-utils";
+import { focusAreaIcons } from "@/lib/icons";
+import { getPostBySlug, getPostContent, getPublishedPosts } from "@/lib/notion-utils";
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { Bot, Brain, Briefcase, Code, Users } from "lucide-react";
+import { Brain } from "lucide-react";
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-// Map Focus Areas to Lucide icons
-const focusAreaIcons: Record<FocusArea, typeof Brain> = {
-  "Human-Centric": Brain,
-  "Tech-Centric": Bot,
-  "Human-AI Collaboration": Users,
-  Coding: Code,
-  "Business of AI": Briefcase,
-};
+// Lazy load SeriesNavigation since it's only needed for posts in series
+const SeriesNavigation = dynamic(() =>
+  import("@/components/SeriesNavigation").then((mod) => ({ default: mod.SeriesNavigation }))
+);
 
 export const revalidate = 3600; // Revalidate every hour
 
@@ -26,8 +24,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const posts = await getPublishedPosts();
-  const post = posts.find((p) => p.slug === slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     return {
@@ -50,8 +47,7 @@ export async function generateStaticParams() {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const posts = await getPublishedPosts();
-  const post = posts.find((p) => p.slug === slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     notFound();
@@ -61,36 +57,42 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const FocusIcon = focusAreaIcons[post.focusArea] || Brain; // Fallback to Brain if focus area not found
 
   // Get series posts if this post is part of a series
-  const seriesPosts = post.seriesId ? posts.filter((p) => p.seriesId === post.seriesId) : [];
+  const seriesPosts = post.seriesId ? await getPublishedPosts().then(posts =>
+    posts.filter((p) => p.seriesId === post.seriesId)
+  ) : [];
 
   // Get related posts (same focus area, excluding current post)
-  const relatedPosts = posts
-    .filter((p) => p.focusArea === post.focusArea && p.id !== post.id)
-    .slice(0, 3);
+  const relatedPosts = await getPublishedPosts().then(posts =>
+    posts
+      .filter((p) => p.focusArea === post.focusArea && p.id !== post.id)
+      .slice(0, 3)
+  );
 
   return (
-    <div className="max-w-4xl xl:max-w-5xl 2xl:max-w-6xl mx-auto py-12 px-4 md:px-8 space-y-8">
+    <div className="max-w-4xl xl:max-w-5xl 2xl:max-w-6xl mx-auto py-8 px-4 md:px-8 space-y-8">
       {/* Series Navigation */}
       {post.seriesId && seriesPosts.length > 1 && (
         <SeriesNavigation currentPost={post} seriesPosts={seriesPosts} />
       )}
 
-      <article className="bg-card rounded-xl shadow-lg border border-card space-y-12 p-8">
+      <article className="bg-card rounded-xl shadow-lg border border-card space-y-8 p-6">
         {/* Header */}
-        <header className="space-y-6 text-center pb-6 border-b border-card">
+        <header className="space-y-4 text-center pb-4 border-b border-card">
           <div className="flex items-center justify-center gap-4 mb-2">
             <Badge variant="secondary" className="font-sans text-base px-3 py-1">
               {post.type}
             </Badge>
             <FocusIcon className="w-6 h-6 text-orange animate-bounce" />
           </div>
-          <h1 className="text-4xl md:text-5xl xl:text-6xl font-sans font-bold mb-2 text-charcoal leading-tight">
+          <h1 className="fluid-h1 font-bold mb-2">
             {post.name}
           </h1>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-charcoal/60 mb-2">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted mb-2">
             <time>{post.publishDate}</time>
             <span>•</span>
             <span>{post.readTime} min read</span>
+            <span>•</span>
+            <span>Last updated: {post.publishDate}</span>
           </div>
           {post.tags.length > 0 && (
             <div className="flex flex-wrap items-center justify-center gap-2 text-sm text-charcoal/60">
@@ -107,11 +109,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </header>
 
         {/* Content */}
-        <section className="prose prose-lg xl:prose-xl 2xl:prose-2xl prose-charcoal text-left leading-relaxed">
-          <p className="text-xl text-charcoal/80 mb-8 font-serif italic leading-relaxed">
+        <section className="prose prose-base">
+          <p className="italic">
             {post.description}
           </p>
-          <div className="space-y-6 font-serif text-lg leading-loose text-charcoal">
+          <div className="space-y-6">
             <NotionContent blocks={blocks.results as BlockObjectResponse[]} />
           </div>
         </section>
@@ -130,7 +132,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {/* Related Posts */}
           {relatedPosts.length > 0 && (
             <div className="mt-8">
-              <h3 className="text-2xl font-sans font-bold mb-6 text-center text-charcoal">
+              <h3 className="fluid-h3 font-bold mb-6 text-center text-charcoal">
                 More on {post.focusArea}
               </h3>
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -140,7 +142,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     href={`/posts/${relatedPost.slug}`}
                     className="block group"
                   >
-                    <PostCard post={relatedPost} />
+                    <ClientOnly>
+                      <PostCard post={relatedPost} />
+                    </ClientOnly>
                   </Link>
                 ))}
               </div>

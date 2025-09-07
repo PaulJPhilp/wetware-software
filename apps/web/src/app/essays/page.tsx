@@ -8,13 +8,11 @@ export const metadata: Metadata = {
     "Thoughtful essays exploring the intersection of human systems and artificial intelligence.",
 };
 
+export const revalidate = 300; // Revalidate every 5 minutes
+
 export default async function EssaysPage() {
   try {
-    const essays = (await getPostsByType("Essay")).filter((post) => {
-      const slug = post.slug?.toLowerCase?.() ?? "";
-      const title = post.name?.toLowerCase?.() ?? "";
-      return !slug.includes("about") && !title.includes("about");
-    });
+    const essays = await getPostsByType("Essay");
 
     return (
       <main className="max-w-6xl xl:max-w-7xl mx-auto px-4 md:px-6 py-8">

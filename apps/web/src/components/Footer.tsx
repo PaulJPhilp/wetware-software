@@ -1,47 +1,58 @@
-import { Github, Mail, Twitter } from "lucide-react";
+import dynamic from "next/dynamic";
+
+// Lazy load social icons since they're not critical for initial page load
+const Github = dynamic(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Github }))
+);
+const Mail = dynamic(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Mail }))
+);
+const Twitter = dynamic(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Twitter }))
+);
 
 export function Footer() {
   return (
     <footer className="border-t mt-16 bg-card">
       <div className="max-w-screen-2xl mx-auto px-4 md:px-6 py-2 flex flex-col sm:flex-row justify-between items-center gap-4 font-sans">
-        <div className="text-[10px] text-muted-foreground text-center sm:text-left">
+        <div className="text-xs text-muted-foreground text-center sm:text-left">
           © {new Date().getFullYear()} Paul J Philp. All rights reserved.
         </div>
         <div className="flex items-center gap-4">
           <a
             href="https://github.com/PaulJPhilp"
-            className="text-muted-foreground hover:text-orange transition-colors"
+            className="text-muted-foreground hover:text-orange transition-colors p-2"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
           >
-            <Github className="w-3 h-3" />
+            <Github className="w-6 h-6" />
           </a>
           <a
             href="mailto:paul@paulphilp.com"
-            className="text-muted-foreground hover:text-orange transition-colors"
+            className="text-muted-foreground hover:text-orange transition-colors p-2"
             aria-label="Email"
           >
-            <Mail className="w-3 h-3" />
+            <Mail className="w-6 h-6" />
           </a>
           <a
             href="https://x.com/PaulPhilp624972"
-            className="text-muted-foreground hover:text-orange transition-colors"
+            className="text-muted-foreground hover:text-orange transition-colors p-2"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Twitter/X"
           >
-            <Twitter className="w-3 h-3" />
+            <Twitter className="w-6 h-6" />
           </a>
           <a
             href="https://bsky.app/profile/paulphilp.com"
-            className="text-muted-foreground hover:text-orange transition-colors"
+            className="text-muted-foreground hover:text-orange transition-colors p-2"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Bluesky"
           >
             <svg
-              className="w-3 h-3"
+              className="w-6 h-6"
               fill="currentColor"
               viewBox="0 0 16 16"
               xmlns="http://www.w3.org/2000/svg"

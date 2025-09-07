@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import type { FocusArea } from "@/lib/notion-utils";
+import { focusAreaIcons } from "@/lib/icons";
 import { getSeries } from "@/lib/notion-utils";
-import { Bot, Brain, Briefcase, Code, Users } from "lucide-react";
+import { Brain } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,14 +13,7 @@ export const metadata: Metadata = {
     "Explore in-depth series covering human-AI collaboration, software architecture, and the intersection of technology and human systems.",
 };
 
-// Map Focus Areas to Lucide icons
-const focusAreaIcons: Record<FocusArea, typeof Brain> = {
-  "Human-Centric": Brain,
-  "Tech-Centric": Bot,
-  "Human-AI Collaboration": Users,
-  Coding: Code,
-  "Business of AI": Briefcase,
-};
+export const revalidate = 300; // Revalidate every 5 minutes
 
 export default async function SeriesPage() {
   try {

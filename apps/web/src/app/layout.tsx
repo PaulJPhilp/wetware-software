@@ -1,5 +1,7 @@
+import { ClientOnly } from "@/components/ClientOnly";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { ServiceWorker } from "@/components/ServiceWorker";
 import { SidebarRail } from "@/components/SidebarRail";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { firaCode, merriweather, montserrat } from "@/lib/fonts";
@@ -58,10 +60,15 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
+          <ServiceWorker />
+          <ClientOnly>
+            <Header />
+          </ClientOnly>
           <main className="max-w-screen-2xl mx-auto px-4 md:px-6 py-2">
-            <div className="md:grid md:grid-cols-[auto_minmax(0,1fr)] gap-4 md:gap-6 items-start">
-              <SidebarRail seriesList={seriesList} />
+            <div className="grid md:grid-cols-[auto_minmax(0,1fr)] lg:grid-cols-[auto_minmax(0,1fr)] gap-6 md:gap-8 items-start">
+              <ClientOnly>
+                <SidebarRail seriesList={seriesList} />
+              </ClientOnly>
               <div className="w-full min-w-0">{children}</div>
             </div>
           </main>

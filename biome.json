@@ -10,8 +10,14 @@
         "rules": {
             "recommended": true,
             "suspicious": {
-                "noExplicitAny": "error"
+                "noExplicitAny": "error",
+                "noUnknownAtRules": "off"
             }
+        }
+    },
+    "css": {
+        "linter": {
+            "enabled": true
         }
     },
     "assist": {

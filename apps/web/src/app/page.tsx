@@ -1,24 +1,24 @@
+import { ClientOnly } from "@/components/ClientOnly";
 import { LatestPosts } from "@/components/LatestPosts";
 import { PostCard } from "@/components/PostCard";
-import { getPublishedPosts, getSeries } from "@/lib/notion-utils";
+import { getFeaturedPosts, getRecentPosts, getSeries } from "@/lib/notion-utils";
 import Link from "next/link";
 
 export const revalidate = 60; // Revalidate every minute to avoid stale cache
 
 export default async function Home() {
-  const posts = (await getPublishedPosts()).filter((post) => {
-    const slug = post.slug?.toLowerCase?.() ?? "";
-    const title = post.name?.toLowerCase?.() ?? "";
-    return !slug.includes("about") && !title.includes("about");
-  });
-  const series = await getSeries();
+  const [featuredPosts, series, recentPosts] = await Promise.all([
+    getFeaturedPosts(3),
+    getSeries(),
+    getRecentPosts(10)
+  ]);
+
   const seriesIdToName: Record<string, string> = Object.fromEntries(
     series.map((s) => [s.id, s.name]),
   );
-  const postsWithSeriesName = posts.map((p) =>
+  const recentPostsWithSeriesName = recentPosts.map((p) =>
     p.seriesId ? { ...p, seriesName: seriesIdToName[p.seriesId] } : p,
   );
-  const featuredPosts = postsWithSeriesName.filter((post) => post.featured).slice(0, 3);
 
   return (
     <div className="space-y-12 px-2 sm:px-4 md:px-8 min-h-screen">
@@ -32,17 +32,19 @@ export default async function Home() {
                 Highlighted content across human-AI collaboration
               </p>
             </div>
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
               {featuredPosts.map((post) => (
                 <Link key={post.id} href={`/posts/${post.slug}`} className="block group">
-                  <PostCard post={post} />
+                  <ClientOnly>
+                    <PostCard post={post} />
+                  </ClientOnly>
                 </Link>
               ))}
             </div>
           </div>
         )}
 
-        <LatestPosts posts={postsWithSeriesName} />
+        <LatestPosts posts={recentPostsWithSeriesName} />
       </section>
     </div>
   );
