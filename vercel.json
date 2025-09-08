@@ -1,9 +1,8 @@
 {
-  "buildCommand": "bun run build:shared && bun run build:web",
+  "buildCommand": "cd .. && bun run build:shared && cd apps/web && bun run build",
   "outputDirectory": "apps/web/.next",
   "framework": "nextjs",
-  "installCommand": "bun install",
-  "devCommand": "bun run dev:web",
+  "installCommand": "cd .. && bun install",
   "regions": [
     "iad1"
   ]
