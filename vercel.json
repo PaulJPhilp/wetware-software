@@ -1,20 +1,5 @@
 {
-  "buildCommand": "cd apps/web && bun run build",
-  "outputDirectory": "apps/web/.next",
   "framework": "nextjs",
-  "installCommand": "bash -lc \"if ! command -v bun >/dev/null 2>&1; then curl -fsSL https://bun.sh/install | bash; export PATH=\"$HOME/.bun/bin:$PATH\"; fi && bun install\"",
-  "devCommand": "cd apps/web && bun run dev",
-  "headers": [
-    {
-      "source": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2))$",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    }
-  ],
   "regions": [
     "iad1"
   ]
