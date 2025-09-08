@@ -41,7 +41,7 @@ export function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-50 bg-card border-b border-border">
+    <header className="sticky top-0 z-[100] bg-card border-b border-border">
       <nav className="max-w-screen-2xl mx-auto px-4 md:px-6 py-1 flex items-center justify-between font-sans min-h-0">
         <div className="flex items-center gap-2">
           <Image
@@ -69,13 +69,13 @@ export function Header() {
         <div className="hidden md:flex items-center gap-2 flex-nowrap">
           <Link
             href="/about"
-            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-4 py-2"
+            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-2 py-2"
           >
             About
           </Link>
           <Link
             href="/projects"
-            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-4 py-2"
+            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-2 py-2"
           >
             Projects
           </Link>
@@ -83,7 +83,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setIsContentOpen(!isContentOpen)}
-              className="flex items-center gap-1 text-sm hover:text-orange transition-colors whitespace-nowrap px-4 py-2"
+              className="flex items-center gap-1 text-sm hover:text-orange transition-colors whitespace-nowrap px-2 py-2"
               onBlur={() => setTimeout(() => setIsContentOpen(false), 150)}
             >
               Content
@@ -99,13 +99,13 @@ export function Header() {
           </div>
           <Link
             href="/resources"
-            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-4 py-2"
+            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-2 py-2"
           >
             Resources
           </Link>
           <Link
             href="/connect"
-            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-4 py-2"
+            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-2 py-2"
           >
             Connect
           </Link>

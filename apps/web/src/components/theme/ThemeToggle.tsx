@@ -28,13 +28,13 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
       type="button"
       onClick={handleToggle}
       aria-label="Toggle theme"
-      className={`inline-flex items-center justify-center rounded-md border border-border bg-card text-card-foreground hover:bg-muted/50 transition-colors h-11 w-11 ${className}`}
+      className={`inline-flex items-center justify-center rounded-md border border-border bg-card text-card-foreground hover:bg-muted/50 transition-colors h-6 w-6 ${className}`}
     >
       {isMounted ? (
         isDark ? (
-          <Sun className="h-5 w-5" />
+          <Sun className="h-3 w-3" />
         ) : (
-          <Moon className="h-5 w-5" />
+          <Moon className="h-3 w-3" />
         )
       ) : (
         <span className="sr-only">Theme</span>

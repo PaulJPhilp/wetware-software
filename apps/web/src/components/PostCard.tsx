@@ -38,7 +38,7 @@ export function PostCard({ post }: { post: Post }) {
           />
         </div>
       )}
-      <CardHeader className="space-y-0 pb-0 py-0">
+      <CardHeader className="space-y-0 pb-0 py-0 px-1">
         <div className="flex items-center space-x-0.5">
           <Badge
             variant="outline"
@@ -55,7 +55,7 @@ export function PostCard({ post }: { post: Post }) {
           </div>
         )}
       </CardHeader>
-      <CardContent className="space-y-[1px] py-0 [&_h2]:mt-0 [&_h2]:mb-0">
+      <CardContent className="space-y-[1px] py-0 px-1 [&_h2]:mt-0 [&_h2]:mb-0">
         <h2 className="text-sm font-sans font-bold group-hover:text-orange transition-colors line-clamp-2">
           {post.name}
         </h2>
@@ -63,7 +63,7 @@ export function PostCard({ post }: { post: Post }) {
           {post.description}
         </p>
       </CardContent>
-      <CardFooter className="flex items-center space-x-0.5 text-xs text-muted-foreground py-0 pt-1">
+      <CardFooter className="flex items-center space-x-0.5 text-xs text-muted-foreground py-0 pt-1 px-1">
         <div className="flex items-center space-x-0.5">
           <div className="space-x-0.5">
             {post.tags.map((tag) => {
