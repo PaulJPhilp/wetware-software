@@ -10,9 +10,10 @@
   "scripts": {
     "dev:web": "cd apps/web && bun run dev",
     "dev:cli": "cd packages/cli && bun run dev",
-    "build:all": "bun run build:web && bun run build:cli",
+    "build:all": "bun run build:shared && bun run build:web && bun run build:cli",
     "build:web": "cd apps/web && bun run build",
     "build:cli": "cd packages/cli && bun run build",
+    "build:shared": "cd packages/shared && bun run build",
     "test:all": "bun run test:cli",
     "test:cli": "cd packages/cli && bun run test",
     "format": "bunx biome format --write apps/ packages/",
