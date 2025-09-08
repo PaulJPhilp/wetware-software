@@ -6,6 +6,9 @@ const bundleAnalyzer = withBundleAnalyzer({
 });
 
 const nextConfig: NextConfig = {
+  // Transpile the shared package
+  transpilePackages: ['@wetware/shared'],
+
   // CDN and caching optimizations
   async headers() {
     return [
