@@ -22,12 +22,6 @@ jobs:
           curl -fsSL https://bun.sh/install | bash
           echo "${HOME}/.bun/bin" >> $GITHUB_PATH
 
-      - name: Check Vercel secrets
-        run: |
-          if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then echo "VERCEL_TOKEN is not set"; exit 1; fi
-          if [ -z "${{ secrets.VERCEL_ORG_ID }}" ]; then echo "VERCEL_ORG_ID is not set"; exit 1; fi
-          if [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then echo "VERCEL_PROJECT_ID is not set"; exit 1; fi
-
       - name: Install dependencies (bun)
         run: |
           cd apps/web
@@ -38,11 +32,3 @@ jobs:
           cd apps/web
           bun run build
 
-      - name: Deploy to Vercel (CLI)
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          cd apps/web
-          # Install vercel temporarily and deploy non-interactively using the token
-          npm ci --package-lock-only || true
-          npx vercel --prod --confirm --token "$VERCEL_TOKEN"

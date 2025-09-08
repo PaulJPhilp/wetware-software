@@ -27,7 +27,7 @@
     "vercel": "^47.0.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.2",
+    "@biomejs/biome": "^2.2.3",
     "typescript": "^5.9.2"
   }
 }
