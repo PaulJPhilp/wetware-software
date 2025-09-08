@@ -10,7 +10,7 @@ export default async function Home() {
   const [featuredPosts, series, recentPosts] = await Promise.all([
     getFeaturedPosts(3),
     getSeries(),
-    getRecentPosts(10)
+    getRecentPosts(10),
   ]);
 
   const seriesIdToName: Record<string, string> = Object.fromEntries(

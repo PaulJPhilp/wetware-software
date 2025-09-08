@@ -35,16 +35,14 @@ export const getSeries = unstable_cache(
     }
   },
   ["published-series"],
-  { revalidate: 600 } // Cache for 10 minutes (series change less frequently)
+  { revalidate: 600 }, // Cache for 10 minutes (series change less frequently)
 );
 
 /**
  * Fetches a single series with its posts
  */
 export const getSeriesWithPosts = unstable_cache(
-  async (
-    seriesSlug: string
-  ): Promise<{ series: Series; posts: Post[] } | null> => {
+  async (seriesSlug: string): Promise<{ series: Series; posts: Post[] } | null> => {
     try {
       // First get the series
       const seriesResponse = await notion.databases.query({
@@ -61,9 +59,7 @@ export const getSeriesWithPosts = unstable_cache(
         return null;
       }
 
-      const series = parseSeriesFromResponse(
-        seriesResponse.results as PageObjectResponse[]
-      )[0];
+      const series = parseSeriesFromResponse(seriesResponse.results as PageObjectResponse[])[0];
 
       // Then get posts for this series
       const postsResponse = await notion.databases.query({
@@ -92,9 +88,7 @@ export const getSeriesWithPosts = unstable_cache(
         ],
       });
 
-      const posts = parsePostsFromResponse(
-        postsResponse.results as PageObjectResponse[]
-      );
+      const posts = parsePostsFromResponse(postsResponse.results as PageObjectResponse[]);
 
       return { series, posts };
     } catch (error) {
@@ -103,7 +97,7 @@ export const getSeriesWithPosts = unstable_cache(
     }
   },
   ["series-with-posts"],
-  { revalidate: 600 } // Cache for 10 minutes (series content changes less frequently)
+  { revalidate: 600 }, // Cache for 10 minutes (series content changes less frequently)
 );
 
 /**
@@ -151,7 +145,7 @@ export const getPublishedPosts = unstable_cache(
     }
   },
   ["published-posts-excluding-about"],
-  { revalidate: 300 } // Cache for 5 minutes
+  { revalidate: 300 }, // Cache for 5 minutes
 );
 
 /**
@@ -205,7 +199,7 @@ export const getPostsByType = unstable_cache(
     }
   },
   ["posts-by-type-excluding-about"],
-  { revalidate: 300 } // Cache for 5 minutes
+  { revalidate: 300 }, // Cache for 5 minutes
 );
 
 /**
@@ -254,7 +248,7 @@ export const getRecentPosts = unstable_cache(
     }
   },
   ["recent-posts"],
-  { revalidate: 300 } // Cache for 5 minutes
+  { revalidate: 300 }, // Cache for 5 minutes
 );
 
 /**
@@ -309,7 +303,7 @@ export const getFeaturedPosts = unstable_cache(
     }
   },
   ["featured-posts"],
-  { revalidate: 300 } // Cache for 5 minutes
+  { revalidate: 300 }, // Cache for 5 minutes
 );
 
 /**
@@ -324,7 +318,7 @@ export const getPostContent = unstable_cache(
     return blocks;
   },
   ["post-content"],
-  { revalidate: 600 } // Cache for 10 minutes (content changes less frequently)
+  { revalidate: 600 }, // Cache for 10 minutes (content changes less frequently)
 );
 
 /**
@@ -361,7 +355,7 @@ export const getPostBySlug = unstable_cache(
     }
   },
   ["post-by-slug"],
-  { revalidate: 300 } // Cache for 5 minutes
+  { revalidate: 300 }, // Cache for 5 minutes
 );
 
 /**
@@ -412,11 +406,7 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
 
         // Get cover image URL if available
         let coverImage: string | undefined;
-        if (
-          coverImageProp &&
-          coverImageProp.type === "files" &&
-          coverImageProp.files.length > 0
-        ) {
+        if (coverImageProp && coverImageProp.type === "files" && coverImageProp.files.length > 0) {
           const file = coverImageProp.files[0];
           if (file.type === "file") {
             coverImage = file.file.url;
@@ -427,11 +417,7 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
 
         // Parse Focus Area
         let focusArea: FocusArea = "Human-Centric"; // Default fallback
-        if (
-          focusAreaProp &&
-          focusAreaProp.type === "select" &&
-          focusAreaProp.select?.name
-        ) {
+        if (focusAreaProp && focusAreaProp.type === "select" && focusAreaProp.select?.name) {
           focusArea = focusAreaProp.select.name as FocusArea;
         }
 
@@ -448,30 +434,22 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
         let normalizedStatus: Series["status"] = "Draft";
         if (statusProp.type === "select") {
           const name = statusProp.select?.name?.toLowerCase() || "";
-          if (name === "active" || name === "in progress")
-            normalizedStatus = "Active";
-          else if (name === "completed" || name === "done")
-            normalizedStatus = "Completed";
-          else if (name === "draft" || name === "not started")
-            normalizedStatus = "Draft";
+          if (name === "active" || name === "in progress") normalizedStatus = "Active";
+          else if (name === "completed" || name === "done") normalizedStatus = "Completed";
+          else if (name === "draft" || name === "not started") normalizedStatus = "Draft";
         } else if (statusProp.type === "status") {
           const name = statusProp.status?.name?.toLowerCase() || "";
-          if (name === "active" || name === "in progress")
-            normalizedStatus = "Active";
-          else if (name === "completed" || name === "done")
-            normalizedStatus = "Completed";
-          else if (name === "draft" || name === "not started")
-            normalizedStatus = "Draft";
+          if (name === "active" || name === "in progress") normalizedStatus = "Active";
+          else if (name === "completed" || name === "done") normalizedStatus = "Completed";
+          else if (name === "draft" || name === "not started") normalizedStatus = "Draft";
         }
 
         return {
           id: page.id,
           name: nameProp.title[0]?.plain_text || "",
           slug: slugProp.rich_text[0]?.plain_text || "",
-          description:
-            descProp.rich_text.map((rt) => rt.plain_text).join("") || "",
-          seriesGoal:
-            goalProp.rich_text.map((rt) => rt.plain_text).join("") || "",
+          description: descProp.rich_text.map((rt) => rt.plain_text).join("") || "",
+          seriesGoal: goalProp.rich_text.map((rt) => rt.plain_text).join("") || "",
           status: normalizedStatus,
           focusArea,
           tags,
@@ -487,7 +465,7 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
             descProp,
             goalProp,
             statusProp,
-          }
+          },
         );
         return null;
       }
@@ -519,8 +497,8 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
     ) {
       throw new Error(
         `Missing required properties in Notion page. Required: Title, Slug, Published Date, Content Type, Description, Tags, Read Time, Featured. Found: ${Object.keys(
-          props
-        ).join(", ")}`
+          props,
+        ).join(", ")}`,
       );
     }
 
@@ -568,19 +546,11 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
     let seriesName: string | undefined;
     let partNumber: number | undefined;
 
-    if (
-      seriesProp &&
-      seriesProp.type === "relation" &&
-      seriesProp.relation.length > 0
-    ) {
+    if (seriesProp && seriesProp.type === "relation" && seriesProp.relation.length > 0) {
       seriesId = seriesProp.relation[0].id;
     }
 
-    if (
-      partNumberProp &&
-      partNumberProp.type === "number" &&
-      partNumberProp.number !== null
-    ) {
+    if (partNumberProp && partNumberProp.type === "number" && partNumberProp.number !== null) {
       partNumber = partNumberProp.number;
     }
 
@@ -606,16 +576,10 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
     let customIcon: string | undefined;
 
     if (curatorsNoteProp && curatorsNoteProp.type === "rich_text") {
-      curatorsNote =
-        curatorsNoteProp.rich_text.map((rt) => rt.plain_text).join("") ||
-        undefined;
+      curatorsNote = curatorsNoteProp.rich_text.map((rt) => rt.plain_text).join("") || undefined;
     }
 
-    if (
-      customIconProp &&
-      customIconProp.type === "files" &&
-      customIconProp.files.length > 0
-    ) {
+    if (customIconProp && customIconProp.type === "files" && customIconProp.files.length > 0) {
       const file = customIconProp.files[0];
       if (file.type === "file") {
         customIcon = file.file.url;
@@ -626,11 +590,7 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
 
     // Parse cover image
     let coverImage: string | undefined;
-    if (
-      coverImageProp &&
-      coverImageProp.type === "files" &&
-      coverImageProp.files.length > 0
-    ) {
+    if (coverImageProp && coverImageProp.type === "files" && coverImageProp.files.length > 0) {
       const file = coverImageProp.files[0];
       if (file.type === "file") {
         coverImage = file.file.url;
@@ -646,10 +606,10 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
       publishDate:
         dateProp.type === "date" && dateProp.date
           ? new Date(dateProp.date.start).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
           : "",
       type: (typeProp.select?.name as ContentType) || "Article",
       focusArea: (focusAreaProp?.select?.name as FocusArea) || "Tech-Centric",

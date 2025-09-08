@@ -14,7 +14,7 @@ registerRoute(
   /^https:\/\/fonts\.googleapis\.com/,
   new StaleWhileRevalidate({
     cacheName: "google-fonts-stylesheets",
-  })
+  }),
 );
 
 // Cache the underlying font files with a cache-first strategy for 1 year
@@ -28,7 +28,7 @@ registerRoute(
         maxEntries: 30,
       }),
     ],
-  })
+  }),
 );
 
 // Cache images with a cache-first strategy
@@ -42,7 +42,7 @@ registerRoute(
         maxEntries: 60,
       }),
     ],
-  })
+  }),
 );
 
 // Cache API responses with a stale-while-revalidate strategy
@@ -56,7 +56,7 @@ registerRoute(
         maxEntries: 50,
       }),
     ],
-  })
+  }),
 );
 
 // Handle navigation requests

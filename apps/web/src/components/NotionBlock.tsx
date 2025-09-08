@@ -15,14 +15,14 @@ import dynamic from "next/dynamic";
 const LazySyntaxHighlighter = dynamic(() =>
   Promise.all([
     import("react-syntax-highlighter"),
-    import("react-syntax-highlighter/dist/esm/styles/prism")
+    import("react-syntax-highlighter/dist/esm/styles/prism"),
   ]).then(([{ Prism }, { atomDark }]) => {
     return ({ language, children }: { language: string; children: string }) => (
       <Prism language={language} style={atomDark} className="rounded-lg">
         {children}
       </Prism>
     );
-  })
+  }),
 );
 
 import { AnchorHeading } from "./AnchorHeading";
@@ -109,9 +109,7 @@ const CodeBlock: FC<{ block: BlockObjectResponse }> = ({ block }) => {
       >
         {isCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
       </button>
-      <LazySyntaxHighlighter language={language}>
-        {code}
-      </LazySyntaxHighlighter>
+      <LazySyntaxHighlighter language={language}>{code}</LazySyntaxHighlighter>
     </div>
   );
 };

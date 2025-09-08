@@ -1,7 +1,7 @@
 "use client";
-import { ChevronRight, Search } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 export interface SeriesArticle {
   title: string;
@@ -20,13 +20,6 @@ interface SeriesSidebarProps {
 
 export const SeriesSidebar: React.FC<SeriesSidebarProps> = ({ seriesList, showTitle = true }) => {
   const [openSeries, setOpenSeries] = useState<Record<string, boolean>>({});
-  const [query, setQuery] = useState("");
-
-  const filteredList = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return seriesList;
-    return seriesList.filter((s) => s.name.toLowerCase().includes(q));
-  }, [query, seriesList]);
 
   const toggleSeries = (name: string) => {
     setOpenSeries((prev) => ({ ...prev, [name]: !prev[name] }));
@@ -36,32 +29,20 @@ export const SeriesSidebar: React.FC<SeriesSidebarProps> = ({ seriesList, showTi
     <aside className="w-32">
       {showTitle && (
         <div className="flex items-center gap-2 mb-3">
-          <h2 className="text-[10px] font-semibold text-foreground dark:text-white">Series</h2>
+          <h2 className="text-lg font-semibold text-foreground dark:text-white">Series</h2>
           <span className="ml-auto text-[8px] text-muted-foreground dark:text-white/70">
             {seriesList.length}
           </span>
         </div>
       )}
 
-      <label className="relative block mb-3">
-        <span className="absolute inset-y-0 left-2 flex items-center text-muted-foreground dark:text-white/60">
-          <Search className="h-2.5 w-2.5" />
-        </span>
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search series"
-          className="w-full pl-5 pr-2 py-1 text-[9px] rounded-md focus:outline-none focus:ring-2 focus:ring-orange/50 bg-white dark:bg-secondary text-foreground placeholder:text-muted-foreground dark:placeholder:text-white/70"
-        />
-      </label>
-
       <nav>
-        {filteredList.length === 0 ? (
+        {seriesList.length === 0 ? (
           <div className="text-[9px] text-muted-foreground dark:text-white/70">
             No matching series.
           </div>
         ) : (
-          filteredList.map((series) => {
+          seriesList.map((series) => {
             const isOpen = !!openSeries[series.name];
             return (
               <div key={series.name} className="mb-1.5">

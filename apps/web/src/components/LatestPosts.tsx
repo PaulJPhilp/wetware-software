@@ -10,7 +10,7 @@ import { useState } from "react";
 
 // Lazy load PostListItem since it's only used in list view
 const PostListItem = dynamic(() =>
-  import("@/components/PostListItem").then((mod) => ({ default: mod.PostListItem }))
+  import("@/components/PostListItem").then((mod) => ({ default: mod.PostListItem })),
 );
 
 interface LatestPostsProps {

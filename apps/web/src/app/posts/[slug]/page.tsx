@@ -13,7 +13,7 @@ import { notFound } from "next/navigation";
 
 // Lazy load SeriesNavigation since it's only needed for posts in series
 const SeriesNavigation = dynamic(() =>
-  import("@/components/SeriesNavigation").then((mod) => ({ default: mod.SeriesNavigation }))
+  import("@/components/SeriesNavigation").then((mod) => ({ default: mod.SeriesNavigation })),
 );
 
 export const revalidate = 3600; // Revalidate every hour
@@ -57,15 +57,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const FocusIcon = focusAreaIcons[post.focusArea] || Brain; // Fallback to Brain if focus area not found
 
   // Get series posts if this post is part of a series
-  const seriesPosts = post.seriesId ? await getPublishedPosts().then(posts =>
-    posts.filter((p) => p.seriesId === post.seriesId)
-  ) : [];
+  const seriesPosts = post.seriesId
+    ? await getPublishedPosts().then((posts) => posts.filter((p) => p.seriesId === post.seriesId))
+    : [];
 
   // Get related posts (same focus area, excluding current post)
-  const relatedPosts = await getPublishedPosts().then(posts =>
-    posts
-      .filter((p) => p.focusArea === post.focusArea && p.id !== post.id)
-      .slice(0, 3)
+  const relatedPosts = await getPublishedPosts().then((posts) =>
+    posts.filter((p) => p.focusArea === post.focusArea && p.id !== post.id).slice(0, 3),
   );
 
   return (
@@ -84,9 +82,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             </Badge>
             <FocusIcon className="w-6 h-6 text-orange animate-bounce" />
           </div>
-          <h1 className="fluid-h1 font-bold mb-2">
-            {post.name}
-          </h1>
+          <h1 className="fluid-h1 font-bold mb-2">{post.name}</h1>
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted mb-2">
             <time>{post.publishDate}</time>
             <span>•</span>
@@ -110,9 +106,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
         {/* Content */}
         <section className="prose prose-base">
-          <p className="italic">
-            {post.description}
-          </p>
+          <p className="italic">{post.description}</p>
           <div className="space-y-6">
             <NotionContent blocks={blocks.results as BlockObjectResponse[]} />
           </div>

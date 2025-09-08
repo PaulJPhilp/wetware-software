@@ -1,15 +1,9 @@
 import dynamic from "next/dynamic";
 
 // Lazy load social icons since they're not critical for initial page load
-const Github = dynamic(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Github }))
-);
-const Mail = dynamic(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Mail }))
-);
-const Twitter = dynamic(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Twitter }))
-);
+const Github = dynamic(() => import("lucide-react").then((mod) => ({ default: mod.Github })));
+const Mail = dynamic(() => import("lucide-react").then((mod) => ({ default: mod.Mail })));
+const Twitter = dynamic(() => import("lucide-react").then((mod) => ({ default: mod.Twitter })));
 
 export function Footer() {
   return (

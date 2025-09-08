@@ -7,19 +7,19 @@ import Link from "next/link";
 
 // Lazy load UI components that are not immediately visible
 const Avatar = dynamic(() =>
-  import("@/components/ui/avatar").then((mod) => ({ default: mod.Avatar }))
+  import("@/components/ui/avatar").then((mod) => ({ default: mod.Avatar })),
 );
 const AvatarFallback = dynamic(() =>
-  import("@/components/ui/avatar").then((mod) => ({ default: mod.AvatarFallback }))
+  import("@/components/ui/avatar").then((mod) => ({ default: mod.AvatarFallback })),
 );
 const AvatarImage = dynamic(() =>
-  import("@/components/ui/avatar").then((mod) => ({ default: mod.AvatarImage }))
+  import("@/components/ui/avatar").then((mod) => ({ default: mod.AvatarImage })),
 );
 const Badge = dynamic(() =>
-  import("@/components/ui/badge").then((mod) => ({ default: mod.Badge }))
+  import("@/components/ui/badge").then((mod) => ({ default: mod.Badge })),
 );
 const Button = dynamic(() =>
-  import("@/components/ui/button").then((mod) => ({ default: mod.Button }))
+  import("@/components/ui/button").then((mod) => ({ default: mod.Button })),
 );
 
 // Refresh the About page content from Notion regularly

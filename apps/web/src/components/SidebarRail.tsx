@@ -19,13 +19,13 @@ export function SidebarRail({ seriesList }: SidebarRailProps) {
     try {
       const stored = window.localStorage.getItem("sidebar-collapsed");
       if (stored != null) setIsCollapsed(stored === "1");
-    } catch { }
+    } catch {}
   }, []);
 
   useEffect(() => {
     try {
       window.localStorage.setItem("sidebar-collapsed", isCollapsed ? "1" : "0");
-    } catch { }
+    } catch {}
   }, [isCollapsed]);
 
   const widthClass = isCollapsed ? "w-4" : "w-40";
