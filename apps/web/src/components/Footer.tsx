@@ -7,46 +7,46 @@ const Twitter = dynamic(() => import("lucide-react").then((mod) => ({ default: m
 
 export function Footer() {
   return (
-    <footer className="border-t mt-16 bg-card">
-      <div className="max-w-screen-2xl mx-auto px-4 md:px-6 py-2 flex flex-col sm:flex-row justify-between items-center gap-4 font-sans">
-        <div className="text-xs text-muted-foreground text-center sm:text-left">
+    <footer className="border-t border-gray-200 dark:border-gray-700 mt-16 bg-silver dark:bg-gray-900 text-gray-900 dark:text-white">
+      <div className="w-full px-4 md:px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-2 font-sans">
+        <div className="text-[10px] text-gray-600 dark:text-gray-400 text-center sm:text-left">
           © {new Date().getFullYear()} Paul J Philp. All rights reserved.
         </div>
         <div className="flex items-center gap-4">
           <a
             href="https://github.com/PaulJPhilp"
-            className="text-muted-foreground hover:text-orange transition-colors p-2"
+            className="text-gray-600 dark:text-gray-400 hover:text-orange transition-colors p-2 rounded-md hover:bg-orange/10 focus:outline-none focus:ring-2 focus:ring-orange/50 focus:ring-offset-2 focus:ring-offset-silver dark:focus:ring-offset-gray-900"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
           >
-            <Github className="w-6 h-6" />
+            <Github className="w-3 h-3" />
           </a>
           <a
             href="mailto:paul@paulphilp.com"
-            className="text-muted-foreground hover:text-orange transition-colors p-2"
+            className="text-gray-600 dark:text-gray-400 hover:text-orange transition-colors p-2 rounded-md hover:bg-orange/10 focus:outline-none focus:ring-2 focus:ring-orange/50 focus:ring-offset-2 focus:ring-offset-silver dark:focus:ring-offset-gray-900"
             aria-label="Email"
           >
-            <Mail className="w-6 h-6" />
+            <Mail className="w-3 h-3" />
           </a>
           <a
             href="https://x.com/PaulPhilp624972"
-            className="text-muted-foreground hover:text-orange transition-colors p-2"
+            className="text-gray-600 dark:text-gray-400 hover:text-orange transition-colors p-2 rounded-md hover:bg-orange/10 focus:outline-none focus:ring-2 focus:ring-orange/50 focus:ring-offset-2 focus:ring-offset-silver dark:focus:ring-offset-gray-900"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Twitter/X"
           >
-            <Twitter className="w-6 h-6" />
+            <Twitter className="w-3 h-3" />
           </a>
           <a
             href="https://bsky.app/profile/paulphilp.com"
-            className="text-muted-foreground hover:text-orange transition-colors p-2"
+            className="text-gray-600 dark:text-gray-400 hover:text-orange transition-colors p-2 rounded-md hover:bg-orange/10 focus:outline-none focus:ring-2 focus:ring-orange/50 focus:ring-offset-2 focus:ring-offset-silver dark:focus:ring-offset-gray-900"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Bluesky"
           >
             <svg
-              className="w-6 h-6"
+              className="w-3 h-3"
               fill="currentColor"
               viewBox="0 0 16 16"
               xmlns="http://www.w3.org/2000/svg"

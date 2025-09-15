@@ -1,10 +1,12 @@
 "use client";
 // import { Footer } from "@/components/Footer";
-import { Footer } from "./Footer";
 import { Header } from "@/components/Header";
-import type { SeriesSidebarSeries as Series } from "@/components/SeriesSidebarCards";
-import { SeriesSidebarCards } from "@/components/SeriesSidebarCards";
-import { SidebarProvider, useSidebar } from "./SidebarContext";
+import { SidebarProvider, useSidebar } from "@/components/SidebarContext";
+import { Footer } from "./Footer";
+// Ensure the file exists at the specified path, or update the path if necessary
+// Update the import path if the file is located elsewhere, for example:
+import type { SeriesSidebarSeries as Series } from "./SeriesSidebarCards";
+import { SeriesSidebarCards } from "./SeriesSidebarCards";
 
 function AppLayoutContent({
   children,
@@ -16,10 +18,10 @@ function AppLayoutContent({
   const { isDesktopSidebarExpanded, setIsDesktopSidebarExpanded, isHydrated } = useSidebar();
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <Header />
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex flex-1">
         {/* Desktop Left Sidebar */}
         <aside
           className={`hidden md:flex flex-col bg-background transition-all duration-300 z-20 ${isHydrated && isDesktopSidebarExpanded ? "w-40" : "w-24"
@@ -60,13 +62,12 @@ function AppLayoutContent({
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto bg-background">
+        <main className="flex-1 bg-background z-0">
           <div className="max-w-screen-2xl mx-auto px-4 md:px-6 py-2">
             <div className="w-full min-w-0">{children}</div>
           </div>
         </main>
       </div>
-
       <Footer />
 
       {/* Mobile Sidebar Drawer - Temporarily removed to isolate hydration issue */}

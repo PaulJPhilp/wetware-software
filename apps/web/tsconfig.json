@@ -3,6 +3,7 @@
   "compilerOptions": {
     "noEmit": true,
     "jsx": "preserve",
+    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
@@ -10,7 +11,9 @@
     ],
     "isolatedModules": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
   "include": [
@@ -20,5 +23,7 @@
     ".next/types/**/*.ts",
     "tailwind.config.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

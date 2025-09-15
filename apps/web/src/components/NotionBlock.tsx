@@ -226,7 +226,11 @@ export function NotionBlock({ block }: NotionBlockProps) {
 
         return (
           <figure className="my-6">
-            <div className="relative w-full aspect-video overflow-hidden rounded-lg shadow-md">
+            <div
+              className="relative w-full aspect-video overflow-hidden rounded-lg shadow-md"
+              // Fallback minHeight to avoid Next Image warning when parent computes 0 height
+              style={{ minHeight: 1 }}
+            >
               <Image
                 src={block.image.external.url}
                 alt={generateAltText(caption, block.image.external.url)}
@@ -276,7 +280,11 @@ export function NotionBlock({ block }: NotionBlockProps) {
 
         return (
           <figure className="my-6">
-            <div className="relative w-full aspect-video overflow-hidden rounded-lg shadow-md">
+            <div
+              className="relative w-full aspect-video overflow-hidden rounded-lg shadow-md"
+              // Fallback minHeight to avoid Next Image warning when parent computes 0 height
+              style={{ minHeight: 1 }}
+            >
               <Image
                 src={block.image.file.url}
                 alt={generateAltText(caption, block.image.file.url)}

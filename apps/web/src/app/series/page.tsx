@@ -44,10 +44,10 @@ export default async function SeriesPage() {
                   <Link key={s.slug} href={`/series/${s.slug}`}>
                     <Card className="group h-full hover:shadow-lg transition-all duration-200 border-charcoal/20 overflow-hidden">
                       {/* Cover image */}
-                      {s.coverImage && (
+                      {s.coverLight && (
                         <div className="relative aspect-[16/9] w-full overflow-hidden bg-charcoal/5">
                           <Image
-                            src={s.coverImage}
+                            src={s.coverLight}
                             alt={s.name}
                             fill
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

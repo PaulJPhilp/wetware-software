@@ -27,7 +27,12 @@ export function PostCard({ post }: { post: Post }) {
     <Card className="group relative flex flex-col px-1 py-1 gap-0 border-charcoal hover:border-orange transition-colors duration-200 hover:shadow-lg min-h-0 w-full">
       {/* Cover image */}
       {post.coverImage && (
-        <div className="relative aspect-[16/9] w-full overflow-hidden bg-charcoal/5 rounded-t-lg">
+        <div
+          className="relative aspect-[16/9] w-full overflow-hidden bg-charcoal/5 rounded-t-lg"
+          // Fallback: ensure the parent has a non-zero height even if Tailwind's aspect utility
+          // isn't picked up by the runtime for some reason (prevents Image fill height=0 warning)
+          style={{ minHeight: 1 }}
+        >
           <Image
             src={post.coverImage}
             alt={post.name}

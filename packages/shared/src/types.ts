@@ -35,7 +35,8 @@ export interface Series {
   status: SeriesStatus;
   focusArea: FocusArea;
   tags: { name: string; color: string }[];
-  coverImage?: string;
+  coverLight?: string;
+  coverDark?: string;
   postCount: number;
 }
 

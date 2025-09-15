@@ -1,8 +1,7 @@
-// Load .env files locally so prebuild can validate env vars before Next.js loads them
-// Use Node builtins with the node: protocol to satisfy lint rules
-const fs = require("node:fs");
-const path = require("node:path");
+import fs from "node:fs";
+import path from "node:path";
 
+// Load .env files locally so prebuild can validate env vars before Next.js loads them
 function loadEnvFile(filePath) {
   try {
     if (!fs.existsSync(filePath)) return 0;

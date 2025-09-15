@@ -1,8 +1,7 @@
 import { ClientOnly } from "@/components/ClientOnly";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { ServiceWorker } from "@/components/ServiceWorker";
-import { SidebarRail } from "@/components/SidebarRail";
+
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { firaCode, merriweather, montserrat } from "@/lib/fonts";
 import { getSeriesList } from "@/lib/getSeriesList";
@@ -46,32 +45,35 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const seriesList = await getSeriesList();
+  const _seriesList = await getSeriesList();
   return (
     <html
       lang="en"
       suppressHydrationWarning
       className={`${montserrat.variable} ${merriweather.variable} ${firaCode.variable}`}
     >
-      <body className="font-serif">
+      <body className="font-serif min-h-screen flex flex-col">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <ServiceWorker />
+          {/* <ServiceWorker /> */}
           <ClientOnly>
             <Header />
           </ClientOnly>
-          <main className="max-w-screen-2xl mx-auto px-4 md:px-6 py-2">
-            <div className="grid md:grid-cols-[auto_minmax(0,1fr)] lg:grid-cols-[auto_minmax(0,1fr)] gap-6 md:gap-8 items-start">
-              <ClientOnly>
-                <SidebarRail seriesList={seriesList} />
-              </ClientOnly>
-              <div className="w-full min-w-0">{children}</div>
-            </div>
-          </main>
+          {/* Main site column layout offset by fixed header height */}
+          <div className="pt-4 md:pt-4 flex-1 w-full flex items-start gap-0">
+            {/* Left rail anchored to viewport left */}
+            <ClientOnly>{/* <SidebarRail seriesList={seriesList} /> */}</ClientOnly>
+            {/* Main content container remains centered */}
+            <main className="flex-1 min-w-0">
+              <div className="max-w-screen-2xl mx-auto px-4 md:px-6 py-2">
+                <div className="w-full min-w-0">{children}</div>
+              </div>
+            </main>
+          </div>
           <Footer />
         </ThemeProvider>
       </body>

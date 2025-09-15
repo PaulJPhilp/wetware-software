@@ -1,55 +1,45 @@
 "use client";
 
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function Header() {
   const [isContentOpen, setIsContentOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSeriesOpen, setIsSeriesOpen] = useState(false);
+  const { theme, systemTheme } = useTheme();
+  const [_isMounted, setIsMounted] = useState(false);
+  const _router = useRouter();
 
-  const handleLinkClick = () => {
-    setIsMobileMenuOpen(false);
-  };
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-  const contentLinks = (
-    <>
-      <Link
-        href="/series"
-        className="block px-4 py-2 text-sm hover:text-orange hover:bg-muted/50 transition-colors"
-        onClick={handleLinkClick}
-      >
-        Series
-      </Link>
-      <Link
-        href="/essays"
-        className="block px-4 py-2 text-sm hover:text-orange hover:bg-muted/50 transition-colors"
-        onClick={handleLinkClick}
-      >
-        Essays
-      </Link>
-      <Link
-        href="/articles"
-        className="block px-4 py-2 text-sm hover:text-orange hover:bg-muted/50 transition-colors"
-        onClick={handleLinkClick}
-      >
-        Articles
-      </Link>
-    </>
-  );
+  const resolvedTheme = theme === "system" ? systemTheme : theme;
+  const _isDark = resolvedTheme === "dark";
+
+  const navLinkClass =
+    "text-xs text-gray-900 dark:text-white hover:text-orange transition-colors px-2 py-2 hover:underline cursor-pointer";
 
   return (
-    <header className="sticky top-0 z-[100] bg-card border-b border-border">
-      <nav className="max-w-screen-2xl mx-auto px-4 md:px-6 py-1 flex items-center justify-between font-sans min-h-0">
+    <header
+      className="fixed inset-x-0 top-0 w-full h-14 md:h-16 z-[100] text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700"
+      style={{
+        backgroundColor: _isMounted ? (_isDark ? "#111827" : "#f8f8f8") : "#f8f8f8",
+      }}
+    >
+      <nav className="w-full px-4 md:px-6 py-1 flex items-center justify-between font-sans">
+        {/* Logo and Title */}
         <div className="flex items-center gap-2">
           <Image
             src="/images/avatar.jpeg"
             alt="Paul J Philp Avatar"
             width={28}
             height={28}
-            className="w-7 h-7 rounded-full border border-border shadow"
+            className="w-7 h-7 rounded-full border border-gray-200 dark:border-gray-700 shadow"
             priority
           />
           <div className="flex flex-col leading-tight">
@@ -59,109 +49,95 @@ export function Header() {
             >
               Wetware & Software
             </Link>
-            <span className="text-[10px] md:text-[11px] text-muted-foreground whitespace-nowrap">
+            <span className="text-[10px] md:text-[11px] text-gray-600 dark:text-gray-400 whitespace-nowrap">
               The Practice of Human-AI Collaboration
             </span>
           </div>
         </div>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-2 flex-nowrap">
-          <Link
-            href="/about"
-            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-2 py-2"
-          >
+        {/* Navigation Menu */}
+        <div className="flex items-center gap-1 ml-4">
+          <Link href="/about" className={navLinkClass}>
             About
           </Link>
-          <Link
-            href="/projects"
-            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-2 py-2"
-          >
+          <Link href="/projects" className={navLinkClass}>
             Projects
           </Link>
+          <button
+            type="button"
+            onClick={() => setIsSeriesOpen(!isSeriesOpen)}
+            className={navLinkClass}
+            aria-expanded={isSeriesOpen}
+          >
+            Series
+          </button>
           <div className="relative">
             <button
               type="button"
               onClick={() => setIsContentOpen(!isContentOpen)}
-              className="flex items-center gap-1 text-sm hover:text-orange transition-colors whitespace-nowrap px-2 py-2"
+              className={navLinkClass}
+              aria-haspopup="true"
+              aria-expanded={isContentOpen}
               onBlur={() => setTimeout(() => setIsContentOpen(false), 150)}
             >
               Content
-              <ChevronDown
-                className={`w-4 h-4 transition-transform ${isContentOpen ? "rotate-180" : ""}`}
-              />
             </button>
             {isContentOpen && (
-              <div className="absolute top-full left-0 mt-1 bg-white dark:bg-black border border-border rounded-lg shadow-lg py-2 min-w-[120px] z-10">
-                {contentLinks}
+              <div className="absolute top-full left-0 mt-1 bg-[#f8f8f8] dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-2 min-w-[120px] z-10">
+                <Link
+                  href="/series"
+                  className="block px-4 py-2 text-sm text-gray-900 dark:text-white hover:text-orange hover:bg-orange/10 transition-colors"
+                >
+                  Series
+                </Link>
+                <Link
+                  href="/essays"
+                  className="block px-4 py-2 text-sm text-gray-900 dark:text-white hover:text-orange hover:bg-orange/10 transition-colors"
+                >
+                  Essays
+                </Link>
+                <Link
+                  href="/articles"
+                  className="block px-4 py-2 text-sm text-gray-900 dark:text-white hover:text-orange hover:bg-orange/10 transition-colors"
+                >
+                  Articles
+                </Link>
               </div>
             )}
           </div>
-          <Link
-            href="/resources"
-            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-2 py-2"
-          >
+          <Link href="/resources" className={navLinkClass}>
             Resources
           </Link>
-          <Link
-            href="/connect"
-            className="text-sm hover:text-orange transition-colors whitespace-nowrap px-2 py-2"
-          >
+          <Link href="/connect" className={navLinkClass}>
             Connect
           </Link>
           <ThemeToggle className="ml-2" />
         </div>
-
-        {/* Mobile Navigation */}
-        <div className="md:hidden flex items-center">
-          <ThemeToggle className="mr-2" />
-          <button
-            type="button"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-3"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
       </nav>
 
-      {/* Mobile Menu Drawer */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-card border-t border-border">
-          <div className="flex flex-col px-2 py-4">
-            <Link
-              href="/about"
-              className="block px-4 py-2 text-sm hover:text-orange transition-colors"
-              onClick={handleLinkClick}
-            >
-              About
-            </Link>
-            <Link
-              href="/projects"
-              className="block px-4 py-2 text-sm hover:text-orange transition-colors"
-              onClick={handleLinkClick}
-            >
-              Projects
-            </Link>
-            <div className="px-4 py-2 text-sm font-semibold">Content</div>
-            <div className="pl-4">{contentLinks}</div>
-            <Link
-              href="/resources"
-              className="block px-4 py-2 text-sm hover:text-orange transition-colors"
-              onClick={handleLinkClick}
-            >
-              Resources
-            </Link>
-            <Link
-              href="/connect"
-              className="block px-4 py-2 text-sm hover:text-orange transition-colors"
-              onClick={handleLinkClick}
-            >
-              Connect
-            </Link>
+      {/* Series Panel */}
+      {isSeriesOpen && (
+        <section
+          aria-label="Series panel"
+          className="w-full bg-[#f8f8f8] dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-inner"
+        >
+          <div className="px-4 md:px-6 py-4">
+            <div className="flex items-start justify-between">
+              <div>
+                <h3 className="font-semibold text-sm text-gray-900 dark:text-white">Series</h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                  Explore all series and sequences of posts.
+                </p>
+                <Link
+                  href="/series"
+                  className="text-xs text-gray-900 dark:text-white hover:text-orange mt-2 inline-block"
+                >
+                  View all series →
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
       )}
     </header>
   );

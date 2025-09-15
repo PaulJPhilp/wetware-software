@@ -59,27 +59,29 @@ export default async function AboutPage() {
       {/* Left profile rail (desktop) */}
       <aside className="hidden lg:block">
         <div className="sticky top-24 space-y-6">
-          <div className="border border-charcoal/10 bg-white rounded-lg p-6 text-center">
+          <div className="border border-gray-200 dark:border-gray-700 !bg-white dark:!bg-gray-900 rounded-lg p-6 text-center">
             <Avatar className="w-28 h-28 mx-auto">
               <AvatarImage src="/images/avatar.jpeg" alt="Paul Philp" />
               <AvatarFallback>PP</AvatarFallback>
             </Avatar>
             <div className="mt-4 space-y-1">
-              <h1 className="text-xl font-sans font-bold text-charcoal leading-tight">
+              <h1 className="text-xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
                 Paul Philp
               </h1>
-              <p className="text-xs font-serif text-charcoal/70 leading-snug">
+              <p className="text-xs font-serif text-gray-600 dark:text-gray-400 leading-snug">
                 Software/AI Engineer, Founder, Executive
               </p>
             </div>
           </div>
-          <div className="border border-charcoal/10 bg-white rounded-lg p-4 space-y-3">
-            <h3 className="text-sm font-sans font-semibold text-charcoal">Connect</h3>
+          <div className="border border-gray-200 dark:border-gray-700 !bg-white dark:!bg-gray-900 rounded-lg p-4 space-y-3">
+            <h3 className="text-sm font-sans font-semibold text-gray-900 dark:text-white">
+              Connect
+            </h3>
             <div className="flex flex-col gap-2">
               <Button
                 variant="outline"
                 asChild
-                className="justify-start text-charcoal border-charcoal/20 hover:bg-charcoal/5"
+                className="justify-start text-gray-900 dark:text-white border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <a
                   href="https://www.linkedin.com/in/pauljphilp/"
@@ -93,7 +95,7 @@ export default async function AboutPage() {
               <Button
                 variant="outline"
                 asChild
-                className="justify-start text-charcoal border-charcoal/20 hover:bg-charcoal/5"
+                className="justify-start text-gray-900 dark:text-white border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <Link href="/connect">
                   <Mail className="w-4 h-4 mr-2" />
@@ -102,9 +104,11 @@ export default async function AboutPage() {
               </Button>
             </div>
           </div>
-          <div className="border border-charcoal/10 bg-white rounded-lg p-4 space-y-2">
-            <h3 className="text-sm font-sans font-semibold text-charcoal">Current Focus</h3>
-            <ul className="space-y-1 text-sm text-charcoal/80">
+          <div className="border border-gray-200 dark:border-gray-700 !bg-white dark:!bg-gray-900 rounded-lg p-4 space-y-2">
+            <h3 className="text-sm font-sans font-semibold text-gray-900 dark:text-white">
+              Current Focus
+            </h3>
+            <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
               <li>• Human-AI collaboration frameworks</li>
               <li>• Large-scale LLM application architecture</li>
               <li>• Effect-TS and functional programming patterns</li>
@@ -122,13 +126,13 @@ export default async function AboutPage() {
             <AvatarFallback>PP</AvatarFallback>
           </Avatar>
           <div className="space-y-2">
-            <h1 className="text-xl md:text-2xl font-sans font-bold text-charcoal leading-tight">
+            <h1 className="text-xl md:text-2xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
               Paul Philp
             </h1>
-            <p className="text-sm font-serif text-charcoal/80 leading-snug">
+            <p className="text-sm font-serif text-gray-700 dark:text-gray-300 leading-snug">
               Software/AI Engineer, Founder, Executive
             </p>
-            <p className="text-xs text-charcoal/60 max-w-2xl mx-auto leading-snug">
+            <p className="text-xs text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-snug">
               Engineering human-AI collaboration at the intersection of complex systems and emerging
               technology
             </p>
@@ -137,17 +141,19 @@ export default async function AboutPage() {
 
         {/* Main Bio Section */}
         <section className="prose max-w-none">
-          <div className="border border-charcoal/10 bg-white rounded-lg p-8 space-y-6">
+          <div className="border border-gray-200 dark:border-gray-700 !bg-white dark:!bg-gray-900 rounded-lg p-8 space-y-6">
             <div className="flex items-center gap-3 mb-4">
               <Brain className="w-6 h-6 text-orange" />
-              <h2 className="text-xl font-sans font-bold text-charcoal m-0">About Paul</h2>
+              <h2 className="text-xl font-sans font-bold text-gray-900 dark:text-white m-0">
+                About Paul
+              </h2>
             </div>
             {aboutBlocks ? (
-              <div className="space-y-4 text-charcoal/80">
+              <div className="space-y-4 text-gray-700 dark:text-gray-300">
                 <NotionContent blocks={aboutBlocks.results as BlockObjectResponse[]} />
               </div>
             ) : (
-              <div className="space-y-4 text-charcoal/80">
+              <div className="space-y-4 text-gray-700 dark:text-gray-300">
                 <p>
                   Welcome to Wetware & Software! I'm Paul Philp, a software engineer, AI researcher,
                   and founder exploring the profound intersection of human systems (wetware) and
@@ -175,8 +181,10 @@ export default async function AboutPage() {
         {/* Featured Essay Callout */}
         <section className="bg-orange/10 border border-orange/20 rounded-lg p-8">
           <div className="space-y-4">
-            <h3 className="text-lg font-sans font-bold text-charcoal">Featured Essay</h3>
-            <p className="text-charcoal/80">
+            <h3 className="text-lg font-sans font-bold text-gray-900 dark:text-white">
+              Featured Essay
+            </h3>
+            <p className="text-gray-700 dark:text-gray-300">
               "What My Marriage Falling Apart Taught Me About LLMs" - A deeply personal exploration
               of complex systems, failure modes, and the surprising parallels between human
               relationships and AI architectures.
@@ -192,12 +200,16 @@ export default async function AboutPage() {
 
         {/* Skills & Expertise */}
         <section className="space-y-6">
-          <h2 className="text-2xl font-sans font-bold text-charcoal">
+          <h2 className="text-2xl font-sans font-bold text-gray-900 dark:text-white">
             Technical Skills & Expertise
           </h2>
           <div className="flex flex-wrap gap-2">
             {skills.map((skill) => (
-              <Badge key={skill} variant="secondary" className="bg-silver text-charcoal">
+              <Badge
+                key={skill}
+                variant="secondary"
+                className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
+              >
                 {skill}
               </Badge>
             ))}
@@ -206,12 +218,17 @@ export default async function AboutPage() {
 
         {/* Blog Topics */}
         <section className="space-y-6">
-          <h2 className="text-2xl font-sans font-bold text-charcoal">What I Write About</h2>
+          <h2 className="text-2xl font-sans font-bold text-gray-900 dark:text-white">
+            What I Write About
+          </h2>
           <div className="grid gap-4 md:grid-cols-2">
             {blogTopics.map((topic) => (
-              <div key={topic} className="flex items-start gap-3 p-4 bg-silver/30 rounded-lg">
+              <div
+                key={topic}
+                className="flex items-start gap-3 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg"
+              >
                 <div className="w-2 h-2 rounded-full bg-orange mt-2 flex-shrink-0" />
-                <p className="text-charcoal/80">{topic}</p>
+                <p className="text-gray-700 dark:text-gray-300">{topic}</p>
               </div>
             ))}
           </div>

@@ -5,7 +5,7 @@ import { FileSystem } from "@effect/platform/FileSystem";
 import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
 import { pipe } from "effect/Function";
-import * as Option from "effect/Option";
+
 import { OpenAI } from "../lib/ai";
 import { Notion } from "../lib/notion";
 import { buildSeriesSchema } from "../lib/seriesSchema";
@@ -28,11 +28,11 @@ export const seriesCommand = pipe(
   }),
   Command.withDescription("Add a new resource series to Notion"),
   Command.withHandler(({ args, options }) =>
-    handler(args, Option.getOrUndefined(options.description), Boolean(options.verbose)),
+    handler(args, Boolean(options.verbose)),
   ),
 );
 
-function handler(seriesName: string, description: string | undefined, isVerbose: boolean) {
+function handler(seriesName: string, isVerbose: boolean) {
   return Effect.gen(function* () {
     const fs = yield* FileSystem;
     const ai = yield* OpenAI;

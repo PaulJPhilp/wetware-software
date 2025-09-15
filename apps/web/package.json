@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "prebuild": "node scripts/check-env.js",
+    "prebuild": "node scripts/check-env.mjs",
     "build": "next build",
     "build:analyze": "ANALYZE=true next build",
     "start": "next start",

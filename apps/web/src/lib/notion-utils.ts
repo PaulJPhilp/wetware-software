@@ -377,6 +377,8 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
       const goalProp = props["Series Goal"];
       const statusProp = props.Status;
       const coverImageProp = props["Cover Image"];
+      const coverLightProp = props["CoverImage-LightMode"];
+      const coverDarkProp = props["CoverImage-DarkMode"];
       const postsRollupProp = props["Posts in Series"];
       const focusAreaProp = props["Focus Area"];
       const tagsProp = props.Tags;
@@ -404,16 +406,48 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
           postCount = postsRollupProp.rollup.array.length;
         }
 
-        // Get cover image URL if available
-        let coverImage: string | undefined;
-        if (coverImageProp && coverImageProp.type === "files" && coverImageProp.files.length > 0) {
-          const file = coverImageProp.files[0];
-          if (file.type === "file") {
-            coverImage = file.file.url;
-          } else if (file.type === "external") {
-            coverImage = file.external.url;
+        // Get cover image URLs if available
+        let coverLight: string | undefined;
+        let _coverDark: string | undefined;
+
+        // Check for separate light/dark cover properties first
+        if (coverLightProp && coverLightProp.type === "rich_text" && coverLightProp.rich_text.length > 0) {
+          const filename = coverLightProp.rich_text[0].plain_text;
+          if (filename) {
+            coverLight = `/images/series/${filename}`;
           }
         }
+
+        if (coverDarkProp && coverDarkProp.type === "rich_text" && coverDarkProp.rich_text.length > 0) {
+          const filename = coverDarkProp.rich_text[0].plain_text;
+          if (filename) {
+            _coverDark = `/images/series/${filename}`;
+          }
+        }
+
+        // Fallback to single cover image property
+        if (!coverLight && coverImageProp && coverImageProp.type === "files" && coverImageProp.files.length > 0) {
+          const file = coverImageProp.files[0];
+          if (file.type === "file") {
+            coverLight = file.file.url;
+          } else if (file.type === "external") {
+            coverLight = file.external.url;
+          }
+        }
+
+        // Also check for page-level cover image as final fallback
+        if (!coverLight && page.cover) {
+          if (page.cover.type === "external") {
+            coverLight = page.cover.external.url;
+          } else if (page.cover.type === "file") {
+            coverLight = page.cover.file.url;
+          }
+        }
+
+        // Log final resolved cover values (after applying all fallbacks)
+        console.log(
+          `Series "${nameProp.title[0]?.plain_text}": resolved coverLight=${coverLight}, coverDark=${_coverDark}`,
+        );
 
         // Parse Focus Area
         let focusArea: FocusArea = "Human-Centric"; // Default fallback
@@ -453,7 +487,8 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
           status: normalizedStatus,
           focusArea,
           tags,
-          coverImage,
+          coverLight,
+          coverDark: _coverDark,
           postCount,
         };
       } else {
@@ -599,6 +634,15 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
       }
     }
 
+    // Also check for page-level cover image
+    if (!coverImage && page.cover) {
+      if (page.cover.type === "external") {
+        coverImage = page.cover.external.url;
+      } else if (page.cover.type === "file") {
+        coverImage = page.cover.file.url;
+      }
+    }
+
     return {
       id: page.id,
       name: nameProp.title[0]?.plain_text || "",
@@ -606,10 +650,10 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
       publishDate:
         dateProp.type === "date" && dateProp.date
           ? new Date(dateProp.date.start).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
           : "",
       type: (typeProp.select?.name as ContentType) || "Article",
       focusArea: (focusAreaProp?.select?.name as FocusArea) || "Tech-Centric",
