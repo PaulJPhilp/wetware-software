@@ -444,10 +444,7 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
           }
         }
 
-        // Log final resolved cover values (after applying all fallbacks)
-        console.log(
-          `Series "${nameProp.title[0]?.plain_text}": resolved coverLight=${coverLight}, coverDark=${_coverDark}`,
-        );
+        // Final resolved cover values are available in coverLight / _coverDark
 
         // Parse Focus Area
         let focusArea: FocusArea = "Human-Centric"; // Default fallback

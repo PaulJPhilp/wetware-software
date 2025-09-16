@@ -1,7 +1,9 @@
 import { ClientOnly } from "@/components/ClientOnly";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-
+import { HeaderProvider } from "@/components/HeaderContext";
+import { ServiceWorker } from "@/components/ServiceWorker";
+import { SidebarRail } from "@/components/SidebarRail";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { firaCode, merriweather, montserrat } from "@/lib/fonts";
 import { getSeriesList } from "@/lib/getSeriesList";
@@ -45,7 +47,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const _seriesList = await getSeriesList();
+  const seriesList = await getSeriesList();
   return (
     <html
       lang="en"
@@ -59,21 +61,23 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* <ServiceWorker /> */}
-          <ClientOnly>
+          <HeaderProvider>
+            <ServiceWorker />
             <Header />
-          </ClientOnly>
-          {/* Main site column layout offset by fixed header height */}
-          <div className="pt-4 md:pt-4 flex-1 w-full flex items-start gap-0">
-            {/* Left rail anchored to viewport left */}
-            <ClientOnly>{/* <SidebarRail seriesList={seriesList} /> */}</ClientOnly>
-            {/* Main content container remains centered */}
-            <main className="flex-1 min-w-0">
-              <div className="max-w-screen-2xl mx-auto px-4 md:px-6 py-2">
-                <div className="w-full min-w-0">{children}</div>
-              </div>
-            </main>
-          </div>
+            {/* Main site column layout offset by fixed header height and footer */}
+            <div className="pt-14 md:pt-16 pb-20 flex-1 w-full flex items-start gap-0 min-h-0">
+              {/* Left rail anchored to viewport left */}
+              <ClientOnly>
+                <SidebarRail seriesList={seriesList} />
+              </ClientOnly>
+              {/* Main content container remains centered */}
+              <main className="flex-1 min-w-0 flex flex-col">
+                <div className="max-w-screen-2xl mx-auto px-4 md:px-6 py-2 flex-1">
+                  <div className="w-full min-w-0">{children}</div>
+                </div>
+              </main>
+            </div>
+          </HeaderProvider>
           <Footer />
         </ThemeProvider>
       </body>

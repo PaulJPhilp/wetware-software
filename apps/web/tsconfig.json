@@ -17,11 +17,11 @@
     }
   },
   "include": [
+    "next-env.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
-    "tailwind.config.js"
+    "tailwind.config.js",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

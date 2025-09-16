@@ -58,8 +58,8 @@ export default async function AboutPage() {
     <main className="max-w-6xl mx-auto py-12 px-4 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-10">
       {/* Left profile rail (desktop) */}
       <aside className="hidden lg:block">
-        <div className="sticky top-24 space-y-6">
-          <div className="border border-gray-200 dark:border-gray-700 !bg-white dark:!bg-gray-900 rounded-lg p-6 text-center">
+        <div className="sticky top-20 space-y-6">
+          <div className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg p-6 text-center">
             <Avatar className="w-28 h-28 mx-auto">
               <AvatarImage src="/images/avatar.jpeg" alt="Paul Philp" />
               <AvatarFallback>PP</AvatarFallback>
@@ -73,7 +73,7 @@ export default async function AboutPage() {
               </p>
             </div>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 !bg-white dark:!bg-gray-900 rounded-lg p-4 space-y-3">
+          <div className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg p-4 space-y-3">
             <h3 className="text-sm font-sans font-semibold text-gray-900 dark:text-white">
               Connect
             </h3>
@@ -81,7 +81,7 @@ export default async function AboutPage() {
               <Button
                 variant="outline"
                 asChild
-                className="justify-start text-gray-900 dark:text-white border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="justify-start text-gray-900 dark:text-white border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <a
                   href="https://www.linkedin.com/in/pauljphilp/"
@@ -95,7 +95,7 @@ export default async function AboutPage() {
               <Button
                 variant="outline"
                 asChild
-                className="justify-start text-gray-900 dark:text-white border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="justify-start text-gray-900 dark:text-white border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <Link href="/connect">
                   <Mail className="w-4 h-4 mr-2" />
@@ -104,7 +104,7 @@ export default async function AboutPage() {
               </Button>
             </div>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 !bg-white dark:!bg-gray-900 rounded-lg p-4 space-y-2">
+          <div className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg p-4 space-y-2">
             <h3 className="text-sm font-sans font-semibold text-gray-900 dark:text-white">
               Current Focus
             </h3>
@@ -141,7 +141,7 @@ export default async function AboutPage() {
 
         {/* Main Bio Section */}
         <section className="prose max-w-none">
-          <div className="border border-gray-200 dark:border-gray-700 !bg-white dark:!bg-gray-900 rounded-lg p-8 space-y-6">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-8 space-y-6">
             <div className="flex items-center gap-3 mb-4">
               <Brain className="w-6 h-6 text-orange" />
               <h2 className="text-xl font-sans font-bold text-gray-900 dark:text-white m-0">
@@ -235,7 +235,7 @@ export default async function AboutPage() {
         </section>
 
         {/* At a Glance & Contact (mobile/tablet) */}
-        <section className="lg:hidden bg-charcoal text-white rounded-lg p-8 space-y-6">
+        <section className="lg:hidden bg-gray-900 dark:bg-gray-900 text-white rounded-lg p-8 space-y-6">
           <h2 className="text-xl font-sans font-bold">Paul Philp: At a Glance</h2>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-3">

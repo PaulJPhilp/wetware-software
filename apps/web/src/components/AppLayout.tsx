@@ -3,10 +3,17 @@
 import { Header } from "@/components/Header";
 import { SidebarProvider, useSidebar } from "@/components/SidebarContext";
 import { Footer } from "./Footer";
-// Ensure the file exists at the specified path, or update the path if necessary
-// Update the import path if the file is located elsewhere, for example:
-import type { SeriesSidebarSeries as Series } from "./SeriesSidebarCards";
-import { SeriesSidebarCards } from "./SeriesSidebarCards";
+// import type { SeriesSidebarSeries as Series } from "./SeriesSidebarCards";
+// import { SeriesSidebarCards } from "./SeriesSidebarCards";
+
+// Temporary placeholder type
+interface Series {
+  name: string;
+  slug?: string;
+  coverLight?: string;
+  coverDark?: string;
+  articles: { title: string; href: string }[];
+}
 
 function AppLayoutContent({
   children,
@@ -55,7 +62,7 @@ function AppLayoutContent({
           <div className="flex-1 overflow-y-auto">
             {isHydrated && isDesktopSidebarExpanded ? (
               <div className="px-2 pt-1 pb-4">
-                <SeriesSidebarCards seriesList={seriesList} showTitle={false} />
+                {/* <SeriesSidebarCards seriesList={seriesList} showTitle={false} /> */}
               </div>
             ) : null}
           </div>

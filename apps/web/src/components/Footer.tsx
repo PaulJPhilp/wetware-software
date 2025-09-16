@@ -7,7 +7,16 @@ const Twitter = dynamic(() => import("lucide-react").then((mod) => ({ default: m
 
 export function Footer() {
   return (
-    <footer className="border-t border-gray-200 dark:border-gray-700 mt-16 bg-silver dark:bg-gray-900 text-gray-900 dark:text-white">
+    <footer
+      className="fixed bottom-0 inset-x-0 w-full border-t border-gray-200 dark:border-gray-700 bg-silver dark:bg-gray-900 text-gray-900 dark:text-white"
+      style={{
+        zIndex: 1020,
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0
+      }}
+    >
       <div className="w-full px-4 md:px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-2 font-sans">
         <div className="text-[10px] text-gray-600 dark:text-gray-400 text-center sm:text-left">
           © {new Date().getFullYear()} Paul J Philp. All rights reserved.

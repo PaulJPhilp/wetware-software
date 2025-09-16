@@ -10,12 +10,23 @@
     --color-silver: 248 248 248; /* #f8f8f8 */
     --color-charcoal: 33 33 33; /* #212121 */
     --color-orange: 255 122 0; /* #ff7a00 */
+
+    /* Z-index scale for consistent layering */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-footer: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+    --z-header: 9999;
   }
 
   .dark {
     /* Dark theme brand colors - adjust for contrast */
-    --color-silver: 24 24 24; /* dark bg */
-    --color-charcoal: 248 248 248; /* light text */
+    --color-silver: 248 248 248; /* light bg */
+    --color-charcoal: 24 24 24; /* dark bg */
     --color-orange: 255 150 60; /* warmer accent in dark */
   }
 

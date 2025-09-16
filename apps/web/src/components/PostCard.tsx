@@ -24,7 +24,7 @@ export function PostCard({ post }: { post: Post }) {
   const FocusIcon = focusAreaIcons[post.focusArea] || Brain;
 
   return (
-    <Card className="group relative flex flex-col px-1 py-1 gap-0 border-charcoal hover:border-orange transition-colors duration-200 hover:shadow-lg min-h-0 w-full">
+    <Card className="group relative flex flex-col px-1 py-1 gap-0 border-charcoal hover:border-orange transition-colors duration-200 hover:shadow-lg min-h-0 w-full max-w-48 md:max-w-56 lg:max-w-64">
       {/* Cover image */}
       {post.coverImage && (
         <div

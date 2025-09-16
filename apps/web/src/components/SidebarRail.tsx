@@ -1,14 +1,25 @@
 "use client";
-import type { SeriesSidebarSeries as CardSeries } from "@/components/SeriesSidebarCards";
-import { SeriesSidebarCards } from "@/components/SeriesSidebarCards";
+import { useHeaderHeight } from "@/components/HeaderContext";
+// import type { SeriesSidebarSeries as CardSeries } from "@/components/SeriesSidebarCards";
+// import { SeriesSidebarCards } from "@/components/SeriesSidebarCards";
 import { useId } from "react";
+
+// Temporary placeholder type
+interface CardSeries {
+  name: string;
+  slug?: string;
+  coverLight?: string;
+  coverDark?: string;
+  articles: { title: string; href: string }[];
+}
 
 interface SidebarRailProps {
   seriesList: CardSeries[];
 }
 
-export function SidebarRail({ seriesList }: SidebarRailProps) {
+export function SidebarRail({ seriesList: _seriesList }: SidebarRailProps) {
   const seriesContentId = useId();
+  const { headerHeight } = useHeaderHeight();
   // Desktop rail is always expanded now; mobile also always visible
 
   // Persist across navigations
@@ -24,8 +35,14 @@ export function SidebarRail({ seriesList }: SidebarRailProps) {
         aria-label="Site navigation sidebar"
       >
         <div id={seriesContentId}>
-          <div className="sticky top-20 self-start max-h-[calc(100vh-5rem)] overflow-y-auto">
-            <SeriesSidebarCards seriesList={seriesList} showTitle={false} />
+          <div
+            className="sticky self-start overflow-y-auto"
+            style={{
+              top: `${headerHeight}px`,
+              maxHeight: `calc(100vh - ${headerHeight}px)`
+            }}
+          >
+            {/* <SeriesSidebarCards seriesList={seriesList} showTitle={false} /> */}
           </div>
         </div>
       </aside>
