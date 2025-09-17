@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
   // Transpile the shared package
   transpilePackages: ["@wetware/shared"],
 
+  // Help Next/Vercel trace files from the monorepo root
+  outputFileTracingRoot: "../../",
+
   // CDN and caching optimizations
   async headers() {
     return [

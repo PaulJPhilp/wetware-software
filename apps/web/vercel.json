@@ -1,6 +1,9 @@
 {
-  "buildCommand": "bun install && bun run build",
+  "installCommand": "bun install --cwd ../..",
+  "buildCommand": "bun run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
-  "regions": ["iad1"]
+  "regions": [
+    "iad1"
+  ]
 }

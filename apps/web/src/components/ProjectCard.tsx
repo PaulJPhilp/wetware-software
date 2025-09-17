@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export interface Project {
     id: string;
@@ -33,6 +34,14 @@ const statusColors = {
 export function ProjectCard({ project, showDescription = true }: ProjectCardProps) {
     return (
         <Card className="group relative flex flex-col h-full border-charcoal/20 hover:border-orange/50 transition-all duration-200 hover:shadow-lg z-0">
+            {/* Clickable overlay for the entire card */}
+            <Link
+                href={`/projects/${project.id}`}
+                aria-label={`Open ${project.name} details`}
+                className="absolute inset-0 z-10"
+            >
+                <span className="sr-only">Open project</span>
+            </Link>
             {/* Project image */}
             {project.imageUrl && (
                 <div className="relative aspect-[16/9] w-full overflow-hidden bg-charcoal/5 rounded-t-xl">
@@ -81,7 +90,7 @@ export function ProjectCard({ project, showDescription = true }: ProjectCardProp
                 </div>
             </CardContent>
 
-            <CardFooter className="flex items-center pt-4 border-t border-charcoal/10">
+            <CardFooter className="flex items-center pt-4 border-t border-charcoal/10 relative z-20">
                 <div className="flex items-center space-x-2">
                     <Button
                         variant="outline"
