@@ -24,7 +24,7 @@ export function PostCard({ post }: { post: Post }) {
   const FocusIcon = focusAreaIcons[post.focusArea] || Brain;
 
   return (
-    <Card className="group relative flex flex-col px-1 py-1 gap-0 border-charcoal hover:border-orange transition-colors duration-200 hover:shadow-lg min-h-0 w-full max-w-48 md:max-w-56 lg:max-w-64">
+    <Card className="group relative flex flex-col px-1 py-1 gap-0 border-gray-300 dark:border-gray-400 hover:border-orange transition-colors duration-200 hover:shadow-lg min-h-0 w-full max-w-64 md:max-w-80 lg:max-w-96">
       {/* Cover image */}
       {post.coverImage && (
         <div
@@ -44,34 +44,31 @@ export function PostCard({ post }: { post: Post }) {
         </div>
       )}
       <CardHeader className="space-y-0 pb-0 py-0 px-1">
-        <div className="flex items-center space-x-0.5">
-          <Badge
-            variant="outline"
-            className="font-sans text-xs px-1 py-0.5 !bg-silver text-charcoal dark:!bg-white dark:text-black"
-          >
-            {post.type}
-          </Badge>
-          <FocusIcon className="w-1.5 h-1.5 text-orange" />
-          <time className="text-xs text-muted-foreground">{post.publishDate}</time>
-        </div>
-        {post.seriesName && post.partNumber && (
-          <div className="text-xs text-orange font-medium">
-            {post.seriesName} • Part {post.partNumber}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span title={post.focusArea}>
+              <FocusIcon className="w-5 h-5 text-orange flex-shrink-0" />
+            </span>
+            <h2 className="text-base font-sans font-bold group-hover:text-orange transition-colors line-clamp-2">
+              {post.name}
+            </h2>
           </div>
-        )}
+          {post.seriesName && post.partNumber && (
+            <div className="text-xs text-orange font-medium flex-shrink-0">
+              {post.seriesName} • Part {post.partNumber}
+            </div>
+          )}
+        </div>
       </CardHeader>
-      <CardContent className="space-y-[1px] py-0 px-1 [&_h2]:mt-0 [&_h2]:mb-0">
-        <h2 className="text-sm font-sans font-bold group-hover:text-orange transition-colors line-clamp-2">
-          {post.name}
-        </h2>
+      <CardContent className="space-y-[1px] py-0 px-1">
         <p className="text-xs text-muted-foreground line-clamp-3 leading-snug">
           {post.description}
         </p>
       </CardContent>
-      <CardFooter className="flex items-center space-x-0.5 text-xs text-muted-foreground py-0 pt-1 px-1">
+      <CardFooter className="flex items-center justify-between text-xs text-muted-foreground py-0 pt-1 px-1">
         <div className="flex items-center space-x-0.5">
           <div className="space-x-0.5">
-            {post.tags.map((tag) => {
+            {post.tags.slice(0, 3).map((tag) => {
               const colorClass = notionColorToTailwind[tag.color] || notionColorToTailwind.default;
               return (
                 <Badge
@@ -85,6 +82,7 @@ export function PostCard({ post }: { post: Post }) {
             })}
           </div>
         </div>
+        <time className="text-[10px] text-muted-foreground italic">{post.publishDate}</time>
       </CardFooter>
     </Card>
   );

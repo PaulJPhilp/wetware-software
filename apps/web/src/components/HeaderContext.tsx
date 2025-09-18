@@ -10,7 +10,7 @@ interface HeaderContextType {
 const HeaderContext = createContext<HeaderContextType | undefined>(undefined);
 
 export function HeaderProvider({ children }: { children: ReactNode }) {
-    const [headerHeight, setHeaderHeight] = useState(56); // Default to h-14 (56px)
+    const [headerHeight, setHeaderHeight] = useState(28); // Default to h-7 (28px)
 
     return (
         <HeaderContext.Provider value={{ headerHeight, setHeaderHeight }}>

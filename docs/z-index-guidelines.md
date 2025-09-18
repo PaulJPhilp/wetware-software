@@ -28,9 +28,9 @@ The Header component is protected with:
 
 ### Footer
 The Footer component is pinned to viewport bottom with:
-- **Fixed positioning**: `position: 'fixed', bottom: 0`
-- **Reliable z-index**: Inline style `zIndex: 1020` 
-- **Full width**: `left: 0, right: 0` spans viewport
+- **Fixed positioning**: Tailwind `fixed bottom-0 inset-x-0`
+- **Reliable z-index**: Tailwind class `z-footer` (1020)
+- **Full width**: `inset-x-0` spans viewport
 - **Always visible**: Stays fixed during scrolling
 
 ## Guidelines for Modal/Overlay Components

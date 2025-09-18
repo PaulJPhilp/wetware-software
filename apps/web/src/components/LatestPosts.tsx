@@ -1,7 +1,6 @@
 "use client";
 
 import { PostCard } from "@/components/PostCard";
-import { Button } from "@/components/ui/button";
 import type { Post } from "@/lib/notion-utils";
 import { LayoutGrid, List } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -22,13 +21,13 @@ export function LatestPosts({ posts }: LatestPostsProps) {
   const latestPosts = posts.slice(0, 10);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full max-w-full mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div className="space-y-1">
-          <h2 className="text-[14px] font-sans font-bold text-foreground dark:text-white leading-tight">
+          <h2 className="text-xl font-sans font-bold text-foreground dark:text-white leading-tight">
             Latest Posts
           </h2>
-          <p className="text-[11px] text-muted-foreground dark:text-white leading-tight">
+          <p className="text-sm text-muted-foreground dark:text-white leading-tight">
             Recent explorations in technology and human systems
           </p>
         </div>
@@ -38,38 +37,18 @@ export function LatestPosts({ posts }: LatestPostsProps) {
               type="button"
               onClick={() => setView("card")}
               aria-pressed={view === "card"}
-              className={`flex items-center gap-1 px-1 py-0.5 text-[9px] h-4 ${view === "card" ? "bg-orange text-white" : "text-orange"}`}
+              className={`flex items-center gap-2 px-2 py-1 text-sm h-8 ${view === "card" ? "bg-orange text-white" : "text-orange"}`}
             >
-              <LayoutGrid className="w-2 h-2" /> Cards
+              <LayoutGrid className="w-4 h-4" /> Cards
             </button>
             <button
               type="button"
               onClick={() => setView("list")}
               aria-pressed={view === "list"}
-              className={`flex items-center gap-1 px-1 py-0.5 text-[9px] h-4 ${view === "list" ? "bg-orange text-white" : "text-orange"}`}
+              className={`flex items-center gap-2 px-2 py-1 text-sm h-8 ${view === "list" ? "bg-orange text-white" : "text-orange"}`}
             >
-              <List className="w-2 h-2" /> List
+              <List className="w-4 h-4" /> List
             </button>
-          </div>
-          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-1 lg:space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              asChild
-              className="border-orange text-orange hover:bg-orange hover:text-white text-[9px] px-1 py-0.5 h-4 min-w-0"
-              title="Reflective essays on technology, human systems, and the intersection of AI and society."
-            >
-              <Link href="/essays">Essays</Link>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              asChild
-              className="border-orange text-orange hover:bg-orange hover:text-white text-[9px] px-1 py-0.5 h-4 min-w-0"
-              title="Technical articles covering software engineering, AI development, and practical implementation patterns for human-AI collaboration systems."
-            >
-              <Link href="/articles">Articles</Link>
-            </Button>
           </div>
         </div>
       </div>
@@ -83,15 +62,15 @@ export function LatestPosts({ posts }: LatestPostsProps) {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col rounded-md border border-border overflow-hidden">
-          <div className="grid grid-cols-[1fr_110px_90px_1fr_60px] items-center gap-2 px-1 py-0.5 h-6 bg-muted/40 text-[10px] leading-none text-muted-foreground">
+        <div className="flex flex-col rounded-md overflow-hidden">
+          <div className="grid grid-cols-[1fr_1fr_110px_90px_60px] items-center gap-2 px-1 py-0.5 h-6 bg-muted/40 text-[10px] leading-none text-muted-foreground">
             <div>Title</div>
+            <div>Series</div>
             <div>Date</div>
             <div>Type</div>
-            <div>Series</div>
             <div className="text-right">Read</div>
           </div>
-          <div className="divide-y divide-border">
+          <div>
             {latestPosts.map((post) => (
               <Link key={post.id} href={`/posts/${post.slug}`} className="block group">
                 <PostListItem post={post} />
