@@ -38,6 +38,7 @@ export interface Series {
   coverLight?: string;
   coverDark?: string;
   postCount: number;
+  publishedDate?: string;
 }
 
 /**
@@ -67,6 +68,10 @@ export interface Post {
   customIcon?: string;
   // Cover image
   coverImage?: string;
+  // About page specific fields
+  skills?: string[];
+  currentFocus?: string[];
+  blogTopics?: string[];
 }
 
 /**

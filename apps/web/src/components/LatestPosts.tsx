@@ -12,8 +12,12 @@ const PostListItem = dynamic(() =>
   import("@/components/PostListItem").then((mod) => ({ default: mod.PostListItem })),
 );
 
+type LatestPost = Post & {
+  seriesName?: string;
+};
+
 interface LatestPostsProps {
-  posts: Post[];
+  posts: LatestPost[];
 }
 
 export function LatestPosts({ posts }: LatestPostsProps) {

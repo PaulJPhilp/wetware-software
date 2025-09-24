@@ -1,5 +1,5 @@
 import { NotionContent } from "@/components/NotionContent";
-import { getPostContent, getPublishedPosts } from "@/lib/notion-utils";
+import { getAboutPage } from "@/lib/notion-utils";
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { Brain, ExternalLink, Linkedin, Mail } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -26,11 +26,12 @@ const Button = dynamic(() =>
 export const revalidate = 60;
 
 export default async function AboutPage() {
-  // Try to load a published About page from Notion (slug: "about"). Fallback to local content.
-  const posts = await getPublishedPosts();
-  const aboutPost = posts.find((p) => p.slug === "about");
-  const aboutBlocks = aboutPost ? await getPostContent(aboutPost.id) : null;
-  const skills = [
+  // Load the About page from Notion. Fallback to local content.
+  const aboutData = await getAboutPage();
+  const aboutPost = aboutData?.post ?? null;
+  const aboutBlocks = aboutData?.blocks ?? null;
+
+  const skills: string[] = [
     "TypeScript",
     "React/Next.js",
     "Tailwind CSS",
@@ -45,7 +46,7 @@ export default async function AboutPage() {
     "Human-AI Collaboration",
   ];
 
-  const blogTopics = [
+  const blogTopics: string[] = [
     "Building robust AI agents and conversational UIs",
     "Architecting large language model (LLM) applications for scale",
     "Effect-TS patterns and functional programming in TypeScript",
@@ -204,7 +205,7 @@ export default async function AboutPage() {
             Technical Skills & Expertise
           </h2>
           <div className="flex flex-wrap gap-2">
-            {skills.map((skill) => (
+            {skills.map((skill: string) => (
               <Badge
                 key={skill}
                 variant="secondary"
@@ -222,7 +223,7 @@ export default async function AboutPage() {
             What I Write About
           </h2>
           <div className="grid gap-4 md:grid-cols-2">
-            {blogTopics.map((topic) => (
+            {blogTopics.map((topic: string) => (
               <div
                 key={topic}
                 className="flex items-start gap-3 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg"

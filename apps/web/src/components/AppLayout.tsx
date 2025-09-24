@@ -3,8 +3,7 @@
 import { Header } from "@/components/Header";
 import { SidebarProvider, useSidebar } from "@/components/SidebarContext";
 import { Footer } from "./Footer";
-// import type { SeriesSidebarSeries as Series } from "./SeriesSidebarCards";
-// import { SeriesSidebarCards } from "./SeriesSidebarCards";
+
 
 // Temporary placeholder type
 interface Series {
@@ -80,13 +79,13 @@ function AppLayoutContent({
       {/* Mobile Sidebar Drawer - Temporarily removed to isolate hydration issue */}
       {/* {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-modal-backdrop md:hidden"
           onClick={() => setIsSidebarOpen(false)}
           role="presentation"
           aria-hidden="true"
         >
           <div
-            className="fixed left-0 top-0 bottom-0 w-40 bg-background shadow-lg z-50 transform transition-transform ease-in-out duration-300 translate-x-0"
+            className="fixed left-0 top-0 bottom-0 w-40 bg-background shadow-lg z-modal transform transition-transform ease-in-out duration-300 translate-x-0"
             role="presentation"
           >
             <div className="flex justify-between items-center p-4">

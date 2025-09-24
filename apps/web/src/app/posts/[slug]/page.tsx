@@ -73,14 +73,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <SeriesNavigation currentPost={post} seriesPosts={seriesPosts} />
       )}
 
-      <article className="bg-card rounded-xl shadow-lg border border-card space-y-8 p-6">
+      <article className="bg-card rounded-xl shadow-lg space-y-8 p-6">
         {/* Header */}
         <header className="space-y-4 text-center pb-4 border-b border-card">
           <div className="flex items-center justify-center gap-4 mb-2">
             <Badge variant="secondary" className="font-sans text-base px-3 py-1">
               {post.type}
             </Badge>
-            <FocusIcon className="w-6 h-6 text-orange animate-bounce" />
+            <FocusIcon className="w-6 h-6 text-orange" />
           </div>
           <h1 className="fluid-h1 font-bold mb-2">{post.name}</h1>
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted mb-2">
@@ -105,8 +105,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </header>
 
         {/* Content */}
-        <section className="prose prose-base">
-          <p className="italic">{post.description}</p>
+        <section className="prose">
           <div className="space-y-6">
             <NotionContent blocks={blocks.results as BlockObjectResponse[]} />
           </div>

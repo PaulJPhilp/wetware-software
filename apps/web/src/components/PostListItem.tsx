@@ -1,5 +1,12 @@
+"use client";
+
 import type { Post } from "@/lib/notion-utils";
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, type ColumnDef } from "@tanstack/react-table";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 
 interface PostListItemProps {
   post: Post;
@@ -7,7 +14,7 @@ interface PostListItemProps {
 
 const columnHelper = createColumnHelper<Post>();
 
-const columns: ColumnDef<Post, any>[] = [
+const columns = [
   columnHelper.accessor("name", {
     header: "Title",
     cell: (info) => (
@@ -15,28 +22,29 @@ const columns: ColumnDef<Post, any>[] = [
         {info.getValue()}
       </h5>
     ),
-    size: undefined, // flexible
   }),
-  columnHelper.accessor((row) => ({
-    seriesName: row.seriesName,
-    partNumber: row.partNumber,
-  }), {
-    id: "series",
-    header: "Series",
-    cell: (info) => {
-      const { seriesName, partNumber } = info.getValue();
-      return (
-        <div className="text-xs leading-none text-orange truncate">
-          {seriesName
-            ? partNumber
-              ? `${seriesName} • Part ${partNumber}`
-              : seriesName
-            : ""}
-        </div>
-      );
+  columnHelper.accessor(
+    (row) => ({
+      seriesName: row.seriesName,
+      partNumber: row.partNumber,
+    }),
+    {
+      id: "series",
+      header: "Series",
+      cell: (info) => {
+        const { seriesName, partNumber } = info.getValue();
+        return (
+          <div className="text-xs leading-none text-orange truncate">
+            {seriesName
+              ? partNumber
+                ? `${seriesName} • Part ${partNumber}`
+                : seriesName
+              : ""}
+          </div>
+        );
+      },
     },
-    size: undefined, // flexible
-  }),
+  ),
   columnHelper.accessor("publishDate", {
     header: "Date",
     cell: (info) => (
@@ -44,7 +52,6 @@ const columns: ColumnDef<Post, any>[] = [
         {info.getValue()}
       </time>
     ),
-    size: 110,
   }),
   columnHelper.accessor("type", {
     header: "Type",
@@ -66,6 +73,12 @@ const columns: ColumnDef<Post, any>[] = [
   }),
 ];
 
+/**
+ * Render a single post inside a fixed-layout table row.
+ *
+ * @param props - Props containing the `post` data to display.
+ * @returns A hoverable row showing key post metadata.
+ */
 export function PostListItem({ post }: PostListItemProps) {
   const table = useReactTable({
     data: [post],

@@ -1,40 +1,37 @@
 "use client";
 import { useTheme } from "next-themes";
-import Image from "next/image";
 import Link from "next/link";
+import type { SeriesSidebarSeries, SeriesSidebarArticle } from "@/lib/types";
+import { ImageWithFallback, useThemeAwareCover } from "@/lib/image-utils";
 
-export interface SeriesSidebarArticle {
-    title: string;
-    href: string;
-}
-
-export interface SeriesSidebarSeries {
-    name: string;
-    slug?: string;
-    coverLight?: string;
-    coverDark?: string;
-    articles: SeriesSidebarArticle[];
-}
-
+/**
+ * SeriesSidebarCards Component
+ * Displays series as compact cards with cover images and article counts
+ * Optimized for sidebar placement with responsive sizing
+ *
+ * @param series - Array of series data to display as cards
+ * @param showTitle - Whether to display the "Series" title header (default: true)
+ * @returns React component displaying series cards with cover images
+ */
 export function SeriesSidebarCards({
-    seriesList,
+    series,
     showTitle = true,
 }: {
-    seriesList: SeriesSidebarSeries[];
+    series: SeriesSidebarSeries[];
     showTitle?: boolean;
 }) {
     const { theme } = useTheme();
     const isDark = theme === "dark";
     return (
-        <div className="w-full">
+        <div className="w-full max-w-[10rem] md:max-w-[8.5rem] lg:max-w-[8rem] xl:max-w-[7rem]">
             {showTitle && (
                 <div className="flex items-center gap-2 mb-2">
                     <h2 className="text-xs font-semibold text-foreground">Series</h2>
-                    <span className="text-[8px] text-muted-foreground">{seriesList.length}</span>
+                    <span className="text-[8px] text-muted-foreground">{series.length}</span>
                 </div>
             )}
 
-            {seriesList.length === 0 ? (
+            {series.length === 0 ? (
                 <div className="py-2 space-y-2">
                     {Array.from({ length: 3 }).map(() => (
                         <div key={crypto.randomUUID()} className="rounded-md overflow-hidden bg-white">
@@ -47,28 +44,22 @@ export function SeriesSidebarCards({
                 </div>
             ) : (
                 <div className="space-y-2">
-                    {seriesList.map((series) => {
+                    {series.map((series) => {
                         const seriesHref = series.slug ? `/series/${series.slug}` : "#";
-                        const cover = isDark ? (series.coverDark || series.coverLight) : (series.coverLight || series.coverDark);
+                        const cover = useThemeAwareCover(series);
                         return (
                             <div key={series.slug || series.name}>
                                 <div className="group rounded-md overflow-hidden bg-white hover:shadow-sm transition">
                                     {/* Top row: image left, title right */}
                                     <div className="flex items-center gap-2 p-2">
-                                        <div className="relative h-[60px] w-[80px] overflow-hidden rounded bg-charcoal/10 flex-shrink-0">
-                                            {/* Always-visible base placeholder */}
-                                            <div className="absolute inset-0 bg-charcoal/10" aria-hidden="true" style={{ zIndex: 0 }} />
-                                            {/* Cover image (overlays placeholder if present) */}
-                                            <Image
-                                                src={cover || "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA4MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjQwIiB5PSIzMCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMC4zZW0iPk5vIENvdmVyPC90ZXh0Pgo8L3N2Zz4K"}
-                                                alt={series.name}
-                                                width={80}
-                                                height={60}
-                                                className="object-cover w-full h-full"
-                                                priority={false}
-                                                style={{ zIndex: 1 }}
-                                            />
-                                        </div>
+                                        <ImageWithFallback
+                                            src={cover}
+                                            alt={series.name}
+                                            width={80}
+                                            height={60}
+                                            onLoad={() => console.log("SeriesSidebarCards cover loaded:", cover, series.name)}
+                                            onError={() => console.error("SeriesSidebarCards cover failed to load:", cover, series.name)}
+                                        />
                                         <div className="min-w-0 flex-1">
                                             <Link
                                                 href={seriesHref}

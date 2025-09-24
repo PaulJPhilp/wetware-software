@@ -4,15 +4,23 @@ import { useEffect } from "react";
 
 export function ServiceWorker() {
   useEffect(() => {
-    if ("serviceWorker" in navigator) {
+    if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("/sw.js")
-          .then((registration) => {
-            console.log("SW registered: ", registration);
+        // Preflight check: ensure sw.js exists and is served as JavaScript
+        fetch("/sw.js", { method: "HEAD" })
+          .then((res) => {
+            const ct = res.headers.get("content-type") || "";
+            const isJs = ct.includes("javascript") || ct.includes("ecmascript");
+            if (res.ok && isJs) {
+              return navigator.serviceWorker.register("/sw.js");
+            }
+            throw new Error(`Unexpected SW content-type: ${ct || "<none>"}`);
           })
-          .catch((registrationError) => {
-            console.log("SW registration failed: ", registrationError);
+          .then((registration) => {
+            console.log("SW registered:", registration);
+          })
+          .catch((err) => {
+            console.warn("SW registration skipped:", err);
           });
       });
     }

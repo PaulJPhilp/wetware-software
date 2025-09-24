@@ -9,12 +9,16 @@
         "allowJs": true,
         "skipLibCheck": true,
         "strict": true,
+        "exactOptionalPropertyTypes": true,
         "esModuleInterop": true,
         "module": "esnext",
         "moduleResolution": "bundler",
+        "noImplicitOverride": true,
+        "noUncheckedIndexedAccess": true,
         "resolveJsonModule": true,
         "jsx": "react-jsx",
         "incremental": true,
+        "useUnknownInCatchVariables": true,
         "paths": {
             "@/*": [
                 "./src/*"

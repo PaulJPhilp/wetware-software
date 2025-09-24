@@ -2,10 +2,9 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { HeaderProvider } from "@/components/HeaderContext";
 import { ServiceWorker } from "@/components/ServiceWorker";
-// import { SidebarRail } from "@/components/SidebarRail";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { firaCode, merriweather, montserrat } from "@/lib/fonts";
-// import { getSeriesList } from "@/lib/getSeriesList";
+
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -46,11 +45,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const seriesList = await getSeriesList();
+
   return (
     <html
       lang="en"
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
       className={`${montserrat.variable} ${merriweather.variable} ${firaCode.variable}`}
     >
       <body className="font-serif min-h-screen grid grid-rows-[auto_1fr_auto]">
@@ -65,13 +65,9 @@ export default async function RootLayout({
             <Header />
             {/* Main site column layout offset by fixed header height and footer */}
             <div className="pt-14 md:pt-16 pb-5 w-full min-h-0">
-              {/* Left rail anchored to viewport left - TEMPORARILY REMOVED */}
-              {/* <ClientOnly>
-                <SidebarRail seriesList={seriesList} />
-              </ClientOnly> */}
-              {/* Main content container remains centered */}
+              {/* Main content container - sidebar is now handled per-page */}
               <main className="min-w-0 flex flex-col">
-                <div className="px-2 md:px-4 py-2 flex-1">
+                <div className="py-2 flex-1">
                   <div className="w-full min-w-0">{children}</div>
                 </div>
               </main>

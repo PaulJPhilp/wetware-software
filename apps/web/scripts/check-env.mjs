@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { z } from "zod";
 
 // Load .env files locally so prebuild can validate env vars before Next.js loads them
 function loadEnvFile(filePath) {
@@ -45,48 +46,64 @@ if (!isCI) {
 }
 
 console.log("Checking environment variables...");
-console.log("NOTION_API_KEY:", process.env.NOTION_API_KEY ? "SET" : "NOT SET");
-console.log("notion_api_key:", process.env.notion_api_key ? "SET" : "NOT SET");
-console.log(
-  "NOTION_DATABASE_ID_BLOG_POSTS:",
-  process.env.NOTION_DATABASE_ID_BLOG_POSTS ? "SET" : "NOT SET"
-);
-console.log(
-  "notion_database_id_blog_posts:",
-  process.env.notion_database_id_blog_posts ? "SET" : "NOT SET"
-);
-console.log(
-  "NOTION_DATABASE_ID_SERIES:",
-  process.env.NOTION_DATABASE_ID_SERIES ? "SET" : "NOT SET"
-);
-console.log(
-  "notion_database_id_series:",
-  process.env.notion_database_id_series ? "SET" : "NOT SET"
-);
 
-// Check if we have at least one of each pair
-const hasNotionApiKey =
-  process.env.NOTION_API_KEY || process.env.notion_api_key;
-const hasBlogPostsId =
-  process.env.NOTION_DATABASE_ID_BLOG_POSTS ||
-  process.env.notion_database_id_blog_posts;
-const hasSeriesId =
-  process.env.NOTION_DATABASE_ID_SERIES ||
-  process.env.notion_database_id_series;
+const EnvSchema = z
+  .object({
+    NOTION_API_KEY: z.string().trim().min(1).optional(),
+    notion_api_key: z.string().trim().min(1).optional(),
+    NOTION_DATABASE_ID_BLOG_POSTS: z.string().trim().min(1).optional(),
+    notion_database_id_blog_posts: z.string().trim().min(1).optional(),
+    NOTION_DATABASE_ID_SERIES: z.string().trim().min(1).optional(),
+    notion_database_id_series: z.string().trim().min(1).optional(),
+  })
+  .superRefine((env, ctx) => {
+    if (!env.NOTION_API_KEY && !env.notion_api_key) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Provide NOTION_API_KEY or notion_api_key with a non-empty value.",
+        path: ["NOTION_API_KEY"],
+      });
+    }
 
-if (!hasNotionApiKey) {
-  console.error("ERROR: No Notion API key found!");
+    if (
+      !env.NOTION_DATABASE_ID_BLOG_POSTS &&
+      !env.notion_database_id_blog_posts
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Provide NOTION_DATABASE_ID_BLOG_POSTS or notion_database_id_blog_posts.",
+        path: ["NOTION_DATABASE_ID_BLOG_POSTS"],
+      });
+    }
+
+    if (
+      !env.NOTION_DATABASE_ID_SERIES &&
+      !env.notion_database_id_series
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Provide NOTION_DATABASE_ID_SERIES or notion_database_id_series.",
+        path: ["NOTION_DATABASE_ID_SERIES"],
+      });
+    }
+  });
+
+const result = EnvSchema.safeParse(process.env);
+
+if (!result.success) {
+  for (const issue of result.error.issues) {
+    console.error("ENV ERROR:", issue.message);
+  }
   process.exit(1);
 }
 
-if (!hasBlogPostsId) {
-  console.error("ERROR: No Blog Posts database ID found!");
-  process.exit(1);
-}
+const vars = result.data;
 
-if (!hasSeriesId) {
-  console.error("ERROR: No Series database ID found!");
-  process.exit(1);
-}
-
-console.log("All required environment variables are set!");
+console.log("All required environment variables are set!", {
+  apiKeyVariant: vars.NOTION_API_KEY ? "upper" : "lower",
+  postsIdVariant: vars.NOTION_DATABASE_ID_BLOG_POSTS ? "upper" : "lower",
+  seriesIdVariant: vars.NOTION_DATABASE_ID_SERIES ? "upper" : "lower",
+});

@@ -1,42 +1,35 @@
 "use client";
 import { useTheme } from "next-themes";
-import Image from "next/image";
 import Link from "next/link";
+import type { SeriesSidebarSeries, SeriesSidebarArticle } from "@/lib/types";
+import { ImageWithFallback, useThemeAwareCover } from "@/lib/image-utils";
 
-// Keep a local interface; structural typing will accept SeriesSidebarCards' prop shape
-export interface SeriesSidebarArticle {
-    title: string;
-    href: string;
-    coverImage?: string;
-}
-
-export interface SeriesSidebarSeries {
-    name: string;
-    slug?: string;
-    coverLight?: string;
-    coverDark?: string;
-    articles: SeriesSidebarArticle[];
-}
-
+/**
+ * SidebarSeriesItem Component
+ * Displays a single series item with cover image and article count
+ * Used within series navigation components
+ *
+ * @param series - Series data to display in the item
+ * @returns React component displaying series item with image and metadata
+ */
 export function SidebarSeriesItem({ series }: { series: SeriesSidebarSeries }) {
     const { theme } = useTheme();
     const isDark = theme === "dark";
-    const cover = isDark ? (series.coverDark || series.coverLight) : (series.coverLight || series.coverDark);
+    const cover = useThemeAwareCover(series);
     return (
         <div className="flex items-center gap-2 rounded-md px-2 py-1 hover:bg-muted/50">
             {cover ? (
-                <div className="relative h-8 w-12 overflow-hidden rounded bg-charcoal/5">
-                    <Image
-                        src={cover}
-                        alt={series.name}
-                        width={48}
-                        height={32}
-                        className="object-cover w-full h-full"
-                        priority={false}
-                    />
-                </div>
+                <ImageWithFallback
+                    src={cover}
+                    alt={series.name}
+                    width={48}
+                    height={32}
+                    className="object-cover w-full h-full"
+                    onLoad={() => console.log("SidebarSeriesItem cover loaded:", cover, series.name)}
+                    onError={() => console.error("SidebarSeriesItem cover failed to load:", cover, series.name)}
+                />
             ) : (
-                <div className="h-8 w-12 rounded bg-charcoal/5" aria-hidden="true" />
+                <div className="h-8 w-12 rounded bg-charcoal/5 flex-shrink-0" aria-hidden="true" />
             )}
 
             <div className="min-w-0 flex-1">
@@ -53,6 +46,13 @@ export function SidebarSeriesItem({ series }: { series: SeriesSidebarSeries }) {
     );
 }
 
+/**
+ * SidebarSeriesSkeleton Component
+ * Displays loading skeleton placeholders for series items
+ * Used during loading states to provide visual feedback
+ *
+ * @returns React component displaying animated skeleton placeholders
+ */
 export function SidebarSeriesSkeleton() {
     return (
         <div className="space-y-2">

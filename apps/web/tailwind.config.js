@@ -38,6 +38,10 @@ module.exports = {
         serif: ["Merriweather", "serif"],
         mono: ["Fira Code", "monospace"],
       },
+      fontSize: {
+        "2xs": ["0.625rem", { lineHeight: "0.875rem" }],
+        "3xs": ["0.5rem", { lineHeight: "0.75rem" }],
+      },
       fluidTypography: {
         h1: {
           min: "2.5rem",

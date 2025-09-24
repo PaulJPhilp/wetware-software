@@ -1,5 +1,6 @@
 "use client";
 
+import { normalizeImageSrc } from "@/lib/image-utils";
 import type {
   BlockObjectResponse,
   RichTextItemResponse,
@@ -31,6 +32,242 @@ import { ShareLink } from "./ShareLink";
 interface NotionBlockProps {
   block: BlockObjectResponse;
 }
+
+// Only use next/image for hosts allowed in next.config.ts to avoid 400s.
+// Keep this list in sync with apps/web/next.config.ts images.remotePatterns
+const isNextImageAllowed = (url: string): boolean => {
+  try {
+    const u = new URL(url);
+    if (u.protocol !== "https:") return false;
+    const host = u.hostname.toLowerCase();
+    return (
+      host === "prod-files-secure.s3.us-west-2.amazonaws.com" ||
+      host === "s3.us-west-2.amazonaws.com" ||
+      host === "notion.so" ||
+      host === "www.notion.so"
+    );
+  } catch {
+    return false;
+  }
+};
+
+// Regex to detect Markdown image tokens like: ![alt](src "title") or ![alt](src)
+// Use a non-global version for testing to avoid lastIndex state issues.
+// Accept straight or curly quotes around the optional title.
+const mdImageTest = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+["“”]([^"“”]*)["“”])?\)/;
+
+const hasMdImageToken = (text: string): boolean => mdImageTest.test(text);
+
+// Render inline text mixed with Markdown image tokens
+// Note: This path does not preserve Notion inline annotations; we trade
+// annotation fidelity for inline image support when tokens are present.
+const _renderTextWithInlineImages = (fullText: string): ReactNode[] => {
+  const nodes: ReactNode[] = [];
+  let lastIndex = 0;
+  // Create a local global regex to tokenize without sharing state
+  // Accept straight or curly quotes for the optional title
+  const re = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+["“”]([^"“”]*)["“”])?\)/g;
+  let match: RegExpExecArray | null = re.exec(fullText);
+
+  while (match !== null) {
+    const [all, alt, src, title] = match;
+    const start = match.index;
+    const end = start + all.length;
+
+    // Preceding text
+    if (start > lastIndex) {
+      nodes.push(fullText.slice(lastIndex, start));
+    }
+
+    // Inline <img>
+    if (src) {
+      nodes.push(
+        <span
+          key={`mdimg-${start}-${src}`}
+          className="inline-block align-middle max-w-full h-auto relative"
+          style={{ verticalAlign: "middle", maxWidth: "100%", height: "auto" }}
+        >
+          <Image
+            src={src}
+            alt={alt || title || "Content illustration"}
+            width={400}
+            height={200}
+            className="inline-block align-middle max-w-full h-auto"
+            style={{ objectFit: "contain" }}
+            onLoadingComplete={() => console.log("img loaded:", src)}
+            onError={() => console.error("img failed to load:", src)}
+          />
+        </span>,
+      );
+    }
+
+    lastIndex = end;
+    match = re.exec(fullText);
+  }
+
+  // Trailing text
+  if (lastIndex < fullText.length) {
+    nodes.push(fullText.slice(lastIndex));
+  }
+
+  return nodes;
+};
+
+// Parse optional title metadata for inline images. Supports syntax:
+// "Caption text | w=480, h=200" (commas or spaces between entries)
+// Returns both cleaned caption and style hints.
+const parseImageTitleMeta = (
+  rawTitle?: string,
+): {
+  caption?: string;
+  width?: number | string;
+  height?: number | string;
+  className?: string;
+} => {
+  if (!rawTitle) {
+    return {};
+  }
+
+  const result: {
+    caption?: string;
+    width?: number | string;
+    height?: number | string;
+    className?: string;
+  } = {};
+
+  const [captionPart, optionsPart] = rawTitle.split("|");
+  const caption = captionPart?.trim();
+  if (caption) {
+    result.caption = caption;
+  }
+
+  if (optionsPart) {
+    const entries = optionsPart
+      .split(/[\s,]+/)
+      .map((segment) => segment.trim())
+      .filter((segment): segment is string => segment.length > 0);
+
+    for (const entry of entries) {
+      const [keyRaw, valueRaw] = entry.split("=");
+      if (!keyRaw || !valueRaw) {
+        continue;
+      }
+
+      const key = keyRaw.toLowerCase();
+      const value = valueRaw.trim();
+
+      if (key === "w" || key === "width") {
+        result.width = value.endsWith("%") ? value : Number.parseFloat(value);
+      } else if (key === "h" || key === "height") {
+        result.height = value.endsWith("%") ? value : Number.parseFloat(value);
+      } else if (key === "class" || key === "classname") {
+        result.className = value;
+      }
+    }
+  }
+
+  return result;
+};
+
+// Create a shallow RichText-like object with updated plain_text/content,
+// preserving annotations and link for rendering with <RichText />.
+const cloneTextWithContent = (
+  text: RichTextItemResponse,
+  content: string,
+): RichTextItemResponse => {
+  const t: RichTextItemResponse = { ...text };
+  if ("text" in t && t.text) {
+    t.text = { ...t.text, content };
+  }
+  t.plain_text = content;
+  return t;
+};
+
+// Render a single RichText segment, splitting around any markdown image tokens
+// while preserving the segment's annotations on surrounding text.
+const renderSegmentWithInlineImages = (
+  text: RichTextItemResponse,
+  keyBase: string,
+): ReactNode[] => {
+  const content = text.plain_text || "";
+  const nodes: ReactNode[] = [];
+  const re = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+["“”]([^"“”]*)["“”])?\)/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null = re.exec(content);
+
+  while (match !== null) {
+    const [all, altRaw, src, titleRaw] = match;
+    const start = match.index;
+    const end = start + all.length;
+
+    if (start > lastIndex) {
+      const pre = content.slice(lastIndex, start);
+      if (pre)
+        nodes.push(
+          <RichText key={`${keyBase}-pre-${start}`} text={cloneTextWithContent(text, pre)} />,
+        );
+    }
+
+    const meta = parseImageTitleMeta(titleRaw);
+    const alt = (altRaw || meta.caption || "Content illustration").trim();
+    const style: React.CSSProperties = {};
+    if (meta.width !== undefined) style.width = meta.width as string | number;
+    if (meta.height !== undefined) style.height = meta.height as string | number;
+    const cls = `inline-block align-middle max-w-full h-auto ${meta.className || ""}`.trim();
+
+    if (src) {
+      nodes.push(
+        <span key={`${keyBase}-img-${start}`} className={cls} style={style}>
+          <Image
+            src={normalizeImageSrc(src) || src}
+            alt={alt}
+            width={meta.width ? Number(meta.width) || 400 : 400}
+            height={meta.height ? Number(meta.height) || 200 : 200}
+            style={{ objectFit: "contain", ...style }}
+            className={cls}
+            onLoadingComplete={() => console.log("img loaded:", src)}
+            onError={() => console.error("img failed to load:", src)}
+          />
+        </span>,
+      );
+    }
+
+    lastIndex = end;
+    match = re.exec(content);
+  }
+
+  if (lastIndex < content.length) {
+    const tail = content.slice(lastIndex);
+    if (tail)
+      nodes.push(
+        <RichText key={`${keyBase}-tail-${lastIndex}`} text={cloneTextWithContent(text, tail)} />,
+      );
+  }
+
+  // If no matches, return original as-is
+  if (nodes.length === 0) return [<RichText key={keyBase} text={text} />];
+  return nodes;
+};
+
+// Render an array of RichText segments with inline images preserved
+const renderAnnotatedWithInlineImages = (
+  blockId: string,
+  segments: RichTextItemResponse[],
+): ReactNode[] => {
+  const anyHas = segments.some((t) => hasMdImageToken(t.plain_text || ""));
+  if (!anyHas) {
+    return segments.map((t, idx) => (
+      <RichText key={`${blockId}-${idx}-${t.plain_text}`} text={t} />
+    ));
+  }
+  const out: ReactNode[] = [];
+  segments.forEach((t, idx) => {
+    out.push(
+      ...renderSegmentWithInlineImages(t, `${blockId}-${idx}-${(t.plain_text || "").slice(0, 8)}`),
+    );
+  });
+  return out;
+};
 
 const RichText: FC<{ text: RichTextItemResponse }> = ({ text }) => {
   if (!text) return null;
@@ -100,7 +337,7 @@ const CodeBlock: FC<{ block: BlockObjectResponse }> = ({ block }) => {
   }, [isCopied]);
 
   return (
-    <div className="relative">
+    <div className="relative isolation-isolate">
       <button
         type="button"
         onClick={handleCopy}
@@ -116,14 +353,49 @@ const CodeBlock: FC<{ block: BlockObjectResponse }> = ({ block }) => {
 
 export function NotionBlock({ block }: NotionBlockProps) {
   switch (block.type) {
-    case "paragraph":
-      return (
-        <p>
-          {block.paragraph.rich_text.map((text, idx) => (
-            <RichText key={`${block.id}-${idx}-${text.plain_text}`} text={text} />
-          ))}
-        </p>
-      );
+    case "paragraph": {
+      // Join paragraph text to detect simple Markdown image syntax
+      const fullText = block.paragraph.rich_text.map((t) => t.plain_text).join("");
+
+      // Matches ![alt](url "title") or ![alt](url)
+      const imgMd = fullText.match(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/);
+
+      // If the entire paragraph is just the image token, render as an image
+      if (imgMd && fullText.trim() === imgMd[0]) {
+        const alt = imgMd[1] || "";
+        const src = imgMd[2];
+        if (!src) {
+          return null;
+        }
+        const title = imgMd[3];
+
+        return (
+          <figure className="my-6">
+            <div className="w-full overflow-hidden rounded-lg shadow-md">
+              {/* Use a plain img to support public/ paths without layout reqs */}
+              <Image
+                src={normalizeImageSrc(src) || src}
+                alt={alt || title || "Content illustration"}
+                width={800}
+                height={400}
+                className="block w-full h-auto"
+                style={{ objectFit: "contain" }}
+                onLoadingComplete={() => console.log("img loaded:", src)}
+                onError={() => console.error("img failed to load:", src)}
+              />
+            </div>
+            {(title || alt) && (
+              <figcaption className="text-sm text-muted text-center mt-2 italic">
+                {title || alt}
+              </figcaption>
+            )}
+          </figure>
+        );
+      }
+
+      // Otherwise, render annotated text preserving inline images
+      return <p>{renderAnnotatedWithInlineImages(block.id, block.paragraph.rich_text)}</p>;
+    }
     case "heading_1": {
       const h1Text = block.heading_1.rich_text.map((text) => text.plain_text).join("");
       const h1Id = h1Text
@@ -166,32 +438,28 @@ export function NotionBlock({ block }: NotionBlockProps) {
         </AnchorHeading>
       );
     }
-    case "bulleted_list_item":
+    case "bulleted_list_item": {
+      const _fullText = block.bulleted_list_item.rich_text.map((t) => t.plain_text).join("");
       return (
-        <li>
-          {block.bulleted_list_item.rich_text.map((text, idx) => (
-            <RichText key={`${block.id}-${idx}-${text.plain_text}`} text={text} />
-          ))}
-        </li>
+        <li>{renderAnnotatedWithInlineImages(block.id, block.bulleted_list_item.rich_text)}</li>
       );
-    case "numbered_list_item":
+    }
+    case "numbered_list_item": {
+      const _fullText = block.numbered_list_item.rich_text.map((t) => t.plain_text).join("");
       return (
-        <li>
-          {block.numbered_list_item.rich_text.map((text, idx) => (
-            <RichText key={`${block.id}-${idx}-${text.plain_text}`} text={text} />
-          ))}
-        </li>
+        <li>{renderAnnotatedWithInlineImages(block.id, block.numbered_list_item.rich_text)}</li>
       );
+    }
     case "code":
       return <CodeBlock block={block} />;
-    case "quote":
+    case "quote": {
+      const _fullText = block.quote.rich_text.map((t) => t.plain_text).join("");
       return (
         <blockquote className="border-l-4 border-orange/60 pl-4 italic bg-orange/5 p-4 rounded-r-lg">
-          {block.quote.rich_text.map((text, idx) => (
-            <RichText key={`${block.id}-${idx}-${text.plain_text}`} text={text} />
-          ))}
+          {renderAnnotatedWithInlineImages(block.id, block.quote.rich_text)}
         </blockquote>
       );
+    }
     case "image":
       if ("external" in block.image) {
         const caption =
@@ -224,31 +492,55 @@ export function NotionBlock({ block }: NotionBlockProps) {
           return "Content illustration";
         };
 
-        return (
-          <figure className="my-6">
-            <div
-              className="relative w-full aspect-video overflow-hidden rounded-lg shadow-md"
-              // Fallback minHeight to avoid Next Image warning when parent computes 0 height
-              style={{ minHeight: 1 }}
-            >
-              <Image
-                src={block.image.external.url}
-                alt={generateAltText(caption, block.image.external.url)}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-                className="object-cover"
-                priority={false}
-              />
-            </div>
-            {caption && (
-              <figcaption className="text-sm text-muted text-center mt-2 italic">
-                {block.image.caption.map((text, idx) => (
-                  <RichText key={`${block.id}-caption-${idx}-${text.plain_text}`} text={text} />
-                ))}
-              </figcaption>
-            )}
-          </figure>
-        );
+        {
+          const url = block.image.external?.url;
+          if (!url) {
+            return null;
+          }
+          const isSvg = url.split("?")[0]?.toLowerCase().endsWith(".svg") ?? false;
+          const allowed = isNextImageAllowed(url);
+          return (
+            <figure className="my-6">
+              <div className="w-full overflow-hidden rounded-lg shadow-md">
+                {isSvg || !allowed ? (
+                  <Image
+                    src={normalizeImageSrc(url) || url}
+                    alt={generateAltText(caption, url)}
+                    width={800}
+                    height={400}
+                    className="block w-full h-auto"
+                    style={{ objectFit: "contain" }}
+                    onLoadingComplete={() => console.log("img loaded:", url)}
+                    onError={() => console.error("Image failed to load:", url)}
+                  />
+                ) : (
+                  <div
+                    className="relative w-full aspect-video overflow-hidden"
+                    style={{ minHeight: 1 }}
+                  >
+                    <Image
+                      src={normalizeImageSrc(url) || url}
+                      alt={generateAltText(caption, url)}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+                      className="object-cover"
+                      priority={false}
+                      onLoad={() => console.log("next/image loaded:", url)}
+                      onError={() => console.error("next/image failed to load:", url)}
+                    />
+                  </div>
+                )}
+              </div>
+              {caption && (
+                <figcaption className="text-sm text-muted text-center mt-2 italic">
+                  {block.image.caption.map((text, idx) => (
+                    <RichText key={`${block.id}-caption-${idx}-${text.plain_text}`} text={text} />
+                  ))}
+                </figcaption>
+              )}
+            </figure>
+          );
+        }
       }
       if ("file" in block.image) {
         const caption =
@@ -278,31 +570,55 @@ export function NotionBlock({ block }: NotionBlockProps) {
           return "Content illustration";
         };
 
-        return (
-          <figure className="my-6">
-            <div
-              className="relative w-full aspect-video overflow-hidden rounded-lg shadow-md"
-              // Fallback minHeight to avoid Next Image warning when parent computes 0 height
-              style={{ minHeight: 1 }}
-            >
-              <Image
-                src={block.image.file.url}
-                alt={generateAltText(caption, block.image.file.url)}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-                className="object-cover"
-                priority={false}
-              />
-            </div>
-            {caption && (
-              <figcaption className="text-sm text-muted text-center mt-2 italic">
-                {block.image.caption.map((text, idx) => (
-                  <RichText key={`${block.id}-caption-${idx}-${text.plain_text}`} text={text} />
-                ))}
-              </figcaption>
-            )}
-          </figure>
-        );
+        {
+          const url = block.image.file?.url;
+          if (!url) {
+            return null;
+          }
+          const isSvg = url.split("?")[0]?.toLowerCase().endsWith(".svg") ?? false;
+          const allowed = isNextImageAllowed(url);
+          return (
+            <figure className="my-6">
+              <div className="w-full overflow-hidden rounded-lg shadow-md">
+                {isSvg || !allowed ? (
+                  <Image
+                    src={normalizeImageSrc(url) || url}
+                    alt={generateAltText(caption, url)}
+                    width={800}
+                    height={400}
+                    className="block w-full h-auto"
+                    style={{ objectFit: "contain" }}
+                    onLoadingComplete={() => console.log("img loaded:", url)}
+                    onError={() => console.error("Image failed to load:", url)}
+                  />
+                ) : (
+                  <div
+                    className="relative w-full aspect-video overflow-hidden"
+                    style={{ minHeight: 1 }}
+                  >
+                    <Image
+                      src={normalizeImageSrc(url) || url}
+                      alt={generateAltText(caption, url)}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+                      className="object-cover"
+                      priority={false}
+                      onLoad={() => console.log("next/image loaded:", url)}
+                      onError={() => console.error("next/image failed to load:", url)}
+                    />
+                  </div>
+                )}
+              </div>
+              {caption && (
+                <figcaption className="text-sm text-muted text-center mt-2 italic">
+                  {block.image.caption.map((text, idx) => (
+                    <RichText key={`${block.id}-caption-${idx}-${text.plain_text}`} text={text} />
+                  ))}
+                </figcaption>
+              )}
+            </figure>
+          );
+        }
       }
       return null;
     case "callout": {
@@ -340,6 +656,8 @@ export function NotionBlock({ block }: NotionBlockProps) {
 
       const calloutId = generateCalloutId(calloutText);
 
+      const _fullText = block.callout.rich_text.map((t) => t.plain_text).join(" ");
+
       return (
         <div
           id={calloutId}
@@ -350,9 +668,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
               <span>{block.callout.icon.emoji}</span>
             )}
             <div className="text-brand flex-1">
-              {block.callout.rich_text.map((text, idx) => (
-                <RichText key={`${block.id}-${idx}-${text.plain_text}`} text={text} />
-              ))}
+              {renderAnnotatedWithInlineImages(block.id, block.callout.rich_text)}
             </div>
             <ShareLink id={calloutId} />
           </div>
