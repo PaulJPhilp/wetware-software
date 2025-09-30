@@ -1,24 +1,53 @@
+/** biome-ignore-all lint/style/useConst: ignore */
+import type { SeriesArticle } from "@/lib/types";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import type { ContentType, FocusArea, Post, Series } from "@wetware/shared";
+import type { ContentType, FocusArea, Post } from "@wetware/shared";
 import { unstable_cache } from "next/cache";
+import { resolveNotionCoverImage, resolveNotionCoverImages } from "./image-resolvers";
 import { blogPostsDatabaseId, notion, seriesDatabaseId } from "./notion";
 import { NotionError, NotionPropertyMissingError, NotionQueryError } from "./notion/errors";
 import { createTimer, logger } from "./notion/logger";
-import type { FeaturedSeries, FeaturedArticle } from "@/lib/types";
-import {
-  resolveNotionCoverImages,
-  resolveNotionCoverImage,
-} from "./image-resolvers";
+
+// Temporarily define Series interface here for debugging
+export interface Series {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  seriesGoal: string;
+  status: string;
+  focusArea: FocusArea;
+  tags: { name: string; color: string }[];
+  coverLight: string;
+  coverDark: string;
+  imageUrl: string;
+  postCount: number;
+  publishedDate?: string;
+  articles: SeriesArticle[];
+}
 
 // Re-export shared types for backward compatibility
-export type { ContentType, FocusArea, Post, Series, FeaturedSeries, FeaturedArticle };
+export type { ContentType, FocusArea, Post, SeriesArticle };
 
 /**
  * Helper function to format dates consistently to avoid hydration mismatches
  * Uses UTC to ensure server and client produce the same output
  */
 function formatDate(date: Date): string {
-  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   return `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
 }
 
@@ -29,42 +58,92 @@ export const getSeries = unstable_cache(
   async (): Promise<Series[]> => {
     const timer = createTimer();
     try {
-      logger.info("Fetching all published series", { databaseId: seriesDatabaseId });
+      logger.info("Fetching all published series", {
+        databaseId: seriesDatabaseId,
+      });
 
       const response = await notion.databases.query({
         database_id: seriesDatabaseId,
         filter: {
-          property: "Status",
-          status: {
-            does_not_equal: "Draft",
-          },
+          and: [
+            {
+              property: "Status",
+              status: {
+                does_not_equal: "Draft",
+              },
+            },
+            {
+              property: "Published Date",
+              date: {
+                is_not_empty: true,
+              },
+            },
+          ],
         },
         sorts: [
           {
-            property: "Name",
-            direction: "ascending",
+            property: "Published Date",
+            direction: "descending",
           },
         ],
       });
 
       const series = parseSeriesFromResponse(response.results as PageObjectResponse[]);
 
+      const seriesWithArticles: Series[] = [];
+
+      for (const s of series) {
+        const postsResponse = await notion.databases.query({
+          database_id: blogPostsDatabaseId,
+          filter: {
+            and: [
+              {
+                property: "Published Date",
+                date: {
+                  is_not_empty: true,
+                },
+              },
+              {
+                property: "Blog Series",
+                relation: {
+                  contains: s.id,
+                },
+              },
+            ],
+          },
+          sorts: [
+            {
+              property: "Part Number",
+              direction: "ascending",
+            },
+          ],
+        });
+
+        const articles = parseSeriesArticles(postsResponse.results as PageObjectResponse[], s.id);
+
+        seriesWithArticles.push({
+          ...s,
+          articles,
+          postCount: articles.length,
+        });
+      }
+
       logger.info("Successfully fetched series", {
-        count: series.length,
-        elapsed: timer.elapsed()
+        count: seriesWithArticles.length,
+        elapsed: timer.elapsed(),
       });
 
-      return series;
+      return seriesWithArticles;
     } catch (error) {
       logger.error("Error accessing Series database", error, {
         databaseId: seriesDatabaseId,
-        elapsed: timer.elapsed()
+        elapsed: timer.elapsed(),
       });
 
       if (error instanceof Error) {
         throw new NotionQueryError("Failed to fetch series", {
           databaseId: seriesDatabaseId,
-          cause: error
+          cause: error,
         });
       }
       throw error;
@@ -77,10 +156,15 @@ export const getSeries = unstable_cache(
 /**
  * Internal function to fetch a single series with its posts
  */
-async function _getSeriesWithPosts(seriesSlug: string): Promise<{ series: Series; posts: Post[] } | null> {
+async function _getSeriesWithPosts(
+  seriesSlug: string,
+): Promise<{ series: Series; posts: Post[] } | null> {
   const timer = createTimer();
   try {
-    logger.info("Fetching series with posts", { seriesSlug, databaseId: seriesDatabaseId });
+    logger.info("Fetching series with posts", {
+      seriesSlug,
+      databaseId: seriesDatabaseId,
+    });
 
     // First get the series
     const seriesResponse = await notion.databases.query({
@@ -101,7 +185,9 @@ async function _getSeriesWithPosts(seriesSlug: string): Promise<{ series: Series
     const series = parseSeriesFromResponse(seriesResponse.results as PageObjectResponse[])[0];
 
     if (!series) {
-      throw new NotionError("Failed to parse series from response", { seriesSlug });
+      throw new NotionError("Failed to parse series from response", {
+        seriesSlug,
+      });
     }
 
     // Then get posts for this series
@@ -137,14 +223,14 @@ async function _getSeriesWithPosts(seriesSlug: string): Promise<{ series: Series
       seriesSlug,
       seriesId: series.id,
       postCount: posts.length,
-      elapsed: timer.elapsed()
+      elapsed: timer.elapsed(),
     });
 
     return { series, posts };
   } catch (error) {
     logger.error("Error fetching series with posts", error, {
       seriesSlug: seriesSlug,
-      elapsed: timer.elapsed()
+      elapsed: timer.elapsed(),
     });
 
     if (error instanceof NotionError) {
@@ -154,7 +240,7 @@ async function _getSeriesWithPosts(seriesSlug: string): Promise<{ series: Series
     if (error instanceof Error) {
       throw new NotionQueryError("Failed to fetch series with posts", {
         seriesSlug,
-        cause: error
+        cause: error,
       });
     }
     throw error;
@@ -169,7 +255,7 @@ export function getSeriesWithPosts(seriesSlug: string) {
   return unstable_cache(
     () => _getSeriesWithPosts(seriesSlug),
     [`series-with-posts-${seriesSlug}`],
-    { revalidate: 600 }
+    { revalidate: 600 },
   )();
 }
 
@@ -216,24 +302,25 @@ export const getPublishedPosts = unstable_cache(
 
       const posts = parsePostsFromResponse(response.results as PageObjectResponse[]);
 
-      /***
-       * logger.info("Successfully fetched published posts", {
-        count: posts.length,
-        elapsed: timer.elapsed()
-      });
-      ***/
+      // Enrich posts with series names
+      const enrichedPosts = await enrichPostsWithSeriesNames(posts);
 
-      return posts;
+      logger.info("Successfully fetched published posts", {
+        count: enrichedPosts.length,
+        elapsed: timer.elapsed(),
+      });
+
+      return enrichedPosts;
     } catch (error) {
       logger.error("Error accessing Notion", error, {
         databaseId: blogPostsDatabaseId,
-        elapsed: timer.elapsed()
+        elapsed: timer.elapsed(),
       });
 
       if (error instanceof Error) {
         throw new NotionQueryError("Failed to fetch published posts", {
           databaseId: blogPostsDatabaseId,
-          cause: error
+          cause: error,
         });
       }
       throw error;
@@ -291,27 +378,30 @@ async function _getPostsByType(contentType: ContentType): Promise<Post[]> {
 
     const posts = parsePostsFromResponse(response.results as PageObjectResponse[]);
 
+    // Enrich posts with series names
+    const enrichedPosts = await enrichPostsWithSeriesNames(posts);
+
     /***
     logger.info("Successfully fetched posts by type", {
       contentType,
-      count: posts.length,
+      count: enrichedPosts.length,
       elapsed: timer.elapsed()
     });
     ***/
 
-    return posts;
+    return enrichedPosts;
   } catch (error) {
     logger.error(`Error fetching ${contentType} posts`, error, {
       contentType,
       databaseId: blogPostsDatabaseId,
-      elapsed: timer.elapsed()
+      elapsed: timer.elapsed(),
     });
 
     if (error instanceof Error) {
       throw new NotionQueryError(`Failed to fetch ${contentType} posts`, {
         contentType,
         databaseId: blogPostsDatabaseId,
-        cause: error
+        cause: error,
       });
     }
     throw error;
@@ -322,11 +412,62 @@ async function _getPostsByType(contentType: ContentType): Promise<Post[]> {
  * Fetches posts by content type (excluding about pages)
  */
 export function getPostsByType(contentType: ContentType) {
-  return unstable_cache(
-    () => _getPostsByType(contentType),
-    [`posts-by-type-${contentType}`],
-    { revalidate: 300 }
-  )();
+  return unstable_cache(() => _getPostsByType(contentType), [`posts-by-type-${contentType}`], {
+    revalidate: 300,
+  })();
+}
+
+/**
+ * Helper function to enrich posts with series names
+ */
+async function enrichPostsWithSeriesNames(posts: Post[]): Promise<Post[]> {
+  // Get unique series IDs from posts
+  const seriesIds = [...new Set(
+    posts
+      .filter((post) => post.seriesId)
+      .map((post) => post.seriesId)
+  )].filter(Boolean) as string[];
+
+  if (seriesIds.length === 0) {
+    return posts;
+  }
+
+  // Fetch series names for all unique series IDs
+  const seriesMap = new Map<string, string>();
+  
+  for (const seriesId of seriesIds) {
+    try {
+      const seriesPage = await notion.pages.retrieve({ 
+        page_id: seriesId 
+      });
+      
+      if ("properties" in seriesPage) {
+        const nameProp = seriesPage.properties.Name;
+        if (nameProp && nameProp.type === "title" && 
+            nameProp.title[0]?.plain_text) {
+          seriesMap.set(seriesId, nameProp.title[0].plain_text);
+        }
+      }
+    } catch (error) {
+      logger.warn(`Failed to fetch series name for ID ${seriesId}`, { 
+        error 
+      });
+    }
+  }
+
+  // Enrich posts with series names
+  return posts.map((post) => {
+    if (post.seriesId && seriesMap.has(post.seriesId)) {
+      const seriesName = seriesMap.get(post.seriesId);
+      if (seriesName) {
+        return {
+          ...post,
+          seriesName,
+        };
+      }
+    }
+    return post;
+  });
 }
 
 /**
@@ -335,7 +476,10 @@ export function getPostsByType(contentType: ContentType) {
 async function _getRecentPosts(limit: number = 10): Promise<Post[]> {
   const timer = createTimer();
   try {
-    logger.info("Fetching recent posts", { limit, databaseId: blogPostsDatabaseId });
+    logger.info("Fetching recent posts", {
+      limit,
+      databaseId: blogPostsDatabaseId,
+    });
 
     const response = await notion.databases.query({
       database_id: blogPostsDatabaseId,
@@ -370,29 +514,34 @@ async function _getRecentPosts(limit: number = 10): Promise<Post[]> {
       page_size: limit,
     });
 
-    const posts = parsePostsFromResponse(response.results as PageObjectResponse[]);
+    const posts = parsePostsFromResponse(
+      response.results as PageObjectResponse[]
+    );
+
+    // Enrich posts with series names
+    const enrichedPosts = await enrichPostsWithSeriesNames(posts);
 
     /***
     logger.info("Successfully fetched recent posts", {
       limit,
-      count: posts.length,
+      count: enrichedPosts.length,
       elapsed: timer.elapsed()
     });
     ***/
 
-    return posts;
+    return enrichedPosts;
   } catch (error) {
     logger.error("Error fetching recent posts", error, {
       limit,
       databaseId: blogPostsDatabaseId,
-      elapsed: timer.elapsed()
+      elapsed: timer.elapsed(),
     });
 
     if (error instanceof Error) {
       throw new NotionQueryError("Failed to fetch recent posts", {
         limit,
         databaseId: blogPostsDatabaseId,
-        cause: error
+        cause: error,
       });
     }
     throw error;
@@ -403,11 +552,9 @@ async function _getRecentPosts(limit: number = 10): Promise<Post[]> {
  * Fetches recent posts with a limit for performance
  */
 export function getRecentPosts(limit: number = 10) {
-  return unstable_cache(
-    () => _getRecentPosts(limit),
-    [`recent-posts-${limit}`],
-    { revalidate: 300 }
-  )();
+  return unstable_cache(() => _getRecentPosts(limit), [`recent-posts-${limit}`], {
+    revalidate: 300,
+  })();
 }
 
 /**
@@ -416,7 +563,10 @@ export function getRecentPosts(limit: number = 10) {
 async function _getFeaturedPosts(limit: number = 3): Promise<Post[]> {
   const timer = createTimer();
   try {
-    logger.info("Fetching featured posts", { limit, databaseId: blogPostsDatabaseId });
+    logger.info("Fetching featured posts", {
+      limit,
+      databaseId: blogPostsDatabaseId,
+    });
 
     const response = await notion.databases.query({
       database_id: blogPostsDatabaseId,
@@ -459,27 +609,30 @@ async function _getFeaturedPosts(limit: number = 3): Promise<Post[]> {
 
     const posts = parsePostsFromResponse(response.results as PageObjectResponse[]);
 
+    // Enrich posts with series names
+    const enrichedPosts = await enrichPostsWithSeriesNames(posts);
+
     /***
     logger.info("Successfully fetched featured posts", {
       limit,
-      count: posts.length,
+      count: enrichedPosts.length,
       elapsed: timer.elapsed()
     });
     ***/
 
-    return posts;
+    return enrichedPosts;
   } catch (error) {
     logger.error("Error fetching featured posts", error, {
       limit,
       databaseId: blogPostsDatabaseId,
-      elapsed: timer.elapsed()
+      elapsed: timer.elapsed(),
     });
 
     if (error instanceof Error) {
       throw new NotionQueryError("Failed to fetch featured posts", {
         limit,
         databaseId: blogPostsDatabaseId,
-        cause: error
+        cause: error,
       });
     }
     throw error;
@@ -509,9 +662,8 @@ export async function getPostContent(pageId: string) {
 
     results.push(
       ...page.results.filter(
-        (block): block is BlockObjectResponse =>
-          (block as BlockObjectResponse).object === "block"
-      )
+        (block): block is BlockObjectResponse => (block as BlockObjectResponse).object === "block",
+      ),
     );
 
     if (page.has_more && page.next_cursor) {
@@ -531,7 +683,10 @@ export async function getPostContent(pageId: string) {
 async function _getPostBySlug(slug: string): Promise<Post | null> {
   const timer = createTimer();
   try {
-    logger.debug("Fetching post by slug", { slug, databaseId: blogPostsDatabaseId });
+    logger.debug("Fetching post by slug", {
+      slug,
+      databaseId: blogPostsDatabaseId,
+    });
 
     const response = await notion.databases.query({
       database_id: blogPostsDatabaseId,
@@ -554,10 +709,14 @@ async function _getPostBySlug(slug: string): Promise<Post | null> {
     });
 
     const posts = parsePostsFromResponse(response.results as PageObjectResponse[]);
-    const post = posts[0];
-    if (!post) {
+    
+    if (posts.length === 0) {
       return null;
     }
+
+    // Enrich posts with series names
+    const enrichedPosts = await enrichPostsWithSeriesNames(posts);
+    const post = enrichedPosts[0] || null;
 
     /***
     logger.info("Successfully fetched post by slug", {
@@ -573,22 +732,21 @@ async function _getPostBySlug(slug: string): Promise<Post | null> {
     logger.error("Error fetching post by slug", error, {
       slug,
       databaseId: blogPostsDatabaseId,
-      elapsed: timer.elapsed()
+      elapsed: timer.elapsed(),
     });
     if (error instanceof Error) {
       throw new NotionQueryError("Failed to fetch post by slug", {
         slug,
         databaseId: blogPostsDatabaseId,
-        cause: error
+        cause: error,
       });
     }
-
 
     if (error instanceof Error) {
       throw new NotionQueryError("Failed to fetch post by slug", {
         slug,
         databaseId: blogPostsDatabaseId,
-        cause: error
+        cause: error,
       });
     }
     throw error;
@@ -599,11 +757,9 @@ async function _getPostBySlug(slug: string): Promise<Post | null> {
  * Fetches a single post by its slug
  */
 export function getPostBySlug(slug: string) {
-  return unstable_cache(
-    () => _getPostBySlug(slug),
-    [`post-by-slug-${slug}`],
-    { revalidate: 300 }
-  )();
+  return unstable_cache(() => _getPostBySlug(slug), [`post-by-slug-${slug}`], {
+    revalidate: 300,
+  })();
 }
 
 /**
@@ -613,7 +769,9 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
   return pages
     .map((page) => {
       if (!("properties" in page)) {
-        throw new NotionError("Invalid page object: missing properties", { page });
+        throw new NotionError("Invalid page object: missing properties", {
+          page,
+        });
       }
 
       const props = page.properties;
@@ -624,9 +782,9 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
       const descProp = props.Description;
       const blogTopicsProp = props["Series Goal"];
       const statusProp = props.Status;
-      const coverImageProp = props["Cover Image"];
-      const coverLightProp = props["CoverImage-LightMode"];
-      const coverDarkProp = props["CoverImage-DarkMode"];
+      const _coverImageProp = props["Cover Image"];
+      const _coverLightProp = props["CoverImage-LightMode"];
+      const _coverDarkProp = props["CoverImage-DarkMode"];
       const postsRollupProp = props["Posts in Series"];
       const focusAreaProp = props["Focus Area"];
       const tagsProp = props.Tags;
@@ -657,14 +815,14 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
 
         // Get cover image URLs if available
         let coverLight: string | undefined;
-        let _coverDark: string | undefined;
+        let coverDark: string | undefined;
 
         // Use the new utility function
         const resolvedCovers = resolveNotionCoverImages(page);
         coverLight = resolvedCovers.coverLight;
-        _coverDark = resolvedCovers.coverDark;
+        coverDark = resolvedCovers.coverDark;
 
-        // Final resolved cover values are available in coverLight / _coverDark
+        // Final resolved cover values are available in coverLight / coverDark
 
         // Parse Focus Area
         let focusArea: FocusArea = "Human-Centric"; // Default fallback
@@ -685,19 +843,25 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
         let normalizedStatus: Series["status"] = "Draft";
         if (statusProp.type === "select") {
           const name = statusProp.select?.name?.toLowerCase() || "";
-          if (name === "active" || name === "in progress" || name === "not started") normalizedStatus = "Active";
+          if (name === "active" || name === "in progress" || name === "not started")
+            normalizedStatus = "Active";
           else if (name === "completed" || name === "done") normalizedStatus = "Completed";
           else if (name === "draft") normalizedStatus = "Draft";
         } else if (statusProp.type === "status") {
           const name = statusProp.status?.name?.toLowerCase() || "";
-          if (name === "active" || name === "in progress" || name === "not started") normalizedStatus = "Active";
+          if (name === "active" || name === "in progress" || name === "not started")
+            normalizedStatus = "Active";
           else if (name === "completed" || name === "done") normalizedStatus = "Completed";
           else if (name === "draft") normalizedStatus = "Draft";
         }
 
         // Parse Published Date
         let publishedDate: string | undefined;
-        if (publishedDateProp && publishedDateProp.type === "date" && publishedDateProp.date?.start) {
+        if (
+          publishedDateProp &&
+          publishedDateProp.type === "date" &&
+          publishedDateProp.date?.start
+        ) {
           publishedDate = publishedDateProp.date.start;
         }
 
@@ -711,23 +875,44 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
           focusArea,
           tags,
           coverLight,
-          coverDark: _coverDark,
+          coverDark: coverDark,
+          imageUrl: coverLight || coverDark || "",
           postCount,
           publishedDate,
+          articles: [],
         };
-      } else {
-        logger.warn("Skipping series page due to missing or invalid required properties", {
-          pageId: page.id,
-          hasName: !!nameProp && nameProp.type === "title",
-          hasSlug: !!slugProp && slugProp.type === "rich_text",
-          hasDescription: !!descProp && descProp.type === "rich_text",
-          hasSeriesGoal: !!blogTopicsProp && blogTopicsProp.type === "rich_text",
-          hasStatus: !!statusProp && (statusProp.type === "select" || statusProp.type === "status"),
-        });
-        return null;
       }
+      logger.warn("Skipping series page due to missing or invalid required properties", {
+        pageId: page.id,
+        hasName: !!nameProp && nameProp.type === "title",
+        hasSlug: !!slugProp && slugProp.type === "rich_text",
+        hasDescription: !!descProp && descProp.type === "rich_text",
+        hasSeriesGoal: !!blogTopicsProp && blogTopicsProp.type === "rich_text",
+        hasStatus: !!statusProp && (statusProp.type === "select" || statusProp.type === "status"),
+      });
+      return null;
     })
     .filter(Boolean) as Series[];
+}
+
+function parseSeriesArticles(pages: PageObjectResponse[], seriesId: string): SeriesArticle[] {
+  return parsePostsFromResponse(pages)
+    .filter((post) => !post.seriesId || post.seriesId === seriesId)
+    .map((post, index) => {
+      const article: SeriesArticle = {
+        id: post.id,
+        slug: post.slug,
+        title: post.name,
+        description: post.description,
+        part: post.partNumber ?? index + 1,
+      };
+
+      if (post.slug) {
+        article.href = `/posts/${post.slug}`;
+      }
+
+      return article;
+    });
 }
 
 /**
@@ -736,19 +921,30 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
 function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
   return pages.map((page) => {
     if (!("properties" in page)) {
-      throw new NotionError("Invalid page object: missing properties", { page });
+      throw new NotionError("Invalid page object: missing properties", {
+        page,
+      });
     }
 
     const props = page.properties;
 
     // Check for required properties
-    const requiredProps = ["Title", "Slug", "Published Date", "Content Type", "Description", "Tags", "Read Time", "Featured"];
-    const missingProps = requiredProps.filter(prop => !(prop in props));
+    const requiredProps = [
+      "Title",
+      "Slug",
+      "Published Date",
+      "Content Type",
+      "Description",
+      "Tags",
+      "Read Time",
+      "Featured",
+    ];
+    const missingProps = requiredProps.filter((prop) => !(prop in props));
 
     if (missingProps.length > 0) {
       throw new NotionPropertyMissingError(
         missingProps.join(", "), // All missing properties
-        page.id
+        page.id,
       );
     }
 
@@ -770,7 +966,7 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
     const sourceLinkProp = props["Source Link"];
     const curatorsNoteProp = props["Curator's Note"];
     const customIconProp = props.Icon;
-    const coverImageProp = props["Cover Image"];
+    const _coverImageProp = props["Cover Image"];
     const skillsProp = (props as Record<string, unknown>).Skills;
     const currentFocusProp = (props as Record<string, unknown>)["Current Focus"];
     const blogTopicsProp = (props as Record<string, unknown>)["Blog Topics"];
@@ -869,7 +1065,9 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
       "type" in currentFocusProp &&
       currentFocusProp.type === "multi_select"
     ) {
-      currentFocus = ((currentFocusProp as unknown) as { multi_select: { name: string }[] }).multi_select.map((t) => t.name);
+      currentFocus = (
+        currentFocusProp as unknown as { multi_select: { name: string }[] }
+      ).multi_select.map((t) => t.name);
     }
 
     let blogTopics: string[] | undefined;
@@ -880,9 +1078,13 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
       typeof (blogTopicsProp as { type: string }).type === "string"
     ) {
       if ((blogTopicsProp as { type: string }).type === "multi_select") {
-        blogTopics = ((blogTopicsProp as unknown) as { multi_select: { name: string }[] }).multi_select.map((t: { name: string }) => t.name);
+        blogTopics = (
+          blogTopicsProp as unknown as { multi_select: { name: string }[] }
+        ).multi_select.map((t: { name: string }) => t.name);
       } else if ((blogTopicsProp as { type: string }).type === "rich_text") {
-        const text = ((blogTopicsProp as unknown) as { rich_text: { plain_text: string }[] }).rich_text
+        const text = (
+          blogTopicsProp as unknown as { rich_text: { plain_text: string }[] }
+        ).rich_text
           .map((rt: { plain_text: string }) => rt.plain_text)
           .join("")
           .trim();
@@ -932,7 +1134,10 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
  * Fetches the About page and its content blocks from Notion
  */
 export const getAboutPage = unstable_cache(
-  async (): Promise<{ post: Post; blocks: { results: BlockObjectResponse[] } } | null> => {
+  async (): Promise<{
+    post: Post;
+    blocks: { results: BlockObjectResponse[] };
+  } | null> => {
     try {
       const response = await notion.databases.query({
         database_id: blogPostsDatabaseId,
@@ -982,171 +1187,10 @@ export const getAboutPage = unstable_cache(
 );
 
 /**
- * Featured Series types for the blog homepage
- * These match the FeaturedSeries component interfaces
- */
-
-
-/**
- * Internal function to fetch featured series with their articles for the homepage
- * Returns series marked as "Active" or "Completed" with published posts
- */
-async function _getFeaturedSeries(limit: number = 3) {
-  const timer = createTimer();
-  try {
-    logger.debug("Fetching featured series", { limit });
-    // Get all series first (fetch more than limit to allow for filtering)
-    const seriesResponse = await notion.databases.query({
-      database_id: seriesDatabaseId,
-      filter: {
-        property: "Published Date",
-        date: {
-          is_not_empty: true,
-        },
-      },
-      sorts: [
-        {
-          property: "Name",
-          direction: "ascending",
-        },
-      ],
-      page_size: limit * 2, // Fetch more to allow for filtering
-    });
-
-    const allSeries = parseSeriesFromResponse(seriesResponse.results as PageObjectResponse[]);
-
-    // For each series, check if it has published posts and collect results
-    const seriesWithPostsPromises = allSeries.map(async (s) => {
-      try {
-        // Query posts for this series by presence of a Published Date
-        const postsResponse = await notion.databases.query({
-          database_id: blogPostsDatabaseId,
-          filter: {
-            and: [
-              {
-                property: "Published Date",
-                date: {
-                  is_not_empty: true,
-                },
-              },
-              {
-                property: "Blog Series",
-                relation: {
-                  contains: s.id,
-                },
-              },
-            ],
-          },
-          sorts: [
-            {
-              property: "Part Number",
-              direction: "ascending",
-            },
-          ],
-        });
-
-        const posts = parsePostsFromResponse(postsResponse.results as PageObjectResponse[]);
-
-        // Only return series that have published posts
-        if (posts.length > 0) {
-          const transformedPosts = transformToFeaturedSeries(s, posts);
-          logger.debug("Series has published posts", {
-            seriesId: s.id,
-            seriesName: s.name,
-            postCount: posts.length,
-            transformedPostCount: transformedPosts.articles.length
-          });
-          transformedPosts.articles.map((p) => logger.debug("  Article:", { id: p.id, title: p.title, part: p.part }));
-          return transformedPosts;
-        }
-        return null;
-      } catch (error: unknown) {
-        logger.error(`Error fetching posts for series "${s.name}"`, error, { seriesId: s.id });
-        return null;
-      }
-    });
-
-    const featuredSeriesResults = await Promise.all(seriesWithPostsPromises);
-
-    // Filter out null results and limit to requested number
-    const featuredSeries = featuredSeriesResults
-      .filter((result): result is FeaturedSeries => result !== null)
-      .slice(0, limit);
-
-    logger.info("Successfully fetched featured series", {
-      limit,
-      count: featuredSeries.length,
-      elapsed: timer.elapsed()
-    });
-
-    return featuredSeries;
-  } catch (error: unknown) {
-    logger.error("Error fetching featured series", error, {
-      limit,
-      elapsed: timer.elapsed()
-    });
-    // Return empty array as fallback instead of throwing
-    return [];
-  }
-}
-
-/**
- * Fetches featured series with their articles for the homepage
- * Returns series marked as "Active" or "Completed" with published posts
- */
-export function getFeaturedSeries(limit: number = 3) {
-  return unstable_cache(
-    () => _getFeaturedSeries(limit),
-    [`featured-series-${limit}`],
-    { revalidate: 600 }
-  )();
-}
-
-/**
- * Transforms Notion Series and Posts data into FeaturedSeries format
- */
-function transformToFeaturedSeries(series: Series, posts: Post[]): FeaturedSeries {
-  const imageUrl =
-    series.coverLight ??
-    series.coverDark ??
-    `https://picsum.photos/seed/${series.id}/300/150`;
-
-  logger.debug("Transforming series to featured series", {
-    seriesId: series.id,
-    seriesName: series.name,
-    coverLight: series.coverLight,
-    coverDark: series.coverDark,
-    imageUrl,
-    postCount: posts.length
-  });
-
-  // Transform posts to featured articles
-  const articles: FeaturedArticle[] = posts.map((post) => ({
-    id: post.id,
-    slug: post.slug,
-    title: post.name,
-    description: post.description,
-    part: post.partNumber || 1,
-  }));
-
-  return {
-    id: series.id,
-    slug: series.slug,
-    title: series.name,
-    imageUrl,
-    ...(series.coverLight ? { coverLight: series.coverLight } : {}),
-    ...(series.coverDark ? { coverDark: series.coverDark } : {}),
-    articles,
-  };
-}
-
-/**
  * Fetches featured posts for the home page
  */
 export function getFeaturedPosts(limit: number = 3) {
-  return unstable_cache(
-    () => _getFeaturedPosts(limit),
-    [`featured-posts-${limit}`],
-    { revalidate: 300 }
-  )();
+  return unstable_cache(() => _getFeaturedPosts(limit), [`featured-posts-${limit}`], {
+    revalidate: 300,
+  })();
 }

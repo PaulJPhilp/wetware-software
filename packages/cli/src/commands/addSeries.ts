@@ -27,9 +27,7 @@ export const seriesCommand = pipe(
     options: Options.all({ verbose: verboseOption, description: descriptionOption }),
   }),
   Command.withDescription("Add a new resource series to Notion"),
-  Command.withHandler(({ args, options }) =>
-    handler(args, Boolean(options.verbose)),
-  ),
+  Command.withHandler(({ args, options }) => handler(args, Boolean(options.verbose))),
 );
 
 function handler(seriesName: string, isVerbose: boolean) {

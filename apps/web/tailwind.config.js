@@ -82,7 +82,7 @@ module.exports = {
     },
   },
   plugins: [
-    require("@tailwindcss/typography"),
-    require("tailwindcss-fluid-typography"),
+    require("@tailwindcss/typography"), 
+    require("tailwindcss-fluid-typography")
   ],
 };

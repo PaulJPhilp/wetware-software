@@ -1,11 +1,6 @@
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { focusAreaIcons } from "@/lib/icons";
+import { SeriesCard } from "@/components/SeriesCard";
 import { getSeries } from "@/lib/notion-utils";
-import { Brain } from "lucide-react";
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Series - Wetware & Software",
@@ -37,74 +32,15 @@ export default async function SeriesPage() {
             </div>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {series.map((s) => {
-                const FocusIcon = focusAreaIcons[s.focusArea] || Brain;
-
-                return (
-                  <Link key={s.slug} href={`/series/${s.slug}`}>
-                    <Card className="group h-full hover:shadow-lg transition-all duration-200 border-charcoal/20 overflow-hidden">
-                      {/* Cover image */}
-                      {s.coverLight && (
-                        <div className="relative aspect-[16/9] w-full overflow-hidden bg-charcoal/5">
-                          <Image
-                            src={s.coverLight}
-                            alt={s.name}
-                            fill
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                            priority={false}
-                          />
-                        </div>
-                      )}
-                      <CardHeader className="space-y-3">
-                        <div className="flex items-start justify-between">
-                          <div className="space-y-2">
-                            <div className="flex items-center gap-2">
-                              <FocusIcon className="w-4 h-4 text-orange" />
-                              <Badge variant="secondary" className="text-xs">
-                                {s.focusArea}
-                              </Badge>
-                              <span className="text-xs text-charcoal/60">
-                                {s.postCount} {s.postCount === 1 ? "part" : "parts"}
-                              </span>
-                            </div>
-                            <h2 className="text-lg font-semibold group-hover:text-orange transition-colors">
-                              {s.name}
-                            </h2>
-                          </div>
-                          {s.status && (
-                            <Badge
-                              variant={s.status === "Active" ? "default" : "secondary"}
-                              className="text-xs"
-                            >
-                              {s.status}
-                            </Badge>
-                          )}
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-charcoal/80 mb-4 leading-relaxed line-clamp-3">
-                          {s.description}
-                        </p>
-                        {s.tags && s.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-2">
-                            {s.tags.map((tag) => (
-                              <Badge key={tag.name} variant="outline" className="text-xs">
-                                {tag.name}
-                              </Badge>
-                            ))}
-                          </div>
-                        )}
-                        <div className="mt-4">
-                          <span className="inline-flex items-center text-xs font-medium text-orange group-hover:underline">
-                            Read series
-                          </span>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                );
-              })}
+              {series.map((s) => (
+                <SeriesCard
+                  key={s.slug}
+                  series={s}
+                  showDescription={true}
+                  showArticleCount={true}
+                  priority={false}
+                />
+              ))}
             </div>
           )}
         </div>

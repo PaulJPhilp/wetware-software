@@ -1,6 +1,10 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: <> */
 import { Client } from "@notionhq/client";
-import type { CreatePageParameters, GetPageResponse, UpdatePageParameters } from "@notionhq/client/build/src/api-endpoints";
+import type {
+  CreatePageParameters,
+  GetPageResponse,
+  UpdatePageParameters,
+} from "@notionhq/client/build/src/api-endpoints";
 import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
 import { pipe } from "effect/Function";
@@ -95,13 +99,16 @@ export interface NotionService {
     opts?: { verbose?: boolean },
   ) => Effect.Effect<{ pageId: string; url?: string }, Error>;
   deletePage: (pageId: string) => Effect.Effect<void, Error>;
-  updatePage: (pageId: string, properties: UpdatePageParameters['properties']) => Effect.Effect<void, Error>;
+  updatePage: (
+    pageId: string,
+    properties: UpdatePageParameters["properties"],
+  ) => Effect.Effect<void, Error>;
   getPage: (pageId: string) => Effect.Effect<GetPageResponse, Error>;
 }
 
 export class Notion extends Effect.Service<NotionService>()("Notion", {
   succeed: {},
-}) { }
+}) {}
 
 export const {
   addResource,
@@ -136,13 +143,13 @@ function mapResourceToProperties(input: ResourceInput): CreatePageParameters["pr
       typeof input.read_time_minutes === "number" ? { number: input.read_time_minutes } : undefined,
     Series: input.resource_series_name
       ? {
-        rich_text: [{ type: "text", text: { content: input.resource_series_name } }],
-      }
+          rich_text: [{ type: "text", text: { content: input.resource_series_name } }],
+        }
       : undefined,
     "Source Entity": input.source_entity_name
       ? {
-        rich_text: [{ type: "text", text: { content: input.source_entity_name } }],
-      }
+          rich_text: [{ type: "text", text: { content: input.source_entity_name } }],
+        }
       : undefined,
   } as CreatePageParameters["properties"];
 }
@@ -323,20 +330,20 @@ export const NotionClientLayer = Layer.effect(
               const name =
                 (
                   (props as Record<string, unknown>)["Name"] as
-                  | { title?: Array<{ plain_text?: string }> }
-                  | undefined
+                    | { title?: Array<{ plain_text?: string }> }
+                    | undefined
                 )?.title?.[0]?.plain_text?.trim?.() ?? "";
               const type =
                 (
                   (props as Record<string, unknown>)["Type"] as
-                  | { select?: { name?: string } }
-                  | undefined
+                    | { select?: { name?: string } }
+                    | undefined
                 )?.select?.name ?? null;
               const sourceEntityName =
                 (
                   (props as Record<string, unknown>)["Source Entity"] as
-                  | { rich_text?: Array<{ plain_text?: string }> }
-                  | undefined
+                    | { rich_text?: Array<{ plain_text?: string }> }
+                    | undefined
                 )?.rich_text?.[0]?.plain_text ?? null;
               const url = (p as { url?: string }).url;
               return {
@@ -362,14 +369,14 @@ export const NotionClientLayer = Layer.effect(
               const name =
                 (
                   (props as Record<string, unknown>)["Name"] as
-                  | { title?: Array<{ plain_text?: string }> }
-                  | undefined
+                    | { title?: Array<{ plain_text?: string }> }
+                    | undefined
                 )?.title?.[0]?.plain_text?.trim?.() ?? "";
               const type =
                 (
                   (props as Record<string, unknown>)["Type"] as
-                  | { select?: { name?: string } }
-                  | undefined
+                    | { select?: { name?: string } }
+                    | undefined
                 )?.select?.name ?? null;
               const url = (p as { url?: string }).url;
               return { id: (p as { id: string }).id, url, name, type };
@@ -391,8 +398,8 @@ export const NotionClientLayer = Layer.effect(
               const name =
                 (
                   (props as Record<string, unknown>)["Name"] as
-                  | { title?: Array<{ plain_text?: string }> }
-                  | undefined
+                    | { title?: Array<{ plain_text?: string }> }
+                    | undefined
                 )?.title?.[0]?.plain_text?.trim?.() ?? "";
               const url = (p as { url?: string }).url;
               return { id: (p as { id: string }).id, url, name };
@@ -433,7 +440,7 @@ export const NotionClientLayer = Layer.effect(
           }),
           Effect.tap(() => Console.log(`Page ${pageId} archived.`)),
         ),
-      updatePage: (pageId: string, properties: UpdatePageParameters['properties']) =>
+      updatePage: (pageId: string, properties: UpdatePageParameters["properties"]) =>
         pipe(
           Effect.tryPromise({
             try: async () => {
@@ -459,56 +466,56 @@ export const NotionClientLayer = Layer.effect(
             const name =
               (
                 (props as Record<string, unknown>)["Name"] as
-                | { title?: Array<{ plain_text?: string }> }
-                | undefined
+                  | { title?: Array<{ plain_text?: string }> }
+                  | undefined
               )?.title?.[0]?.plain_text?.trim?.() ?? "";
             const type =
               (
                 (props as Record<string, unknown>)["Type"] as
-                | { select?: { name?: string } }
-                | undefined
+                  | { select?: { name?: string } }
+                  | undefined
               )?.select?.name ?? null;
             const sourceEntityName =
               (
                 (props as Record<string, unknown>)["Source Entity"] as
-                | { rich_text?: Array<{ plain_text?: string }> }
-                | undefined
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
               )?.rich_text?.[0]?.plain_text ?? null;
             const icon =
               (
                 (props as Record<string, unknown>)["Icon"] as
-                | { rich_text?: Array<{ plain_text?: string }> }
-                | undefined
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
               )?.rich_text?.[0]?.plain_text ?? null;
             const curatorNote =
               (
                 (props as Record<string, unknown>)["Curator's Note"] as
-                | { rich_text?: Array<{ plain_text?: string }> }
-                | undefined
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
               )?.rich_text?.[0]?.plain_text ?? null;
             const focusArea =
               (
                 (props as Record<string, unknown>)["Focus Area"] as
-                | { multi_select?: Array<{ name?: string }> }
-                | undefined
+                  | { multi_select?: Array<{ name?: string }> }
+                  | undefined
               )?.multi_select?.map((s) => s.name ?? "") ?? [];
             const tags =
               (
                 (props as Record<string, unknown>)["Tags"] as
-                | { multi_select?: Array<{ name?: string }> }
-                | undefined
+                  | { multi_select?: Array<{ name?: string }> }
+                  | undefined
               )?.multi_select?.map((s) => s.name ?? "") ?? [];
             const readTimeMinutes =
               (
                 (props as Record<string, unknown>)["Read Time (min)"] as
-                | { number?: number }
-                | undefined
+                  | { number?: number }
+                  | undefined
               )?.number ?? null;
             const seriesName =
               (
                 (props as Record<string, unknown>)["Series"] as
-                | { rich_text?: Array<{ plain_text?: string }> }
-                | undefined
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
               )?.rich_text?.[0]?.plain_text ?? null;
             const url = (p as { url?: string }).url;
             return {
@@ -535,32 +542,32 @@ export const NotionClientLayer = Layer.effect(
             const name =
               (
                 (props as Record<string, unknown>)["Name"] as
-                | { title?: Array<{ plain_text?: string }> }
-                | undefined
+                  | { title?: Array<{ plain_text?: string }> }
+                  | undefined
               )?.title?.[0]?.plain_text?.trim?.() ?? "";
             const type =
               (
                 (props as Record<string, unknown>)["Type"] as
-                | { select?: { name?: string } }
-                | undefined
+                  | { select?: { name?: string } }
+                  | undefined
               )?.select?.name ?? null;
             const description =
               (
                 (props as Record<string, unknown>)["Description"] as
-                | { rich_text?: Array<{ plain_text?: string }> }
-                | undefined
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
               )?.rich_text?.[0]?.plain_text ?? null;
             const endorsement =
               (
                 (props as Record<string, unknown>)["Paul's Endorsement"] as
-                | { rich_text?: Array<{ plain_text?: string }> }
-                | undefined
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
               )?.rich_text?.[0]?.plain_text ?? null;
             const focusArea =
               (
                 (props as Record<string, unknown>)["Focus Area"] as
-                | { multi_select?: Array<{ name?: string }> }
-                | undefined
+                  | { multi_select?: Array<{ name?: string }> }
+                  | undefined
               )?.multi_select?.map((s) => s.name ?? "") ?? [];
             const url = (p as { url?: string }).url;
             return {
@@ -583,20 +590,20 @@ export const NotionClientLayer = Layer.effect(
             const name =
               (
                 (props as Record<string, unknown>)["Name"] as
-                | { title?: Array<{ plain_text?: string }> }
-                | undefined
+                  | { title?: Array<{ plain_text?: string }> }
+                  | undefined
               )?.title?.[0]?.plain_text?.trim?.() ?? "";
             const description =
               (
                 (props as Record<string, unknown>)["Description"] as
-                | { rich_text?: Array<{ plain_text?: string }> }
-                | undefined
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
               )?.rich_text?.[0]?.plain_text ?? null;
             const goal =
               (
                 (props as Record<string, unknown>)["Series Goal"] as
-                | { rich_text?: Array<{ plain_text?: string }> }
-                | undefined
+                  | { rich_text?: Array<{ plain_text?: string }> }
+                  | undefined
               )?.rich_text?.[0]?.plain_text ?? null;
             const url = (p as { url?: string }).url;
             return {
@@ -653,7 +660,10 @@ export const NotionClientLayer = Layer.effect(
                 rich_text: [{ type: "text", text: { content: updates.sourceEntityName } }],
               };
             }
-            await notion.pages.update({ page_id: pageId, properties: properties as UpdatePageParameters['properties'] });
+            await notion.pages.update({
+              page_id: pageId,
+              properties: properties as UpdatePageParameters["properties"],
+            });
           },
           catch: (e) => new Error(`Notion API error: ${String(e)}`),
         }),
@@ -685,7 +695,10 @@ export const NotionClientLayer = Layer.effect(
                 multi_select: updates.focusArea.map((name) => ({ name })),
               };
             }
-            await notion.pages.update({ page_id: pageId, properties: properties as UpdatePageParameters['properties'] });
+            await notion.pages.update({
+              page_id: pageId,
+              properties: properties as UpdatePageParameters["properties"],
+            });
           },
           catch: (e) => new Error(`Notion API error: ${String(e)}`),
         }),
@@ -706,7 +719,10 @@ export const NotionClientLayer = Layer.effect(
                 rich_text: [{ type: "text", text: { content: updates.goal } }],
               };
             }
-            await notion.pages.update({ page_id: pageId, properties: properties as UpdatePageParameters['properties'] });
+            await notion.pages.update({
+              page_id: pageId,
+              properties: properties as UpdatePageParameters["properties"],
+            });
           },
           catch: (e) => new Error(`Notion API error: ${String(e)}`),
         }),

@@ -1,0 +1,52 @@
+---
+description: Ensure subclasses or implementations can be used interchangeably (Liskov Substitution)
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: false
+---
+
+# Liskov Substitution Principle (LSP)
+
+**Rule:** Subclasses or implementations should work in place of their base types without altering correctness or invariants.
+
+## Why
+
+- Prevents surprises or violations when using abstractions  
+- Ensures consistent behavior across implementations
+
+## Bad Example
+
+```ts
+class Rectangle {
+  setWidth(w: number) { /* … */ }
+  setHeight(h: number) { /* … */ }
+}
+class Square extends Rectangle {
+  setWidth(w: number) { super.setWidth(w); super.setHeight(w) }
+  setHeight(h: number) { super.setWidth(h); super.setHeight(h) }
+}
+```
+
+Using Square in place of Rectangle may break code expecting independent width/height.
+
+## Good Example
+
+```ts
+interface Shape {
+  area(): number
+}
+class Rectangle implements Shape {
+  constructor(readonly width: number, readonly height: number) {}
+  area() { return this.width * this.height }
+}
+class Circle implements Shape {
+  constructor(readonly radius: number) {}
+  area() { return Math.PI * this.radius * this.radius }
+}
+```
+
+Each implementation obeys the Shape contract without hidden surprises.
+
+## Tips
+•Avoid subclasses that weaken preconditions or strengthen postconditions.
+•Use behavioral contracts and document expectations.
+•Where LSP is hard to guarantee, prefer composition over inheritance.

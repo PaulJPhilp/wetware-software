@@ -11,7 +11,18 @@
             "recommended": true,
             "suspicious": {
                 "noExplicitAny": "error",
-                "noUnknownAtRules": "off"
+                "noUnknownAtRules": "off",
+                "useAwait": "error"
+            },
+            "style": {
+                "useImportType": "error",
+                "useFilenamingConvention": "error",
+                "noNonNullAssertion": "warn",
+                "noUselessElse": "error"
+            },
+            "complexity": {
+                "useSimpleNumberKeys": "error",
+                "useOptionalChain": "error"
             }
         }
     },

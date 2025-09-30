@@ -28,7 +28,7 @@ export const revalidate = 60;
 export default async function AboutPage() {
   // Load the About page from Notion. Fallback to local content.
   const aboutData = await getAboutPage();
-  const aboutPost = aboutData?.post ?? null;
+  const _aboutPost = aboutData?.post ?? null;
   const aboutBlocks = aboutData?.blocks ?? null;
 
   const skills: string[] = [

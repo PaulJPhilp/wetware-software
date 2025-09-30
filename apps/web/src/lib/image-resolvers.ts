@@ -1,7 +1,11 @@
 /**
  * Utilities used by server modules to derive cover image URLs from Notion.
  */
+import { isFullBlock } from "@notionhq/client";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { access } from "node:fs/promises";
+import path from "node:path";
+import { notion } from "./notion";
 
 /**
  * Compute theme-aware cover URLs from Notion page properties.
@@ -16,7 +20,7 @@ export function resolveNotionCoverImages(
   page: PageObjectResponse,
   lightPropName: string = "CoverImage-LightMode",
   darkPropName: string = "CoverImage-DarkMode",
-  fallbackPropName: string = "Cover Image"
+  fallbackPropName: string = "Cover Image",
 ): { coverLight?: string; coverDark?: string } {
   if (!("properties" in page)) {
     return {};
@@ -69,6 +73,46 @@ export function resolveNotionCoverImages(
   };
 }
 
+export async function getImageUrl(imagePath: string): Promise<string> {
+  // If it's already a full URL, return it as is
+  if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
+    return imagePath;
+  }
+
+  // If it's a Notion file, construct the Notion URL
+  if (imagePath.startsWith("notion://")) {
+    const blockId = imagePath.replace("notion://", "");
+    try {
+      const block = await notion.blocks.retrieve({ block_id: blockId });
+      if (isFullBlock(block) && block.type === "image" && block.image) {
+        if (block.image.type === "external") {
+          return block.image.external.url;
+        }
+        if (block.image.type === "file") {
+          return block.image.file.url;
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching Notion image block:", error);
+    }
+    // Fail if Notion image cannot be resolved
+    throw new Error(`Unable to resolve Notion image for block ${blockId}`);
+  }
+
+  // Assume it's a local image path, prepend with /images/ if not already
+  const normalized = imagePath.startsWith("/images/") ? imagePath : `/images/${imagePath}`;
+
+  // Verify local file exists under public/
+  try {
+    const diskPath = path.join(process.cwd(), "public", normalized.replace(/^\//, ""));
+    await access(diskPath);
+  } catch {
+    throw new Error(`Missing local image file: ${normalized}`);
+  }
+
+  return normalized;
+}
+
 /**
  * Resolve a single cover URL from Notion page properties.
  *
@@ -78,7 +122,7 @@ export function resolveNotionCoverImages(
  */
 export function resolveNotionCoverImage(
   page: PageObjectResponse,
-  propName: string = "Cover Image"
+  propName: string = "Cover Image",
 ): string | undefined {
   if (!("properties" in page)) {
     return undefined;

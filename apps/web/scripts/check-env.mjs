@@ -60,32 +60,23 @@ const EnvSchema = z
     if (!env.NOTION_API_KEY && !env.notion_api_key) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message:
-          "Provide NOTION_API_KEY or notion_api_key with a non-empty value.",
+        message: "Provide NOTION_API_KEY or notion_api_key with a non-empty value.",
         path: ["NOTION_API_KEY"],
       });
     }
 
-    if (
-      !env.NOTION_DATABASE_ID_BLOG_POSTS &&
-      !env.notion_database_id_blog_posts
-    ) {
+    if (!env.NOTION_DATABASE_ID_BLOG_POSTS && !env.notion_database_id_blog_posts) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message:
-          "Provide NOTION_DATABASE_ID_BLOG_POSTS or notion_database_id_blog_posts.",
+        message: "Provide NOTION_DATABASE_ID_BLOG_POSTS or notion_database_id_blog_posts.",
         path: ["NOTION_DATABASE_ID_BLOG_POSTS"],
       });
     }
 
-    if (
-      !env.NOTION_DATABASE_ID_SERIES &&
-      !env.notion_database_id_series
-    ) {
+    if (!env.NOTION_DATABASE_ID_SERIES && !env.notion_database_id_series) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message:
-          "Provide NOTION_DATABASE_ID_SERIES or notion_database_id_series.",
+        message: "Provide NOTION_DATABASE_ID_SERIES or notion_database_id_series.",
         path: ["NOTION_DATABASE_ID_SERIES"],
       });
     }

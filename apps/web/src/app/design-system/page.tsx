@@ -1,6 +1,6 @@
 import { Callout } from "@/components/Callout";
 import { ColorSystemExamples, ExampleSVG } from "@/components/ColorSystemExamples";
-import { Epigraph } from "@/components/Epigraph";
+import { CustomTag } from "@/components/CustomTag";
 import { Figure } from "@/components/Figure";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -87,13 +87,44 @@ export default function DesignSystemPage() {
             </div>
           </div>
 
-          {/* Epigraph Example */}
+          {/* CustomTag Examples */}
           <div className="mb-8">
-            <h3 className="text-2xl font-sans font-bold text-brand mb-4">Epigraph</h3>
-            <Epigraph author="Marshall McLuhan">
-              The medium is the message. This is because it is the medium that shapes and controls
-              the scale and form of human association and action.
-            </Epigraph>
+            <h3 className="text-2xl font-sans font-bold text-brand mb-4">CustomTag Variants</h3>
+            <div className="space-y-4">
+              <p className="text-muted">
+                Flexible tag component with multiple visual variants for different contexts and
+                meanings.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <CustomTag variant="default">Default</CustomTag>
+                <CustomTag variant="primary">Primary</CustomTag>
+                <CustomTag variant="secondary">Secondary</CustomTag>
+                <CustomTag variant="success">Success</CustomTag>
+                <CustomTag variant="warning">Warning</CustomTag>
+              </div>
+              <div className="text-sm text-muted space-y-2">
+                <p>
+                  <strong>Usage:</strong> Use different variants to convey meaning:
+                </p>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>
+                    <code>default</code>: General purpose tags (backwards compatible)
+                  </li>
+                  <li>
+                    <code>primary</code>: Featured or important content
+                  </li>
+                  <li>
+                    <code>secondary</code>: Less prominent categories
+                  </li>
+                  <li>
+                    <code>success</code>: Positive states like "Published" or "Approved"
+                  </li>
+                  <li>
+                    <code>warning</code>: Alerts or error states like "Draft" or "Urgent"
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           {/* Figure Example */}
@@ -199,8 +230,8 @@ export default function DesignSystemPage() {
                 contexts
               </li>
               <li>
-                <strong>Reusable Components:</strong> Figure, Callout, Epigraph for consistent
-                content
+                <strong>Reusable Components:</strong> CustomTag, Figure, Callout, Epigraph for
+                consistent content
               </li>
               <li>
                 <strong>Theme Awareness:</strong> Automatic light/dark mode switching
@@ -215,6 +246,10 @@ export default function DesignSystemPage() {
               <li>Use semantic utilities instead of hardcoded colors</li>
               <li>Apply .focus-ring to all interactive elements</li>
               <li>Use .link-brand-subtle for prose content, .link-brand for navigation</li>
+              <li>
+                Use CustomTag variants to convey meaning (default for general, primary for featured,
+                success/warning for states)
+              </li>
               <li>Wrap SVGs with accent classes for theme-aware styling</li>
               <li>Reserve orange for 10-15% of visual elements for maximum impact</li>
             </ul>

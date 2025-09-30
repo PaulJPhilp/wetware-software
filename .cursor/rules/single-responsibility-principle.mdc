@@ -1,0 +1,46 @@
+---
+description: Enforce that each class/module/file has a single responsibility
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: true
+---
+
+# Single Responsibility Principle (SRP)
+
+**Rule:** Each class, module, or file should have exactly one reason to change. Avoid combining responsibilities.
+
+## Why
+
+- Improves modularity and maintainability  
+- Makes testing smaller units easier  
+- Reduces coupling between concerns
+
+## Bad Example
+
+```ts
+class UserService {
+  fetchUser(id: string) { /* … */ }
+  validateUser(input: any) { /* … */ }
+  exportUsersCSV(users: User[]) { /* … */ }
+}
+```
+
+Here UserService mixes fetching, validation, and exporting logic.
+
+## Good Example
+
+```ts
+interface IUserFetcher { fetchUser(id: string): Promise<User> }
+interface IUserValidator { validate(input: any): boolean }
+interface IExporter<T> { export(items: T[]): string }
+
+class UserFetcher implements IUserFetcher { /* … */ }
+class UserValidator implements IUserValidator { /* … */ }
+class CSVExporter implements IExporter<User> { /* … */ }
+```
+
+Separate each responsibility into its own class/module.
+
+## Tips
+•If a class is getting large (> ~200 lines) or has multiple roles, inspect responsibility boundaries.
+•Use composition or delegation rather than monolithic inheritance.
+•Keep modules focused; break out helpers or submodules when needed.

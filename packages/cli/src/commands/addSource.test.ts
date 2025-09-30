@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: <> */
 import * as NodeContext from "@effect/platform-node/NodeContext";
 import * as Effect from "effect/Effect";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { OpenAI, type OpenAIService } from "../lib/ai";
 import { Notion, type NotionService } from "../lib/notion";
 import { runAddSource } from "./addSource";

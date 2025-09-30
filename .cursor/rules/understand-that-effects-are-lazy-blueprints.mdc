@@ -1,0 +1,25 @@
+description: Remember that defining an effect does not execute it
+globs: "**/*.ts"
+alwaysApply: false
+
+# Understand that Effects are Lazy Blueprints
+**Rule:** Understand that effects are lazy blueprints.
+
+### Example
+```typescript
+import { Effect } from "effect";
+
+console.log("1. Defining the Effect blueprint...");
+
+const program = Effect.sync(() => {
+  console.log("3. The blueprint is now being executed!");
+  return 42;
+});
+
+console.log("2. The blueprint has been defined. No work has been done yet.");
+
+Effect.runSync(program);
+```
+
+**Explanation:**  
+Defining an `Effect` does not execute any code inside it. Only when you call `Effect.runSync(program)` does the computation actually happen.

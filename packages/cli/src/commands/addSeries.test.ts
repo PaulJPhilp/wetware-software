@@ -1,5 +1,5 @@
 import { Effect, Layer } from "effect";
-import { Notion, OpenAIService } from "../lib/ai";
+import { Notion } from "../lib/ai";
 import { runAddSeries } from "./addSeries";
 import { vi, test, expect } from "vitest";
 

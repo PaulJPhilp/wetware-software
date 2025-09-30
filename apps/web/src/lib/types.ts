@@ -53,24 +53,8 @@ export interface SidebarArticle {
 
 // Legacy type aliases for backward compatibility
 /**
- * Backwards-compatible alias for `Series`.
- */
-export type FeaturedSeries = Series;
-/**
- * Backwards-compatible alias for `SeriesArticle`.
- */
-export type FeaturedArticle = SeriesArticle;
-/**
  * Backwards-compatible alias used by existing article components.
  */
 export type ArticleInSeries = SeriesArticle;
 
 // Type aliases for sidebar components to maintain clarity
-/**
- * Legacy alias for sidebar series structures.
- */
-export type SeriesSidebarSeries = SidebarSeries;
-/**
- * Legacy alias for sidebar article structures.
- */
-export type SeriesSidebarArticle = SidebarArticle;

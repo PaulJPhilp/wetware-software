@@ -1,0 +1,55 @@
+---
+description: Encourage extension over modification (Open/Closed Principle)
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: false
+---
+
+# Open/Closed Principle (OCP)
+
+**Rule:** Code should be open for extension but closed for modification. Prefer adding new behavior without altering existing, well-tested classes/modules.
+
+## Why
+
+- Reduces risk of introducing regressions  
+- Encourages use of abstractions and extension points
+
+## Bad Example
+
+```ts
+class ReportGenerator {
+  generate(type: "pdf" | "html", data: Data) {
+    if (type === "pdf") {
+      // PDF logic
+    } else {
+      // HTML logic
+    }
+  }
+}
+```
+
+When you want to add a new format, you’d modify this class.
+
+## Good Example
+
+```ts
+interface ReportFormatter {
+  format(data: Data): string
+}
+
+class PdfFormatter implements ReportFormatter { /* … */ }
+class HtmlFormatter implements ReportFormatter { /* … */ }
+
+class ReportGenerator {
+  constructor(private formatter: ReportFormatter) {}
+  generate(data: Data) {
+    return this.formatter.format(data)
+  }
+}
+```
+
+To support a new format, you add a new ReportFormatter without touching ReportGenerator.
+
+## Tips
+•Favor dependency injection of abstractions (interfaces) over switching logic within classes.
+•Use plugin or strategy patterns when behavior variants are expected.
+•Avoid if/else or switch statements on types scattered across code; prefer polymorphism.

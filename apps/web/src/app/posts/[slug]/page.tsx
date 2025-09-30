@@ -1,3 +1,4 @@
+import { AuthorBioSidebar } from "@/components/AuthorBioSidebar";
 import { ClientOnly } from "@/components/ClientOnly";
 import { NotionContent } from "@/components/NotionContent";
 import { PostCard } from "@/components/PostCard";
@@ -67,84 +68,115 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   );
 
   return (
-    <div className="max-w-4xl xl:max-w-5xl 2xl:max-w-6xl mx-auto py-8 px-4 md:px-8 space-y-8">
-      {/* Series Navigation */}
-      {post.seriesId && seriesPosts.length > 1 && (
-        <SeriesNavigation currentPost={post} seriesPosts={seriesPosts} />
-      )}
-
-      <article className="bg-card rounded-xl shadow-lg space-y-8 p-6">
-        {/* Header */}
-        <header className="space-y-4 text-center pb-4 border-b border-card">
-          <div className="flex items-center justify-center gap-4 mb-2">
-            <Badge variant="secondary" className="font-sans text-base px-3 py-1">
-              {post.type}
-            </Badge>
-            <FocusIcon className="w-6 h-6 text-orange" />
-          </div>
-          <h1 className="fluid-h1 font-bold mb-2">{post.name}</h1>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted mb-2">
-            <time>{post.publishDate}</time>
-            <span>•</span>
-            <span>{post.readTime} min read</span>
-            <span>•</span>
-            <span>Last updated: {post.publishDate}</span>
-          </div>
-          {post.tags.length > 0 && (
-            <div className="flex flex-wrap items-center justify-center gap-2 text-sm text-charcoal/60">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag.name}
-                  className="hover:text-orange transition-colors bg-silver px-2 py-1 rounded"
-                >
-                  #{tag.name}
-                </span>
-              ))}
-            </div>
+    <div className="max-w-7xl mx-auto py-8 px-4 md:px-8">
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Main Content */}
+        <div className="flex-1 min-w-0 space-y-8">
+          {/* Series Navigation */}
+          {post.seriesId && seriesPosts.length > 1 && (
+            <SeriesNavigation currentPost={post} seriesPosts={seriesPosts} />
           )}
-        </header>
 
-        {/* Content */}
-        <section className="prose">
-          <div className="space-y-6">
-            <NotionContent blocks={blocks.results as BlockObjectResponse[]} />
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer className="border-t pt-8">
-          <div className="flex justify-center mb-8">
-            <Link
-              href="/"
-              className="text-sm font-sans text-charcoal/60 hover:text-orange transition-colors px-4 py-2 rounded-lg bg-silver shadow"
+          <article className="bg-card rounded-xl shadow-lg space-y-8 p-6">
+            {/* Header */}
+            <header
+              className="space-y-4 text-center pb-4 border-b 
+              border-card"
             >
-              ← Back to all posts
-            </Link>
-          </div>
-
-          {/* Related Posts */}
-          {relatedPosts.length > 0 && (
-            <div className="mt-8">
-              <h3 className="fluid-h3 font-bold mb-6 text-center text-charcoal">
-                More on {post.focusArea}
-              </h3>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {relatedPosts.map((relatedPost) => (
-                  <Link
-                    key={relatedPost.id}
-                    href={`/posts/${relatedPost.slug}`}
-                    className="block group"
-                  >
-                    <ClientOnly>
-                      <PostCard post={relatedPost} />
-                    </ClientOnly>
-                  </Link>
-                ))}
+              <div
+                className="flex items-center justify-center gap-4 
+                mb-2"
+              >
+                <Badge variant="secondary" className="font-sans text-base px-3 py-1">
+                  {post.type}
+                </Badge>
+                <FocusIcon className="w-6 h-6 text-orange" />
               </div>
-            </div>
-          )}
-        </footer>
-      </article>
+              <h1 className="fluid-h1 font-bold mb-2">{post.name}</h1>
+              <div
+                className="flex flex-wrap items-center justify-center 
+                gap-4 text-sm text-muted mb-2"
+              >
+                <time>{post.publishDate}</time>
+                <span>•</span>
+                <span>{post.readTime} min read</span>
+                <span>•</span>
+                <span>Last updated: {post.publishDate}</span>
+              </div>
+              {post.tags.length > 0 && (
+                <div
+                  className="flex flex-wrap items-center 
+                  justify-center gap-2 text-sm text-charcoal/60"
+                >
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag.name}
+                      className="hover:text-orange transition-colors 
+                        bg-silver px-2 py-1 rounded"
+                    >
+                      #{tag.name}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </header>
+
+            {/* Content */}
+            <section className="prose">
+              <div className="space-y-6">
+                <NotionContent blocks={blocks.results as BlockObjectResponse[]} />
+              </div>
+            </section>
+
+            {/* Footer */}
+            <footer className="border-t pt-8">
+              <div className="flex justify-center mb-8">
+                <Link
+                  href="/"
+                  className="text-sm font-sans text-charcoal/60 
+                    hover:text-orange transition-colors px-4 py-2 
+                    rounded-lg bg-silver shadow"
+                >
+                  ← Back to all posts
+                </Link>
+              </div>
+
+              {/* Related Posts */}
+              {relatedPosts.length > 0 && (
+                <div className="mt-8">
+                  <h3
+                    className="fluid-h3 font-bold mb-6 text-center 
+                    text-charcoal"
+                  >
+                    More on {post.focusArea}
+                  </h3>
+                  <div
+                    className="grid gap-6 md:grid-cols-2 
+                    lg:grid-cols-3"
+                  >
+                    {relatedPosts.map((relatedPost) => (
+                      <Link
+                        key={relatedPost.id}
+                        href={`/posts/${relatedPost.slug}`}
+                        className="block group"
+                      >
+                        <ClientOnly>
+                          <PostCard post={relatedPost} />
+                        </ClientOnly>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </footer>
+          </article>
+        </div>
+
+        {/* Author Bio Sidebar */}
+        <div className="lg:w-80 lg:flex-shrink-0">
+          <AuthorBioSidebar />
+        </div>
+      </div>
     </div>
   );
 }

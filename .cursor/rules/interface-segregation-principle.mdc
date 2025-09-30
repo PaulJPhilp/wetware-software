@@ -1,0 +1,42 @@
+---
+description: Prefer small, specific interfaces over large, general ones
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: false
+---
+
+# Interface Segregation Principle (ISP)
+
+**Rule:** Clients should only depend on the methods they use. Avoid “fat” interfaces that force implementers to provide unnecessary methods.
+
+## Why
+
+- Reduces coupling  
+- Makes interfaces easier to satisfy and evolve  
+- Encourages more precise design
+
+## Bad Example
+
+```ts
+interface IUserService {
+  fetchUser(id: string): Promise<User>
+  validateUser(input: any): boolean
+  exportUsersCSV(users: User[]): string
+}
+```
+
+A class using only fetchUser is forced to depend on validation and export methods.
+
+## Good Example
+
+```ts
+interface IUserFetcher { fetchUser(id: string): Promise<User> }
+interface IUserValidator { validate(input: any): boolean }
+interface IExporter<T> { export(items: T[]): string }
+```
+
+Clients depend only on the interfaces they need.
+
+## Tips
+•Split large interfaces into cohesive smaller ones.
+•Use interface composition (extends) to combine behaviors when needed.
+•Keep interface methods minimal and well focused.

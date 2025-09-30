@@ -1,7 +1,7 @@
 // Minimal, self-contained Service Worker (no external imports)
 // Purpose: avoid evaluation errors during registration.
 
-self.addEventListener("install", (event) => {
+self.addEventListener("install", (_event) => {
   // Activate immediately after installation
   self.skipWaiting();
 });

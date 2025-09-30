@@ -1,0 +1,45 @@
+---
+description: Require tests for any public API or exposed behavior
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: false
+---
+
+# Tests for Public Behavior
+
+**Rule:** For any class, module, or function exposed in public API (exported), there should be corresponding test coverage verifying edge cases, expected behavior, and substitutions.
+
+## Why
+
+- Guards against regressions  
+- Verifies behavior contracts  
+- Encourages designing for testability
+
+## Example
+
+```ts
+// src/services/userService.ts
+export function getUserName(id: number): string {
+  if (id <= 0) throw new Error("Invalid")
+  return `User${id}`
+}
+
+// tests/userService.test.ts
+import { getUserName } from "../src/services/userService"
+import { expect, describe, it } from "vitest"
+
+describe("getUserName", () => {
+  it("returns name for positive id", () => {
+    expect(getUserName(3)).toBe("User3")
+  })
+  it("throws for nonpositive id", () => {
+    expect(() => getUserName(0)).toThrow("Invalid")
+  })
+})
+```
+
+Ensure all exposed behaviors are tested.
+
+## Tips
+•Aim for unit tests that cover normal and edge cases.
+•Use test doubles (mocks, fakes) for dependencies when needed.
+•For classes with multiple public methods, ensure each method behavior is covered.

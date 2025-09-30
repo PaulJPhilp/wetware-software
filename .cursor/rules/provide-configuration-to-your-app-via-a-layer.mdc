@@ -1,0 +1,32 @@
+description: Provide configuration to your app via a Layer.
+globs: "**/*.ts"
+alwaysApply: true
+
+# Provide Configuration to Your App via a Layer
+**Rule:** Provide configuration to your app via a Layer.
+
+### Example
+````typescript
+import { Effect, Layer } from "effect";
+
+class ServerConfig extends Effect.Service<ServerConfig>()(
+  "ServerConfig",
+  {
+    sync: () => ({
+      port: process.env.PORT ? parseInt(process.env.PORT) : 8080
+    })
+  }
+) {}
+
+const program = Effect.gen(function* () {
+  const config = yield* ServerConfig;
+  yield* Effect.log(`Starting application on port ${config.port}...`);
+});
+
+Effect.runPromise(
+  Effect.provide(program, ServerConfig.Default)
+).catch(console.error);
+````
+
+**Explanation:**  
+This approach makes configuration available contextually, supporting better testing and modularity.

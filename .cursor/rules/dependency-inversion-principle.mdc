@@ -1,0 +1,57 @@
+---
+description: Depend on abstractions rather than concrete implementations
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: true
+---
+
+# Dependency Inversion Principle (DIP)
+
+**Rule:** High-level modules should not depend on low-level modules directly. Both should depend on abstractions (interfaces or types).
+
+## Why
+
+- Enables decoupling, testing, substitution  
+- Makes code more modular and maintainable
+
+## Bad Example
+
+```ts
+class FileLogger {
+  log(msg: string) { /* write to file */ }
+}
+class UserService {
+  private logger = new FileLogger()
+  createUser(u: User) {
+    this.logger.log("creating user")
+    // ...
+  }
+}
+```
+
+UserService is tightly coupled to FileLogger.
+
+## Good Example
+
+```ts
+interface Logger {
+  log(msg: string): void
+}
+
+class FileLogger implements Logger { /* … */ }
+class ConsoleLogger implements Logger { /* … */ }
+
+class UserService {
+  constructor(private logger: Logger) {}
+  createUser(u: User) {
+    this.logger.log("creating user")
+    // ...
+  }
+}
+```
+
+You can supply any Logger, including mocks for testing.
+
+## Tips
+•Always inject dependencies through constructors or parameters.
+•Avoid new ConcreteClass() inside business logic if possible.
+•Use interfaces or abstract classes to define contracts.

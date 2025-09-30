@@ -1,0 +1,52 @@
+---
+description: Avoid duplication by abstracting repeated logic (DRY)
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: true
+---
+
+# Don’t Repeat Yourself (DRY)
+
+**Rule:** Extract and reuse common logic instead of duplicating it across modules. Duplicate code is a maintenance burden.
+
+## Why
+
+- Easier to update logic in one place  
+- Reduces risk of divergent behaviors  
+- Improves readability and consistency
+
+## Bad Example
+
+```ts
+function sumArray(a: number[]): number {
+  let sum = 0
+  for (const x of a) {
+    sum += x
+  }
+  return sum
+}
+
+function sumList(lst: number[]): number {
+  let total = 0
+  for (const x of lst) {
+    total += x
+  }
+  return total
+}
+```
+
+Two implementations of the same logic.
+
+## Good Example
+
+```ts
+function sum(numbers: number[]): number {
+  return numbers.reduce((acc, x) => acc + x, 0)
+}
+```
+
+Use the common helper sum wherever needed instead of repeating loops.
+
+## Tips
+•When seeing near-duplicate blocks, extract into a function, utility, or shared service.
+•Use higher-order functions or generics to generalize similar patterns.
+•Ensure the abstraction does not overcomplicate — sometimes small duplication is acceptable if abstraction is forced or obscure.

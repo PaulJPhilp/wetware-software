@@ -6,13 +6,13 @@ import { Archive, Code, Github, Star, Wrench } from "lucide-react";
 export default function ProjectsPage() {
   const featuredProjects = getFeaturedProjects();
   const featuredProject = featuredProjects[0]; // Only show the first featured project
-  const otherProjects = projects.filter(p => p.id !== featuredProject?.id);
+  const otherProjects = projects.filter((p) => p.id !== featuredProject?.id);
 
   const stats = {
     total: projects.length,
-    active: projects.filter(p => p.status === "active").length,
-    archived: projects.filter(p => p.status === "archived").length,
-    maintenance: projects.filter(p => p.status === "maintenance").length,
+    active: projects.filter((p) => p.status === "active").length,
+    archived: projects.filter((p) => p.status === "archived").length,
+    maintenance: projects.filter((p) => p.status === "maintenance").length,
   };
 
   return (
@@ -24,7 +24,10 @@ export default function ProjectsPage() {
             Projects
           </h1>
           <p className="text-lg text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
-            Welcome to my workshop. Here, you'll find a collection of practical AI applications and robust software systems. These projects demonstrate how I use modern technologies like TypeScript, Effect-TS, and Next.js, along with advanced AI orchestration frameworks, to solve real-world problems and deliver tangible engineering value.
+            Welcome to my workshop. Here, you'll find a collection of practical AI applications and
+            robust software systems. These projects demonstrate how I use modern technologies like
+            TypeScript, Effect-TS, and Next.js, along with advanced AI orchestration frameworks, to
+            solve real-world problems and deliver tangible engineering value.
           </p>
         </div>
 
@@ -86,16 +89,8 @@ export default function ProjectsPage() {
             on the latest developments in software engineering and robotics.
           </p>
         </div>
-        <Button
-          variant="outline"
-          asChild
-          className="bg-white text-charcoal hover:bg-white/90"
-        >
-          <a
-            href="https://github.com/PaulJPhilp"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+        <Button variant="outline" asChild className="bg-white text-charcoal hover:bg-white/90">
+          <a href="https://github.com/PaulJPhilp" target="_blank" rel="noopener noreferrer">
             <Github className="w-4 h-4 mr-2" />
             View on GitHub
           </a>

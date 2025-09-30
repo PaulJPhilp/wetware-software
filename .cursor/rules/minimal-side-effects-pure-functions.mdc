@@ -1,0 +1,53 @@
+---
+description: Favor pure functions and isolate side effects
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: false
+---
+
+# Minimal Side Effects & Pure Functions
+
+**Rule:** Prefer pure functions (no mutation, no hidden I/O). If side effects exist, isolate them in separate layers/modules.
+
+## Why
+
+- Easier to reason about functions  
+- Better testability  
+- Reduces hidden state or cross-cutting bugs
+
+## Bad Example
+
+```ts
+let counter = 0
+
+function incrementAndLog(): number {
+  counter += 1
+  console.log("Counter:", counter)
+  return counter
+}
+```
+
+Mixed logic, side effects, and mutation.
+
+## Good Example
+
+```ts
+function increment(n: number): number {
+  return n + 1
+}
+
+function logCounter(n: number): void {
+  console.log("Counter:", n)
+}
+```
+
+Combine them at a higher level, e.g.:
+
+```ts
+const newCount = increment(oldCount)
+logCounter(newCount)
+```
+
+## Tips
+•Limit mutation. Favor immutable data (e.g. readonly, spread, functional update).
+•Wrap side-effectful logic (I/O, logging, network) in dedicated modules or effect systems.
+•Keep core logic pure; side effects should be boundary concerns.

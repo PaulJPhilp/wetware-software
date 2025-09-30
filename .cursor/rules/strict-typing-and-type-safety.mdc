@@ -1,0 +1,51 @@
+---
+description: Favor strict typing, avoid `any`, prefer readonly and exact types
+globs: ["**/*.ts", "**/*.tsx"]
+alwaysApply: true
+---
+
+# Strict Typing & Type Safety
+
+**Rule:** Avoid `any`, enable `strict` mode in `tsconfig.json`, use `readonly`, explicit return types, and precise types where possible.
+
+## Why
+
+- Catches bugs at compile time  
+- Improves developer confidence  
+- Enables more robust tooling support
+
+## Bad Example
+
+```ts
+function process(input: any): any {
+  return JSON.parse(input)
+}
+```
+
+Using any loses type safety.
+
+## Good Example
+
+```ts
+interface Input { a: number; b: string }
+function process(input: string): Input {
+  const obj = JSON.parse(input) as Input
+  return { a: obj.a, b: obj.b }
+}
+```
+
+Or even better:
+
+```ts
+function process(input: string): Input {
+  return JSON.parse(input)
+}
+```
+
+with correct type annotations and checks.
+
+## Tips
+•In tsconfig.json, set "strict": true and related flags (noImplicitAny, strictNullChecks, etc.).
+•Use readonly for properties that should not change.
+•Explicitly annotate function return types, especially public APIs.
+•Prefer union / literal types / discriminated unions over any or unknown when possible.

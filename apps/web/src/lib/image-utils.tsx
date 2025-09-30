@@ -1,8 +1,21 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import Image from "next/image";
-import { useMemo } from "react";
+// import type { SidebarSeries } from "./types"; // Temporarily commented out
+
+export interface MyUniqueSidebarArticle {
+  title: string;
+  href: string; // Required for sidebar links
+  partNumber?: number;
+}
+
+export interface MyUniqueSidebarSeries {
+  name: string; // Required for sidebar navigation
+  slug?: string;
+  coverLight?: string;
+  coverDark?: string;
+  articles: MyUniqueSidebarArticle[];
+}
 
 /**
  * Describes assets that support both light and dark theme covers.
@@ -18,13 +31,12 @@ export interface ThemeAwareCover {
  * @param cover - Object exposing light and dark cover URLs.
  * @returns A theme-aware cover URL when available.
  */
-export function useThemeAwareCover(cover: ThemeAwareCover): string | undefined {
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
-
-  return useMemo(() => {
-    return isDark ? cover.coverDark || cover.coverLight : cover.coverLight || cover.coverDark;
-  }, [cover.coverLight, cover.coverDark, isDark]);
+export function resolveThemeAwareCover(series: MyUniqueSidebarSeries, isDark: boolean): string {
+  const chosen = isDark
+    ? series.coverDark || series.coverLight
+    : series.coverLight || series.coverDark;
+  const normalized = normalizeImageSrc(chosen);
+  return normalized || "/images/default-series-cover.png";
 }
 
 /**
@@ -81,6 +93,61 @@ export function normalizeImageSrc(src: string | undefined): string | undefined {
     return src;
   }
 }
+
+/**
+ * Check if a URL is allowed for Next.js Image component
+ * Based on remotePatterns configuration in next.config.ts
+ */
+export const isNextImageAllowed = (url: string): boolean => {
+  try {
+    const u = new URL(url);
+    if (u.protocol !== "https:") return false;
+    const host = u.hostname.toLowerCase();
+    return (
+      host === "prod-files-secure.s3.us-west-2.amazonaws.com" ||
+      host === "s3.us-west-2.amazonaws.com" ||
+      host === "notion.so" ||
+      host === "www.notion.so"
+    );
+  } catch {
+    // Likely a relative path (public asset) which is fine
+    return true;
+  }
+};
+
+/**
+ * Generate responsive image sizes for different breakpoints
+ */
+export const getResponsiveImageSizes = (sizes?: {
+  mobile?: string;
+  tablet?: string;
+  desktop?: string;
+}) => {
+  const defaultSizes = {
+    mobile: "100vw",
+    tablet: "50vw",
+    desktop: "33vw",
+  };
+
+  const finalSizes = { ...defaultSizes, ...sizes };
+
+  return `(max-width: 640px) ${finalSizes.mobile}, (max-width: 1024px) ${finalSizes.tablet}, ${finalSizes.desktop}`;
+};
+
+/**
+ * Handle image error states
+ */
+export const handleImageError = (onError?: (error: string) => void, fallbackSrc?: string) => {
+  return (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const img = event.currentTarget;
+    if (fallbackSrc && img.src !== fallbackSrc) {
+      img.src = fallbackSrc;
+    } else {
+      img.style.display = "none";
+      onError?.("Failed to load image");
+    }
+  };
+};
 
 /**
  * Render an image that gracefully falls back when sources are missing.
