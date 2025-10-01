@@ -197,7 +197,7 @@ export function Header() {
                 id={menuId}
                 role="menu"
                 aria-labelledby={triggerId}
-                className="absolute top-full left-1/2 transform -translate-x-1/2 mt-0.5 bg-popover border border-border rounded-lg shadow-lg py-0.5 min-w-[100px] z-dropdown animate-in fade-in-0 zoom-in-95 duration-200"
+                className="absolute top-full left-1/2 transform -translate-x-1/2 mt-4 bg-popover backdrop-blur-md border border-border rounded-lg shadow-lg py-0.5 min-w-[100px] z-dropdown animate-in fade-in-0 zoom-in-95 duration-200"
               >
                 <Link
                   href="/essays"

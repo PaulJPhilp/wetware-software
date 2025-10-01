@@ -104,7 +104,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <div className={`flex-1 ${!project.imageUrl ? "lg:w-full" : ""}`}>
             <div className="space-y-4">
               <div className="flex items-start justify-between">
-                <h1 className="text-3xl md:text-4xl font-sans font-bold text-charcoal leading-tight">
+                <h1 className="text-3xl md:text-4xl font-sans font-bold text-charcoal dark:text-white leading-tight">
                   {project.name}
                 </h1>
                 <Badge className={`flex items-center gap-1 ${statusInfo.color}`}>
@@ -113,7 +113,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </Badge>
               </div>
 
-              <p className="text-lg text-charcoal/80 leading-relaxed">{project.description}</p>
+              <p className="text-lg text-charcoal/80 dark:text-gray-300 leading-relaxed">{project.description}</p>
 
               {/* Technologies */}
               <div className="flex flex-wrap gap-2">
@@ -177,7 +177,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       {/* Detailed Description */}
       {project.longDescription && (
         <section className="space-y-6">
-          <h2 className="text-2xl font-sans font-bold text-charcoal">About This Project</h2>
+          <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">About This Project</h2>
           <Card>
             <CardContent className="pt-6">
               <div className="prose prose-lg max-w-none dark:prose-invert">
@@ -198,7 +198,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       {/* Related Projects */}
       {relatedProjects.length > 0 && (
         <section className="space-y-6">
-          <h2 className="text-2xl font-sans font-bold text-charcoal">Related Projects</h2>
+          <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">Related Projects</h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {relatedProjects.map((relatedProject) => (
               <ProjectCard
@@ -214,10 +214,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       {/* Call to Action */}
       <section className="bg-silver/30 dark:bg-charcoal/30 rounded-xl p-8 text-center space-y-6">
         <div className="space-y-4">
-          <h2 className="text-2xl font-sans font-bold text-charcoal">
+          <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">
             Interested in This Project?
           </h2>
-          <p className="text-charcoal/80 max-w-2xl mx-auto">
+          <p className="text-charcoal/80 dark:text-gray-300 max-w-2xl mx-auto">
             Check out the source code, contribute to the development, or get in touch if you'd like
             to collaborate.
           </p>

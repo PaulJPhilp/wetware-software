@@ -9,8 +9,8 @@ export default function ConnectPage() {
       description: "For opportunities, collaboration, or detailed discussions",
       icon: <Mail className="w-6 h-6" />,
       action: "Send Email",
-      href: "mailto:paul@wetware-software.com",
-      display: "paul@wetware-software.com",
+      href: "mailto:paul@paulphilp.com",
+      display: "paul@paulphilp.com",
     },
     {
       title: "LinkedIn",
@@ -44,13 +44,13 @@ export default function ConnectPage() {
       <section className="text-center space-y-4">
         <div className="flex items-center justify-center gap-2 mb-3">
           <Users className="w-6 h-6 text-orange" />
-          <h1 className="text-2xl font-sans font-bold text-charcoal leading-tight">Connect</h1>
+          <h1 className="text-2xl font-sans font-bold text-charcoal dark:text-white leading-tight">Connect</h1>
         </div>
         <div className="max-w-3xl mx-auto space-y-2">
-          <p className="text-sm font-serif text-charcoal/80">
+          <p className="text-sm font-serif text-charcoal/80 dark:text-gray-300">
             Let's explore human-AI collaboration together
           </p>
-          <p className="text-sm text-charcoal/60 leading-snug">
+          <p className="text-sm text-charcoal/60 dark:text-gray-400 leading-snug">
             Whether you're interested in collaboration, have questions about my work, or want to
             discuss opportunities in AI and software engineering, I'd love to hear from you. Choose
             the best way to connect based on your needs.
@@ -70,12 +70,12 @@ export default function ConnectPage() {
                 <div className="p-2 bg-orange/10 rounded-lg text-orange group-hover:bg-orange group-hover:text-white transition-colors">
                   {method.icon}
                 </div>
-                <CardTitle className="text-xl font-sans text-charcoal">{method.title}</CardTitle>
+                <CardTitle className="text-xl font-sans text-charcoal dark:text-white">{method.title}</CardTitle>
               </div>
-              <CardDescription className="text-charcoal/60">{method.description}</CardDescription>
+              <CardDescription className="text-charcoal/60 dark:text-gray-400">{method.description}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm font-mono text-charcoal/70 bg-silver/30 p-3 rounded">
+              <p className="text-sm font-mono text-charcoal/70 dark:text-gray-300 bg-silver/30 dark:bg-gray-800/30 p-3 rounded">
                 {method.display}
               </p>
               <Button asChild className="w-full bg-orange hover:bg-orange/90 text-white">
@@ -89,15 +89,15 @@ export default function ConnectPage() {
       </section>
 
       {/* What to Expect */}
-      <section className="bg-silver/30 rounded-lg p-8 space-y-6">
-        <h2 className="text-2xl font-sans font-bold text-charcoal text-center">What to Expect</h2>
+      <section className="bg-silver/30 dark:bg-gray-800/30 rounded-lg p-8 space-y-6">
+        <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white text-center">What to Expect</h2>
         <div className="grid gap-6 md:grid-cols-3 text-center">
           <div className="space-y-3">
             <div className="w-12 h-12 bg-orange/10 rounded-full flex items-center justify-center mx-auto">
               <Mail className="w-6 h-6 text-orange" />
             </div>
-            <h3 className="font-sans font-semibold text-charcoal">Quick Response</h3>
-            <p className="text-sm text-charcoal/70">
+            <h3 className="font-sans font-semibold text-charcoal dark:text-white">Quick Response</h3>
+            <p className="text-sm text-charcoal/70 dark:text-gray-300">
               I typically respond to emails within 24-48 hours and engage actively on social
               platforms.
             </p>
@@ -106,8 +106,8 @@ export default function ConnectPage() {
             <div className="w-12 h-12 bg-orange/10 rounded-full flex items-center justify-center mx-auto">
               <MessageCircle className="w-6 h-6 text-orange" />
             </div>
-            <h3 className="font-sans font-semibold text-charcoal">Thoughtful Discussion</h3>
-            <p className="text-sm text-charcoal/70">
+            <h3 className="font-sans font-semibold text-charcoal dark:text-white">Thoughtful Discussion</h3>
+            <p className="text-sm text-charcoal/70 dark:text-gray-300">
               I love diving deep into complex topics and exploring new perspectives on human-AI
               collaboration.
             </p>
@@ -116,8 +116,8 @@ export default function ConnectPage() {
             <div className="w-12 h-12 bg-orange/10 rounded-full flex items-center justify-center mx-auto">
               <Users className="w-6 h-6 text-orange" />
             </div>
-            <h3 className="font-sans font-semibold text-charcoal">Meaningful Connections</h3>
-            <p className="text-sm text-charcoal/70">
+            <h3 className="font-sans font-semibold text-charcoal dark:text-white">Meaningful Connections</h3>
+            <p className="text-sm text-charcoal/70 dark:text-gray-300">
               Whether for collaboration, learning, or professional opportunities, I value authentic
               connections.
             </p>
@@ -127,7 +127,7 @@ export default function ConnectPage() {
 
       {/* Topics of Interest */}
       <section className="text-center space-y-6">
-        <h2 className="text-2xl font-sans font-bold text-charcoal">Great Conversation Starters</h2>
+        <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">Great Conversation Starters</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 text-left">
           {[
             "Human-AI collaboration frameworks",
@@ -137,9 +137,9 @@ export default function ConnectPage() {
             "LLM application architecture",
             "Philosophy of technology and human connection",
           ].map((topic) => (
-            <div key={topic} className="flex items-start gap-3 p-4 bg-white rounded-lg border">
+            <div key={topic} className="flex items-start gap-3 p-4 bg-white dark:bg-gray-800 rounded-lg border dark:border-gray-700">
               <div className="w-2 h-2 rounded-full bg-orange mt-2 flex-shrink-0" />
-              <p className="text-charcoal/80">{topic}</p>
+              <p className="text-charcoal/80 dark:text-gray-300">{topic}</p>
             </div>
           ))}
         </div>

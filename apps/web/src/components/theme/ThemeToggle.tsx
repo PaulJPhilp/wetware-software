@@ -17,7 +17,7 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
     setIsMounted(true);
   }, []);
 
-  const resolvedTheme = theme === "system" ? systemTheme : theme;
+  const resolvedTheme = isMounted ? (theme === "system" ? systemTheme : theme) : undefined;
   const isDark = resolvedTheme === "dark";
 
   function handleToggle() {
@@ -37,8 +37,8 @@ export function ThemeToggle({ className = "" }: ThemeToggleProps) {
       type="button"
       onClick={handleToggle}
       onKeyDown={handleKeyDown}
-      aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
-      aria-pressed={isDark}
+      aria-label="Toggle theme"
+      aria-pressed={false}
       className={`inline-flex items-center justify-center rounded-md border border-border bg-card text-card-foreground hover:bg-muted/50 transition-colors h-6 w-6 relative ${className}`}
     >
       <Sun

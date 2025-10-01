@@ -9,15 +9,15 @@ export default function WorkPage() {
       <section className="text-center space-y-4">
         <div className="flex items-center justify-center gap-2 mb-3">
           <Briefcase className="w-6 h-6 text-orange" />
-          <h1 className="text-2xl font-sans font-bold text-charcoal leading-tight">
+          <h1 className="text-2xl font-sans font-bold text-charcoal dark:text-white leading-tight">
             Work & Portfolio
           </h1>
         </div>
         <div className="max-w-3xl mx-auto space-y-2">
-          <p className="text-sm font-serif text-charcoal/80">
+          <p className="text-sm font-serif text-charcoal/80 dark:text-gray-300">
             Exploring the intersection of human creativity and AI innovation
           </p>
-          <p className="text-sm text-charcoal/60 leading-snug">
+          <p className="text-sm text-charcoal/60 dark:text-gray-400 leading-snug">
             Currently focused on building tools and frameworks that enhance human-AI collaboration.
             My work spans from experimental research to production-ready applications.
           </p>
@@ -27,12 +27,12 @@ export default function WorkPage() {
       {/* Coming Soon Section */}
       <section className="space-y-6">
         <div className="text-center space-y-2">
-          <h2 className="text-2xl font-sans font-bold text-charcoal">Projects Coming Soon</h2>
-          <p className="text-charcoal/60">Building something interesting? Check back soon.</p>
+          <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">Projects Coming Soon</h2>
+          <p className="text-charcoal/60 dark:text-gray-400">Building something interesting? Check back soon.</p>
         </div>
 
-        <div className="bg-silver/30 rounded-lg border-2 border-dashed border-charcoal/20 p-12 text-center">
-          <p className="text-charcoal/60">
+        <div className="bg-silver/30 dark:bg-gray-800/30 rounded-lg border-2 border-dashed border-charcoal/20 dark:border-gray-700 p-12 text-center">
+          <p className="text-charcoal/60 dark:text-gray-400">
             I'm currently working on several projects that I'll be sharing here soon.
           </p>
         </div>

@@ -22,8 +22,8 @@ export default async function ArticlesPage() {
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="space-y-8">
           <div className="space-y-2">
-            <h1 className="text-xl font-sans font-bold text-charcoal leading-tight">Articles</h1>
-            <p className="text-xs text-charcoal/80 max-w-2xl leading-snug">
+            <h1 className="text-xl font-sans font-bold text-charcoal dark:text-white leading-tight">Articles</h1>
+            <p className="text-xs text-charcoal/80 dark:text-gray-300 max-w-2xl leading-snug">
               Technical articles covering software engineering, AI development, and practical
               implementation patterns for human-AI collaboration systems.
             </p>
@@ -31,7 +31,7 @@ export default async function ArticlesPage() {
 
           {articles.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-charcoal/60">No articles available yet. Check back soon!</p>
+              <p className="text-charcoal/60 dark:text-gray-400">No articles available yet. Check back soon!</p>
             </div>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -54,13 +54,13 @@ export default async function ArticlesPage() {
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="space-y-8">
           <div className="space-y-4">
-            <h1 className="text-4xl font-bold text-charcoal">Articles</h1>
-            <p className="text-lg text-charcoal/80 max-w-2xl">
+            <h1 className="text-4xl font-bold text-charcoal dark:text-white">Articles</h1>
+            <p className="text-lg text-charcoal/80 dark:text-gray-300 max-w-2xl">
               Technical articles on software engineering and AI development.
             </p>
           </div>
           <div className="text-center py-12">
-            <p className="text-charcoal/60">Unable to load articles. Please try again later.</p>
+            <p className="text-charcoal/60 dark:text-gray-400">Unable to load articles. Please try again later.</p>
           </div>
         </div>
       </main>

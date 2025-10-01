@@ -20,10 +20,10 @@ export default function ProjectsPage() {
       {/* Header Section */}
       <section className="text-center space-y-6">
         <div className="space-y-4">
-          <h1 className="text-3xl md:text-4xl font-sans font-bold text-charcoal leading-tight">
+          <h1 className="text-3xl md:text-4xl font-sans font-bold text-charcoal dark:text-white leading-tight">
             Projects
           </h1>
-          <p className="text-lg text-charcoal/80 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg text-charcoal/80 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Welcome to my workshop. Here, you'll find a collection of practical AI applications and
             robust software systems. These projects demonstrate how I use modern technologies like
             TypeScript, Effect-TS, and Next.js, along with advanced AI orchestration frameworks, to
@@ -57,7 +57,7 @@ export default function ProjectsPage() {
         <section className="space-y-6">
           <div className="flex items-center gap-3">
             <Star className="w-6 h-6 text-orange" />
-            <h2 className="text-3xl font-sans font-bold text-charcoal">Featured Project</h2>
+            <h2 className="text-3xl font-sans font-bold text-charcoal dark:text-white">Featured Project</h2>
           </div>
 
           <div className="max-w-4xl mx-auto">
@@ -70,7 +70,7 @@ export default function ProjectsPage() {
       <section className="space-y-6">
         <div className="flex items-center gap-3">
           <Code className="w-5 h-5 text-orange" />
-          <h2 className="text-2xl font-sans font-bold text-charcoal">All Projects</h2>
+          <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">All Projects</h2>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
