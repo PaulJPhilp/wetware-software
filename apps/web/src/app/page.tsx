@@ -15,21 +15,17 @@ export default async function Home() {
   const recentPostsWithSeriesName = recentPosts;
 
   return (
-    <div className="py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Main Content */}
-          <div className="flex-1 min-w-0">
-            <SeriesContentLayout series={resolvedSeries}>
-              <LatestPosts posts={recentPostsWithSeriesName} />
-            </SeriesContentLayout>
-          </div>
+    <div className="py-8 max-w-7xl mx-auto px-4">
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Main Content */}
+        <main className="flex-1 min-w-0 lg:order-2">
+          <LatestPosts posts={recentPostsWithSeriesName} />
+        </main>
 
-          {/* Author Bio Sidebar */}
-          <div className="lg:w-80 lg:flex-shrink-0">
-            <AuthorBioSidebar />
-          </div>
-        </div>
+        {/* Author Bio Sidebar */}
+        <aside className="w-full lg:w-80 flex-shrink-0 lg:order-1">
+          <AuthorBioSidebar />
+        </aside>
       </div>
     </div>
   );
