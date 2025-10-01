@@ -42,7 +42,7 @@ export function AuthorBioSidebar({ className = "", testId }: BaseComponentProps)
         space-y-3"
       >
         <p>
-          <strong className="font-semibold text-foreground">Paul Philp</strong> is a greybeard
+          <strong className="font-semibold text-foreground">Paul Philp</strong> is an experienced
           software and AI engineer and former founder/CEO with a track record of leading teams,
           shipping products, and architecting robust systems. He's a team Oscar winner for technical
           innovation and currently works across the modern AI engineering stack: TypeScript,

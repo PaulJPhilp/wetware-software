@@ -37,11 +37,9 @@ export function LatestPosts({
   testId,
 }: LatestPostsProps) {
   const [view, setView] = useState<"card" | "list">("card"); // Always start with card view
-  const [isHydrated, setIsHydrated] = useState(false);
   const latestPosts = posts.slice(0, maxPosts);
 
   useEffect(() => {
-    setIsHydrated(true);
     setView(defaultView); // Set the actual default view after hydration
   }, [defaultView]);
 
