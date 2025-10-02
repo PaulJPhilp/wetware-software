@@ -5,6 +5,8 @@ import { FileSystem } from "@effect/platform/FileSystem";
 import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
 import { pipe } from "effect/Function";
+import * as Option from "effect/Option";
+import * as NodePath from "node:path";
 
 import { OpenAI } from "../lib/ai";
 import { Notion } from "../lib/notion";
@@ -12,37 +14,71 @@ import { buildSeriesSchema } from "../lib/seriesSchema";
 
 const verboseOption = Options.boolean("verbose").pipe(
   Options.withAlias("v"),
-  Options.withDescription("Enable verbose output"),
+  Options.withDescription("Enable verbose output")
 );
 
 const descriptionOption = Options.text("description").pipe(
   Options.withAlias("d"),
   Options.optional,
-  Options.withDescription("Optional description for the series"),
+  Options.withDescription("Optional description for the series")
 );
 
 export const seriesCommand = pipe(
   Command.make("series", {
     args: Args.text().pipe(Args.withDescription("Series name")),
-    options: Options.all({ verbose: verboseOption, description: descriptionOption }),
+    options: Options.all({
+      verbose: verboseOption,
+      description: descriptionOption,
+    }),
   }),
   Command.withDescription("Add a new resource series to Notion"),
-  Command.withHandler(({ args, options }) => handler(args, Boolean(options.verbose))),
+  Command.withHandler(({ args, options }) =>
+    runAddSeries(
+      args,
+      Option.getOrUndefined(options.description),
+      Boolean(options.verbose)
+    )
+  )
 );
 
-function handler(seriesName: string, isVerbose: boolean) {
+export interface RunAddSeriesOptions {
+  promptOverride?: string;
+}
+
+export function runAddSeries(
+  seriesName: string,
+  description: string | undefined,
+  isVerbose: boolean,
+  options?: RunAddSeriesOptions
+) {
   return Effect.gen(function* () {
-    const fs = yield* FileSystem;
     const ai = yield* OpenAI;
     const notion = yield* Notion;
 
-    if (isVerbose) {
-      yield* Console.log("Reading prompt from prompts/addSeries.txt");
+    const promptPath = NodePath.join(
+      process.cwd(),
+      "packages",
+      "cli",
+      "prompts",
+      "addSeries.txt"
+    );
+
+    let prompt: string;
+    if (options?.promptOverride) {
+      prompt = options.promptOverride;
+    } else {
+      if (isVerbose) {
+        yield* Console.log(`Reading prompt from ${promptPath}`);
+      }
+      const fs = yield* FileSystem;
+      prompt = yield* fs.readFileString(promptPath);
     }
 
-    const prompt = yield* fs.readFileString("prompts/addSeries.txt");
-
-    const seriesBlock = [`Series Name: "${seriesName}"`].join("\n");
+    const lines = [`Series Name: "${seriesName}"`];
+    if (description) {
+      lines.push(`Series Description: "${description}"`);
+    }
+    const seriesBlock = lines.join("\n");
 
     const aiJson = yield* ai.generateSeriesJson({
       prompt,
@@ -60,7 +96,9 @@ function handler(seriesName: string, isVerbose: boolean) {
       verbose: isVerbose,
     });
     yield* Console.log(
-      `Success: Created Series page ${res.pageId}${res.url ? ` at ${res.url}` : ""}`,
+      `Success: Created Series page ${res.pageId}${
+        res.url ? ` at ${res.url}` : ""
+      }`
     );
   });
 }

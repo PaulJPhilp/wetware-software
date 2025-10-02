@@ -4,7 +4,8 @@ import * as Effect from "effect/Effect";
 import * as http from "node:http";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { OpenAI, type OpenAIService } from "../lib/ai";
-import { Notion, type NotionService } from "../lib/notion";
+import { Notion } from "../lib/notion";
+import { createNotionMock } from "../test/notionTestUtils";
 import { runAddResource } from "./addResource";
 
 let server: http.Server;
@@ -60,21 +61,32 @@ describe("CLI add resource", () => {
           return JSON.stringify(out);
         }),
       generateSourceEntityJson: () => Effect.succeed("{}"),
+      generateSeriesJson: () => Effect.succeed("{}"),
     };
 
-    const fakeNotion: NotionService = {
+    const fakeNotion = createNotionMock({
       addResource: (data) =>
         Effect.sync(() => {
           notionCalledWith = data;
           return { pageId: "page_123", url: "https://notion.test/page_123" };
         }),
-      addSourceEntity: () => Effect.sync(() => ({ pageId: "s1", url: "https://notion.test/s1" })),
+      addSourceEntity: () =>
+        Effect.sync(() => ({ pageId: "s1", url: "https://notion.test/s1" })),
+      listResources: () => Effect.succeed([]),
+      listSourceEntities: () => Effect.succeed([]),
+      listResourceSeries: () => Effect.succeed([]),
+    });
+
+    const _fakeFs = {
+      readFileString: vi.fn(() => Effect.succeed("PROMPT")),
     };
 
-    const effect = runAddResource(`${baseUrl}/page`, true).pipe(
+    const effect = runAddResource(`${baseUrl}/page`, true, {
+      promptOverride: "PROMPT Override For Tests",
+    }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
@@ -109,21 +121,32 @@ describe("CLI add resource", () => {
           return JSON.stringify(out);
         }),
       generateSourceEntityJson: () => Effect.succeed("{ }"),
+      generateSeriesJson: () => Effect.succeed("{}"),
     };
 
-    const fakeNotion: NotionService = {
+    const fakeNotion = createNotionMock({
       addResource: (data) =>
         Effect.sync(() => {
           notionCalledWith = data;
           return { pageId: "page_456", url: "https://notion.test/page_456" };
         }),
-      addSourceEntity: () => Effect.sync(() => ({ pageId: "s1", url: "https://notion.test/s1" })),
+      addSourceEntity: () =>
+        Effect.sync(() => ({ pageId: "s1", url: "https://notion.test/s1" })),
+      listResources: () => Effect.succeed([]),
+      listSourceEntities: () => Effect.succeed([]),
+      listResourceSeries: () => Effect.succeed([]),
+    });
+
+    const _fakeFs = {
+      readFileString: vi.fn(() => Effect.succeed("PROMPT")),
     };
 
-    const effect = runAddResource(`${baseUrl}/video`, true).pipe(
+    const effect = runAddResource(`${baseUrl}/video`, true, {
+      promptOverride: "PROMPT Override For Tests",
+    }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
@@ -162,21 +185,32 @@ describe("CLI add resource", () => {
           return JSON.stringify(out);
         }),
       generateSourceEntityJson: () => Effect.succeed("{ }"),
+      generateSeriesJson: () => Effect.succeed("{}"),
     };
 
-    const fakeNotion: NotionService = {
+    const fakeNotion = createNotionMock({
       addResource: (data) =>
         Effect.sync(() => {
           notionCalledWith = data;
           return { pageId: "page_789", url: "https://notion.test/page_789" };
         }),
-      addSourceEntity: () => Effect.sync(() => ({ pageId: "s1", url: "https://notion.test/s1" })),
+      addSourceEntity: () =>
+        Effect.sync(() => ({ pageId: "s1", url: "https://notion.test/s1" })),
+      listResources: () => Effect.succeed([]),
+      listSourceEntities: () => Effect.succeed([]),
+      listResourceSeries: () => Effect.succeed([]),
+    });
+
+    const _fakeFs = {
+      readFileString: vi.fn(() => Effect.succeed("PROMPT")),
     };
 
-    const effect = runAddResource(`${baseUrl}/book`, true).pipe(
+    const effect = runAddResource(`${baseUrl}/book`, true, {
+      promptOverride: "PROMPT Override For Tests",
+    }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
@@ -203,24 +237,41 @@ describe("CLI add resource", () => {
           });
         }),
       generateSourceEntityJson: () => Effect.succeed("{ }"),
+      generateSeriesJson: () => Effect.succeed("{}"),
     };
 
-    const fakeNotion: NotionService = {
+    const fakeNotion = createNotionMock({
       addResource: () => Effect.sync(() => ({ pageId: "", url: "" })),
       addSourceEntity: () => Effect.sync(() => ({ pageId: "", url: "" })),
+      listResources: () => Effect.succeed([]),
+      listSourceEntities: () => Effect.succeed([]),
+      listResourceSeries: () => Effect.succeed([]),
+    });
+
+    const _fakeFs = {
+      readFileString: vi.fn(() => Effect.succeed("PROMPT")),
     };
 
-    const effect = runAddResource(`${baseUrl}/invalid`, true).pipe(
+    const effect = runAddResource(`${baseUrl}/invalid`, true, {
+      promptOverride: "PROMPT",
+    }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     const result = await Effect.runPromiseExit(effect);
 
-    expect(result._tag).toBe("Failure");
-    expect(result.cause._tag).toBe("Fail");
-    expect(result.cause.error.message).toContain("Validation failed");
+    if (result._tag === "Failure") {
+      const failure = result.cause;
+      if (failure._tag === "Fail") {
+        expect(failure.error.message).toContain("Validation failed");
+      } else {
+        throw new Error("Expected Fail cause");
+      }
+    } else {
+      throw new Error("Expected failure exit");
+    }
   });
 
   it("handles Notion API errors during addResource", async () => {
@@ -236,58 +287,89 @@ describe("CLI add resource", () => {
           });
         }),
       generateSourceEntityJson: () => Effect.succeed("{}"),
+      generateSeriesJson: () => Effect.succeed("{}"),
     };
 
-    const fakeNotion: NotionService = {
-      addResource: () => Effect.fail(new Error("Notion API Error: Failed to create page")),
+    const fakeNotion = createNotionMock({
+      addResource: () =>
+        Effect.fail(new Error("Notion API Error: Failed to create page")),
       addSourceEntity: () => Effect.succeed({ pageId: "", url: "" }),
       listResources: () => Effect.succeed([]),
       listSourceEntities: () => Effect.succeed([]),
       listResourceSeries: () => Effect.succeed([]),
+    });
+
+    const _fakeFs = {
+      readFileString: vi.fn(() => Effect.succeed("PROMPT")),
     };
 
-    const effect = runAddResource(`${baseUrl}/notion-error`, true).pipe(
+    const effect = runAddResource(`${baseUrl}/notion-error`, true, {
+      promptOverride: "PROMPT",
+    }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     const result = await Effect.runPromiseExit(effect);
 
-    expect(result._tag).toBe("Failure");
-    expect(result.cause._tag).toBe("Fail");
-    expect(result.cause.error.message).toContain("Notion API Error");
+    if (result._tag === "Failure") {
+      const failure = result.cause;
+      if (failure._tag === "Fail") {
+        expect(failure.error.message).toContain("Notion API Error");
+      } else {
+        throw new Error("Expected Fail cause");
+      }
+    } else {
+      throw new Error("Expected failure exit");
+    }
   });
 
   it("handles web fetch errors during addResource", async () => {
     const fakeAI: OpenAIService = {
       generateResourceJson: () => Effect.succeed("{}"),
       generateSourceEntityJson: () => Effect.succeed("{}"),
+      generateSeriesJson: () => Effect.succeed("{}"),
     };
 
-    const fakeNotion: NotionService = {
+    const fakeNotion = createNotionMock({
       addResource: () => Effect.succeed({ pageId: "", url: "" }),
       addSourceEntity: () => Effect.succeed({ pageId: "", url: "" }),
       listResources: () => Effect.succeed([]),
       listSourceEntities: () => Effect.succeed([]),
       listResourceSeries: () => Effect.succeed([]),
-    };
+    });
 
     // Mock fetch to throw an error
     const originalFetch = global.fetch;
-    global.fetch = vi.fn(() => Promise.reject(new Error("Network error during fetch")));
+    global.fetch = vi.fn(() =>
+      Promise.reject(new Error("Network error during fetch"))
+    );
 
-    const effect = runAddResource(`${baseUrl}/fetch-error`, true).pipe(
+    const _fakeFs = {
+      readFileString: vi.fn(() => Effect.succeed("PROMPT")),
+    };
+
+    const effect = runAddResource(`${baseUrl}/fetch-error`, true, {
+      promptOverride: "PROMPT",
+    }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     const result = await Effect.runPromiseExit(effect);
 
-    expect(result._tag).toBe("Failure");
-    expect(result.cause._tag).toBe("Fail");
-    expect(result.cause.error.message).toContain("Failed to fetch metadata");
+    if (result._tag === "Failure") {
+      const failure = result.cause;
+      if (failure._tag === "Fail") {
+        expect(failure.error.message).toContain("Failed to fetch metadata");
+      } else {
+        throw new Error("Expected Fail cause");
+      }
+    } else {
+      throw new Error("Expected failure exit");
+    }
 
     global.fetch = originalFetch; // Restore original fetch
   });

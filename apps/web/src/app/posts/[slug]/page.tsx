@@ -71,7 +71,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     <div className="max-w-7xl mx-auto py-8 px-4 md:px-8">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Main Content */}
-        <div className="flex-1 min-w-0 space-y-8">
+        <div className="flex-1 min-w-0 space-y-8 lg:order-2">
           {/* Series Navigation */}
           {post.seriesId && seriesPosts.length > 1 && (
             <SeriesNavigation currentPost={post} seriesPosts={seriesPosts} />
@@ -173,9 +173,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </div>
 
         {/* Author Bio Sidebar */}
-        <div className="lg:w-80 lg:flex-shrink-0">
+        <aside className="w-full lg:w-80 lg:flex-shrink-0 lg:order-1">
           <AuthorBioSidebar />
-        </div>
+        </aside>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { Brain } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { Card, CardContent, CardHeader } from "./ui/card";
+import { Card } from "./ui/card";
 
 interface PostCardProps extends CardComponentProps {
   /** Post data to display */
@@ -135,13 +135,20 @@ export function PostCard({
   const getDescriptionClampClass = () => {
     if (descriptionLineClamp === 0) return "";
     switch (descriptionLineClamp) {
-      case 1: return "line-clamp-1";
-      case 2: return "line-clamp-2";
-      case 3: return "line-clamp-3";
-      case 4: return "line-clamp-4";
-      case 5: return "line-clamp-5";
-      case 6: return "line-clamp-6";
-      default: return `line-clamp-${descriptionLineClamp}`;
+      case 1:
+        return "line-clamp-1";
+      case 2:
+        return "line-clamp-2";
+      case 3:
+        return "line-clamp-3";
+      case 4:
+        return "line-clamp-4";
+      case 5:
+        return "line-clamp-5";
+      case 6:
+        return "line-clamp-6";
+      default:
+        return `line-clamp-${descriptionLineClamp}`;
     }
   };
 
@@ -186,7 +193,6 @@ export function PostCard({
                 <div
                   className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center"
                   aria-live="polite"
-                  aria-label="Loading image"
                 >
                   <span className="text-xs text-gray-500" aria-hidden="true">
                     Loading...
@@ -197,17 +203,20 @@ export function PostCard({
                 <div
                   className="absolute inset-0 bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
                   role="alert"
-                  aria-label="Failed to load image"
                 >
                   <span className="text-xs text-gray-500" aria-hidden="true">
                     Failed to load image
                   </span>
                 </div>
               ) : (
-                <img
+                <Image
                   src={post.coverImage}
                   alt={post.name}
-                  className="block w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                  fill
+                  sizes={getResponsiveImageSizes()}
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                  priority={imagePriority}
+                  unoptimized
                   onLoad={() => setImageLoading(false)}
                   onError={handleImageError(() => setImageError(true))}
                 />
@@ -216,7 +225,7 @@ export function PostCard({
           )}
         </div>
       )}
-      
+
       {/* Content container with proper spacing */}
       <div className="flex flex-col flex-1 justify-center space-y-1">
         {/* Header section */}
@@ -239,7 +248,7 @@ export function PostCard({
             {post.name}
           </h2>
         </div>
-        
+
         {/* Description section */}
         {showDescription && (
           <div>
@@ -249,10 +258,10 @@ export function PostCard({
                 getDescriptionClampClass(),
               )}
               style={{
-                display: '-webkit-box',
+                display: "-webkit-box",
                 WebkitLineClamp: descriptionLineClamp,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
               }}
               id={`post-description-${post.id}`}
               aria-describedby={`post-title-${post.id}`}
@@ -262,15 +271,17 @@ export function PostCard({
           </div>
         )}
       </div>
-      
+
       {/* Footer section with controlled spacing */}
-      <div className={cn("flex items-center justify-between text-xs text-muted-foreground", spacing.descriptionToFooter)}>
+      <div
+        className={cn(
+          "flex items-center justify-between text-xs text-muted-foreground",
+          spacing.descriptionToFooter,
+        )}
+      >
         {showTags && post.tags && post.tags.length > 0 && (
-          <div
-            className="flex items-center space-x-0.5"
-            role="group"
-            aria-label={`Tags for ${post.name}`}
-          >
+          <fieldset className="flex items-center space-x-0.5">
+            <legend className="sr-only">Tags for {post.name}</legend>
             <div className="space-x-0.5">
               {post.tags.slice(0, maxTags).map((tag, _index) => (
                 <CustomTag
@@ -285,19 +296,15 @@ export function PostCard({
               {post.tags.length > maxTags && (
                 <span
                   className="text-xs text-muted-foreground ml-1"
-                  aria-label={`${post.tags.length - maxTags} additional tags not shown`}
+                  title={`${post.tags.length - maxTags} additional tags not shown`}
                 >
                   +{post.tags.length - maxTags} more
                 </span>
               )}
             </div>
-          </div>
+          </fieldset>
         )}
-        <time
-          className="text-xs text-muted-foreground italic"
-          dateTime={post.publishDate}
-          aria-label={`Published on ${post.publishDate}`}
-        >
+        <time className="text-xs text-muted-foreground italic" dateTime={post.publishDate}>
           {post.publishDate}
         </time>
       </div>

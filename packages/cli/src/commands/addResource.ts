@@ -5,6 +5,7 @@ import { FileSystem } from "@effect/platform/FileSystem";
 import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
 import { pipe } from "effect/Function";
+import * as NodePath from "node:path";
 import { OpenAI } from "../lib/ai";
 import { Notion } from "../lib/notion";
 import { buildSchema } from "../lib/schema";
@@ -12,7 +13,7 @@ import { fetchPageMetadata } from "../lib/web";
 
 const verboseOption = Options.boolean("verbose").pipe(
   Options.withAlias("v"),
-  Options.withDescription("Enable verbose output"),
+  Options.withDescription("Enable verbose output")
 );
 
 export const resourceCommand = pipe(
@@ -21,26 +22,48 @@ export const resourceCommand = pipe(
     options: Options.all({ verbose: verboseOption }),
   }),
   Command.withDescription("Add a single resource by URL"),
-  Command.withHandler(({ args, options }) => handler(args, Boolean(options.verbose))),
+  Command.withHandler(({ args, options }) =>
+    runAddResource(args, Boolean(options.verbose))
+  )
 );
 
 export const addResourceCommand = pipe(
   Command.make("add"),
   Command.withDescription("Add resources to Notion"),
-  Command.withSubcommands([resourceCommand]),
+  Command.withSubcommands([resourceCommand])
 );
 
-function handler(resourceUrl: string, isVerbose: boolean) {
+export interface RunAddResourceOptions {
+  promptOverride?: string;
+}
+
+export function runAddResource(
+  resourceUrl: string,
+  isVerbose: boolean,
+  options?: RunAddResourceOptions
+) {
   return Effect.gen(function* () {
-    const fs = yield* FileSystem;
     const ai = yield* OpenAI;
     const notion = yield* Notion;
 
-    if (isVerbose) {
-      yield* Console.log("Reading prompt from prompts/addResources.txt");
-    }
+    const promptsDir = NodePath.join(
+      process.cwd(),
+      "packages",
+      "cli",
+      "prompts"
+    );
+    const promptPath = NodePath.join(promptsDir, "addResources.txt");
 
-    const prompt = yield* fs.readFileString("prompts/addResources.txt");
+    let prompt: string;
+    if (options?.promptOverride) {
+      prompt = options.promptOverride;
+    } else {
+      if (isVerbose) {
+        yield* Console.log(`Reading prompt from ${promptPath}`);
+      }
+      const fs = yield* FileSystem;
+      prompt = yield* fs.readFileString(promptPath);
+    }
     const meta = yield* fetchPageMetadata(resourceUrl);
     const resourceBlock = [
       `Resource Title: "${meta.title ?? ""}"`,
@@ -61,9 +84,9 @@ function handler(resourceUrl: string, isVerbose: boolean) {
 
     const res = yield* notion.addResource(validated, { verbose: isVerbose });
     yield* Console.log(
-      `Success: Created Notion page ${res.pageId}${res.url ? ` at ${res.url}` : ""}`,
+      `Success: Created Notion page ${res.pageId}${
+        res.url ? ` at ${res.url}` : ""
+      }`
     );
   });
 }
-
-export const runAddResource = handler;

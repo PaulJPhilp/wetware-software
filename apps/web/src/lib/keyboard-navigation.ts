@@ -35,7 +35,9 @@ export function getFocusableElements(container: HTMLElement): HTMLElement[] {
     '[contenteditable="true"]',
   ].join(", ");
 
-  return Array.from(container.querySelectorAll(focusableSelectors)) as HTMLElement[];
+  return Array.from(
+    container.querySelectorAll(focusableSelectors)
+  ) as HTMLElement[];
 }
 
 /**
@@ -108,7 +110,7 @@ export function useArrowNavigation<T extends HTMLElement>(
     loop?: boolean;
     orientation?: "vertical" | "horizontal" | "both";
     onSelect?: (index: number) => void;
-  } = {},
+  } = {}
 ) {
   const { loop = true, orientation = "vertical", onSelect } = options;
   const currentIndex = useRef(-1);
@@ -118,7 +120,8 @@ export function useArrowNavigation<T extends HTMLElement>(
       if (!isActive || items.length === 0) return;
 
       const isVertical = orientation === "vertical" || orientation === "both";
-      const isHorizontal = orientation === "horizontal" || orientation === "both";
+      const isHorizontal =
+        orientation === "horizontal" || orientation === "both";
 
       let newIndex = currentIndex.current;
 
@@ -185,7 +188,11 @@ export function useArrowNavigation<T extends HTMLElement>(
           return;
       }
 
-      if (newIndex !== currentIndex.current && newIndex >= 0 && newIndex < items.length) {
+      if (
+        newIndex !== currentIndex.current &&
+        newIndex >= 0 &&
+        newIndex < items.length
+      ) {
         const targetItem = items[newIndex];
         if (targetItem) {
           currentIndex.current = newIndex;
@@ -193,7 +200,7 @@ export function useArrowNavigation<T extends HTMLElement>(
         }
       }
     },
-    [items, isActive, loop, orientation, onSelect],
+    [items, isActive, loop, orientation, onSelect]
   );
 
   useEffect(() => {
@@ -235,7 +242,7 @@ export function useEscapeKey(callback: () => void, isActive: boolean = true) {
  */
 export function useClickOutside<T extends HTMLElement>(
   callback: () => void,
-  isActive: boolean = true,
+  isActive: boolean = true
 ) {
   const ref = useRef<T>(null);
 
@@ -258,7 +265,10 @@ export function useClickOutside<T extends HTMLElement>(
 /**
  * Manage roving tabindex for complex widgets
  */
-export function useRovingTabIndex<T extends HTMLElement>(items: T[], activeIndex: number) {
+export function useRovingTabIndex<T extends HTMLElement>(
+  items: T[],
+  activeIndex: number
+) {
   useEffect(() => {
     items.forEach((item, index) => {
       if (index === activeIndex) {
@@ -277,7 +287,7 @@ export function useRovingTabIndex<T extends HTMLElement>(items: T[], activeIndex
  */
 export function announceToScreenReader(
   message: string,
-  priority: "polite" | "assertive" = "polite",
+  priority: "polite" | "assertive" = "polite"
 ) {
   const announcement = document.createElement("div");
   announcement.setAttribute("aria-live", priority);
@@ -296,7 +306,9 @@ export function announceToScreenReader(
 /**
  * Keyboard event handler factory for common interactions
  */
-export function createKeyboardHandler(handlers: Record<string, (event: KeyboardEvent) => void>) {
+export function createKeyboardHandler(
+  handlers: Record<string, (event: KeyboardEvent) => void>
+) {
   return (event: KeyboardEvent) => {
     const handler = handlers[event.key];
     if (handler) {
@@ -320,7 +332,7 @@ export function focusElement(
   options?: {
     preventScroll?: boolean;
     scrollIntoView?: boolean;
-  },
+  }
 ) {
   const { preventScroll = false, scrollIntoView = true } = options || {};
 
@@ -336,16 +348,19 @@ export function focusElement(
 }
 
 /**
+/**
  * Debounce function for performance optimization
  */
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number,
-): (...args: Parameters<T>) => void {
-  let timeout: ReturnType<typeof setTimeout>;
+export function debounce<Args extends unknown[]>(
+  func: (...args: Args) => unknown,
+  wait: number
+): (...args: Args) => void {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
 
-  return (...args: Parameters<T>) => {
+  return (...args: Args) => {
     clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
+    timeout = setTimeout(() => {
+      void func(...args);
+    }, wait);
   };
 }

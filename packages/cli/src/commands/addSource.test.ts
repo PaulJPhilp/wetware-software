@@ -3,7 +3,8 @@ import * as NodeContext from "@effect/platform-node/NodeContext";
 import * as Effect from "effect/Effect";
 import { describe, expect, it } from "vitest";
 import { OpenAI, type OpenAIService } from "../lib/ai";
-import { Notion, type NotionService } from "../lib/notion";
+import { Notion } from "../lib/notion";
+import { createNotionMock } from "../test/notionTestUtils";
 import { runAddSource } from "./addSource";
 
 describe("CLI add source", () => {
@@ -27,24 +28,35 @@ describe("CLI add source", () => {
           expect(sourceBlock).toContain("Source Name");
           return JSON.stringify(out);
         }),
+      generateSeriesJson: () => Effect.succeed("{}"),
     };
 
-    const fakeNotion: NotionService = {
-      addResource: () => Effect.succeed({ pageId: "", url: "" }), // Not used in this test
+    const fakeNotion = createNotionMock({
+      addResource: () => Effect.succeed({ pageId: "", url: "" }),
       addSourceEntity: (data) =>
         Effect.sync(() => {
           notionCalledWith = data;
-          return { pageId: "source_123", url: "https://notion.test/source_123" };
+          return {
+            pageId: "source_123",
+            url: "https://notion.test/source_123",
+          };
         }),
       listResources: () => Effect.succeed([]),
       listSourceEntities: () => Effect.succeed([]),
       listResourceSeries: () => Effect.succeed([]),
-    };
+    });
 
-    const effect = runAddSource("Test Source", "https://example.com/test-source", true).pipe(
+    const effect = runAddSource(
+      "Test Source",
+      "https://example.com/test-source",
+      true,
+      {
+        promptOverride: "PROMPT Override For Tests",
+      }
+    ).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
@@ -70,27 +82,42 @@ describe("CLI add source", () => {
             focus_area: ["Business of AI"],
           });
         }),
+      generateSeriesJson: () => Effect.succeed("{}"),
     };
 
-    const fakeNotion: NotionService = {
+    const fakeNotion = createNotionMock({
       addResource: () => Effect.succeed({ pageId: "", url: "" }),
       addSourceEntity: () => Effect.succeed({ pageId: "", url: "" }),
       listResources: () => Effect.succeed([]),
       listSourceEntities: () => Effect.succeed([]),
       listResourceSeries: () => Effect.succeed([]),
-    };
+    });
 
-    const effect = runAddSource("Invalid Source", "https://example.com/invalid-source", true).pipe(
+    const effect = runAddSource(
+      "Invalid Source",
+      "https://example.com/invalid-source",
+      true,
+      {
+        promptOverride: "PROMPT Override For Tests",
+      }
+    ).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     const result = await Effect.runPromiseExit(effect);
 
-    expect(result._tag).toBe("Failure");
-    expect(result.cause._tag).toBe("Fail");
-    expect(result.cause.error.message).toContain("Validation failed");
+    if (result._tag === "Failure") {
+      const failure = result.cause;
+      if (failure._tag === "Fail") {
+        expect(failure.error.message).toContain("Validation failed");
+      } else {
+        throw new Error("Expected Fail cause");
+      }
+    } else {
+      throw new Error("Expected failure exit");
+    }
   });
 
   it("handles AI returning syntactically invalid JSON", async () => {
@@ -101,31 +128,42 @@ describe("CLI add source", () => {
           // Syntactically invalid JSON
           return "{invalid";
         }),
+      generateSeriesJson: () => Effect.succeed("{}"),
     };
 
-    const fakeNotion: NotionService = {
+    const fakeNotion = createNotionMock({
       addResource: () => Effect.succeed({ pageId: "", url: "" }),
       addSourceEntity: () => Effect.succeed({ pageId: "", url: "" }),
       listResources: () => Effect.succeed([]),
       listSourceEntities: () => Effect.succeed([]),
       listResourceSeries: () => Effect.succeed([]),
-    };
+    });
 
     const effect = runAddSource(
       "Invalid JSON Source",
       "https://example.com/invalid-json",
       true,
+      {
+        promptOverride: "PROMPT Override For Tests",
+      }
     ).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     const result = await Effect.runPromiseExit(effect);
 
-    expect(result._tag).toBe("Failure");
-    expect(result.cause._tag).toBe("Fail");
-    expect(result.cause.error.message).toContain("Validation failed");
+    if (result._tag === "Failure") {
+      const failure = result.cause;
+      if (failure._tag === "Fail") {
+        expect(failure.error.message).toContain("Validation failed");
+      } else {
+        throw new Error("Expected Fail cause");
+      }
+    } else {
+      throw new Error("Expected failure exit");
+    }
   });
 
   it("handles Notion API errors during addSourceEntity", async () => {
@@ -142,31 +180,44 @@ describe("CLI add source", () => {
             focus_area: ["Tech-Centric"],
           });
         }),
+      generateSeriesJson: () => Effect.succeed("{}"),
     };
 
-    const fakeNotion: NotionService = {
+    const fakeNotion = createNotionMock({
       addResource: () => Effect.succeed({ pageId: "", url: "" }),
       addSourceEntity: () =>
-        Effect.fail(new Error("Notion API Error: Failed to create source entity page")),
+        Effect.fail(
+          new Error("Notion API Error: Failed to create source entity page")
+        ),
       listResources: () => Effect.succeed([]),
       listSourceEntities: () => Effect.succeed([]),
       listResourceSeries: () => Effect.succeed([]),
-    };
+    });
 
     const effect = runAddSource(
       "Notion Error Source",
       "https://example.com/notion-error",
       true,
+      {
+        promptOverride: "PROMPT Override For Tests",
+      }
     ).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     const result = await Effect.runPromiseExit(effect);
 
-    expect(result._tag).toBe("Failure");
-    expect(result.cause._tag).toBe("Fail");
-    expect(result.cause.error.message).toContain("Notion API Error");
+    if (result._tag === "Failure") {
+      const failure = result.cause;
+      if (failure._tag === "Fail") {
+        expect(failure.error.message).toContain("Notion API Error");
+      } else {
+        throw new Error("Expected Fail cause");
+      }
+    } else {
+      throw new Error("Expected failure exit");
+    }
   });
 });

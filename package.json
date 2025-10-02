@@ -26,10 +26,10 @@
     "@types/react-syntax-highlighter": "^15.5.13",
     "react-syntax-highlighter": "^15.6.6",
     "tailwindcss-fluid-typography": "^1.0.5",
-    "vercel": "^47.0.5"
+    "vercel": "^47.1.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.3",
-    "typescript": "^5.9.2"
+    "@biomejs/biome": "^2.2.5",
+    "typescript": "^5.9.3"
   }
 }

@@ -6,24 +6,27 @@ import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
 import { pipe } from "effect/Function";
 import * as Option from "effect/Option";
+import * as NodePath from "node:path";
 import { OpenAI } from "../lib/ai";
 import { Notion } from "../lib/notion";
 import { buildSourceEntitySchema } from "../lib/sourceEntitySchema";
 
 const verboseOption = Options.boolean("verbose").pipe(
   Options.withAlias("v"),
-  Options.withDescription("Enable verbose output"),
+  Options.withDescription("Enable verbose output")
 );
 const urlOption = Options.text("url").pipe(
   Options.withAlias("u"),
   Options.optional,
-  Options.withDescription("Optional URL for the source entity"),
+  Options.withDescription("Optional URL for the source entity")
 );
 
 export const sourceCommand = pipe(
   Command.make("source", {
     args: Args.text().pipe(
-      Args.withDescription("Source name (e.g., YouTube channel, author, company)"),
+      Args.withDescription(
+        "Source name (e.g., YouTube channel, author, company)"
+      )
     ),
     options: Options.all({ verbose: verboseOption, url: urlOption }),
   }),
@@ -32,26 +35,48 @@ export const sourceCommand = pipe(
     handler(
       args,
       Option.match(options.url, { onNone: () => null, onSome: (v) => v }),
-      Boolean(options.verbose),
-    ),
-  ),
+      Boolean(options.verbose)
+    )
+  )
 );
 
-function handler(sourceName: string, sourceUrl: string | null, isVerbose: boolean) {
+export interface RunAddSourceOptions {
+  promptOverride?: string;
+}
+
+export function handler(
+  sourceName: string,
+  sourceUrl: string | null,
+  isVerbose: boolean,
+  options?: RunAddSourceOptions
+) {
   return Effect.gen(function* () {
-    const fs = yield* FileSystem;
     const ai = yield* OpenAI;
     const notion = yield* Notion;
 
-    if (isVerbose) {
-      yield* Console.log("Reading prompt from prompts/addSourceEntity.txt");
+    const promptPath = NodePath.join(
+      process.cwd(),
+      "packages",
+      "cli",
+      "prompts",
+      "addSourceEntity.txt"
+    );
+
+    let prompt: string;
+    if (options?.promptOverride) {
+      prompt = options.promptOverride;
+    } else {
+      if (isVerbose) {
+        yield* Console.log(`Reading prompt from ${promptPath}`);
+      }
+      const fs = yield* FileSystem;
+      prompt = yield* fs.readFileString(promptPath);
     }
 
-    const prompt = yield* fs.readFileString("prompts/addSourceEntity.txt");
-
-    const sourceBlock = [`Source Name: "${sourceName}"`, `Source URL: "${sourceUrl ?? ""}"`].join(
-      "\n",
-    );
+    const sourceBlock = [
+      `Source Name: "${sourceName}"`,
+      `Source URL: "${sourceUrl ?? ""}"`,
+    ].join("\n");
 
     const aiJson = yield* ai.generateSourceEntityJson({
       prompt,
@@ -69,7 +94,9 @@ function handler(sourceName: string, sourceUrl: string | null, isVerbose: boolea
       verbose: isVerbose,
     });
     yield* Console.log(
-      `Success: Created Source Entity page ${res.pageId}${res.url ? ` at ${res.url}` : ""}`,
+      `Success: Created Source Entity page ${res.pageId}${
+        res.url ? ` at ${res.url}` : ""
+      }`
     );
   });
 }
