@@ -8,7 +8,7 @@ export default async function Home() {
   const [, recentPosts] = await Promise.all([getSeries(), getRecentPosts(10)]);
 
   return (
-    <div className="py-8 max-w-7xl mx-auto px-4">
+    <div className="py-8 max-w-7xl ml-0 mr-auto px-4">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Main Content */}
         <main className="flex-1 min-w-0 lg:order-2">
