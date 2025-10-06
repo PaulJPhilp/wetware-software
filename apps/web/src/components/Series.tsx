@@ -1,6 +1,6 @@
+import SeriesCard from "@/components/SeriesCard";
 import type { BaseComponentProps } from "@/lib/component-types";
 import type { Series } from "@/lib/notion-utils";
-import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
 
@@ -17,39 +17,11 @@ interface SeriesSectionProps extends BaseComponentProps {
   maxSeries?: number;
   /** Whether to show article lists */
   showArticleLists?: boolean;
+  /** Card variant for different layouts */
+  variant?: "grid" | "carousel" | "list";
+  /** Card size */
+  size?: "sm" | "md" | "lg";
 }
-
-/**
- * Simple Series Card - displays basic series info
- */
-const SimpleSeriesCard: React.FC<{ series: Series }> = ({ series }) => {
-  const coverImage =
-    series.imageUrl || series.coverLight || series.coverDark || "/images/default-series-cover.png";
-
-  return (
-    <Link
-      href={`/series/${series.slug}`}
-      className="group block p-4 border border-border rounded-lg hover:border-orange transition-colors"
-    >
-      <div className="flex items-center gap-4">
-        <div className="relative w-16 h-12 flex-shrink-0 overflow-hidden rounded">
-          <Image
-            src={coverImage}
-            alt={`${series.name} series cover`}
-            fill
-            className="object-cover"
-          />
-        </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-foreground group-hover:text-orange transition-colors line-clamp-1">
-            {series.name}
-          </h3>
-          <p className="text-sm text-muted-foreground">{series.postCount || 0} posts</p>
-        </div>
-      </div>
-    </Link>
-  );
-};
 
 /**
  * Simple Article List - placeholder since Series from getSeries() doesn't include articles
@@ -78,29 +50,44 @@ const SimpleArticleList: React.FC<{ articles: Series["articles"] }> = ({ article
 };
 
 /**
- * Simplified Series Section - 1/4 screen width, not a sidebar
+ * Simplified Series Section - Responsive sidebar with unified SeriesCard
  */
 export const SeriesSection: React.FC<SeriesSectionProps> = ({
   series = [],
   maxSeries = 10,
   showArticleLists = false,
+  variant = "list",
+  size = "sm",
   className = "",
+  testId,
 }) => {
   const displaySeries = series.slice(0, maxSeries);
 
   return (
-    <section className={`rounded-lg border border-border bg-background p-6 ${className}`}>
+    <section
+      className={`rounded-lg border border-border bg-background p-4 sm:p-6 ${className}`}
+      data-testid={testId}
+    >
       <div className="sticky top-4">
-        <h2 className="text-lg font-bold text-foreground mb-6">Series</h2>
+        <h2 className="text-lg font-bold text-foreground mb-4 sm:mb-6">Series</h2>
         {displaySeries.length === 0 ? (
           <div className="text-sm text-muted-foreground">No series available at the moment.</div>
         ) : (
-          displaySeries.map((seriesItem) => (
-            <div key={seriesItem.id} className="mb-8">
-              <SimpleSeriesCard series={seriesItem} />
-              {showArticleLists && <SimpleArticleList articles={seriesItem.articles} />}
-            </div>
-          ))
+          <div className="space-y-4">
+            {displaySeries.map((seriesItem) => (
+              <div key={seriesItem.id} className="space-y-3">
+                <SeriesCard
+                  series={seriesItem}
+                  variant={variant}
+                  size={size}
+                  showDescription={false}
+                  showArticleCount={true}
+                  testId={`series-card-${seriesItem.slug}`}
+                />
+                {showArticleLists && <SimpleArticleList articles={seriesItem.articles} />}
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </section>

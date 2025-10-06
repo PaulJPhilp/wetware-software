@@ -31,14 +31,17 @@ export default async function SeriesPage() {
               <p className="text-charcoal/60">No series available yet. Check back soon!</p>
             </div>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {series.map((s) => (
                 <SeriesCard
                   key={s.slug}
                   series={s}
+                  variant="grid"
+                  size="md"
                   showDescription={true}
                   showArticleCount={true}
                   priority={false}
+                  testId={`grid-series-${s.slug}`}
                 />
               ))}
             </div>
