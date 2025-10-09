@@ -12,9 +12,9 @@ export default async function Home() {
     <div className="py-8 max-w-7xl ml-0 mr-auto px-4">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Main Content */}
-        <main className="flex-1 min-w-0 lg:order-2 space-y-6">
+        <main className="flex-1 min-w-0 lg:order-2">
           {/* Series Carousel Section */}
-          <section>
+          <section id="series-section" className="mb-6">
             <SeriesCarousel
               series={series}
               title="Featured Series"
@@ -36,8 +36,8 @@ export default async function Home() {
           <LatestPosts posts={recentPosts} />
         </main>
 
-        {/* Author Bio Sidebar */}
-        <aside className="w-full lg:w-80 flex-shrink-0 lg:order-1">
+        {/* Author Bio Sidebar - Aligned with Latest Posts */}
+        <aside className="w-full lg:w-80 flex-shrink-0 lg:order-1 lg:mt-[304px]">
           <AuthorBioSidebar />
         </aside>
       </div>
