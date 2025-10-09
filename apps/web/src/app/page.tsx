@@ -10,28 +10,29 @@ export default async function Home() {
 
   return (
     <div className="py-8 max-w-7xl ml-0 mr-auto px-4">
-      {/* Series Carousel Section */}
-      <section className="mb-6">
-        <SeriesCarousel
-          series={series}
-          title="Featured Series"
-          description="Explore our latest series on technology and human systems"
-          slidesToShow={{
-            base: 2,
-            sm: 2,
-            md: 3,
-            lg: 4,
-            xl: 5,
-          }}
-          showDescription={true}
-          showArticleCount={true}
-          testId="home-series-carousel"
-        />
-      </section>
-
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Main Content */}
-        <main className="flex-1 min-w-0 lg:order-2">
+        <main className="flex-1 min-w-0 lg:order-2 space-y-6">
+          {/* Series Carousel Section */}
+          <section>
+            <SeriesCarousel
+              series={series}
+              title="Featured Series"
+              description="Explore our latest series on technology and human systems"
+              slidesToShow={{
+                base: 2,
+                sm: 2,
+                md: 3,
+                lg: 4,
+                xl: 5,
+              }}
+              showDescription={true}
+              showArticleCount={true}
+              testId="home-series-carousel"
+            />
+          </section>
+
+          {/* Latest Posts Section */}
           <LatestPosts posts={recentPosts} />
         </main>
 
