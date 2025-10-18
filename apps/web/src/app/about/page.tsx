@@ -1,7 +1,7 @@
 import { NotionContent } from "@/components/NotionContent";
 import { getAboutPage } from "@/lib/notion-utils";
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { Brain, ExternalLink, Linkedin, Mail } from "lucide-react";
+import { ExternalLink, Linkedin, Mail } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
@@ -132,19 +132,14 @@ export default async function AboutPage() {
 
         {/* Main Bio Section */}
         <section className="prose max-w-none">
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-8 space-y-6">
-            <div className="flex items-center gap-3 mb-4">
-              <Brain className="w-6 h-6 text-orange" />
-              <h2 className="text-xl font-sans font-bold text-gray-900 dark:text-white m-0">
-                About Paul
-              </h2>
-            </div>
+          <div className="border border-border bg-card rounded-lg p-8 space-y-6">
+            <h2 className="text-2xl font-bold text-foreground m-0">About Paul</h2>
             {aboutBlocks ? (
-              <div className="space-y-4 text-gray-700 dark:text-gray-300">
+              <div className="space-y-4 text-foreground">
                 <NotionContent blocks={aboutBlocks.results as BlockObjectResponse[]} />
               </div>
             ) : (
-              <div className="space-y-4 text-gray-700 dark:text-gray-300">
+              <div className="space-y-4 text-foreground">
                 <p>
                   Welcome to Wetware & Software! I'm Paul Philp, a software engineer, AI researcher,
                   and founder exploring the profound intersection of human systems (wetware) and
@@ -170,17 +165,15 @@ export default async function AboutPage() {
         </section>
 
         {/* Featured Essay Callout */}
-        <section className="bg-orange/10 border border-orange/20 rounded-lg p-8">
+        <section className="border border-border bg-muted rounded-lg p-8">
           <div className="space-y-4">
-            <h3 className="text-lg font-sans font-bold text-gray-900 dark:text-white">
-              Featured Essay
-            </h3>
-            <p className="text-gray-700 dark:text-gray-300">
+            <h3 className="text-lg font-bold text-foreground">Featured Essay</h3>
+            <p className="text-foreground">
               "What My Marriage Falling Apart Taught Me About LLMs" - A deeply personal exploration
               of complex systems, failure modes, and the surprising parallels between human
               relationships and AI architectures.
             </p>
-            <Button asChild className="bg-orange hover:bg-orange/90 text-white">
+            <Button variant="default" asChild>
               <Link href="/posts/my-marriage-and-ai">
                 Read the Essay
                 <ExternalLink className="w-4 h-4 ml-2" />
@@ -191,16 +184,10 @@ export default async function AboutPage() {
 
         {/* Skills & Expertise */}
         <section className="space-y-6">
-          <h2 className="text-2xl font-sans font-bold text-gray-900 dark:text-white">
-            Technical Skills & Expertise
-          </h2>
+          <h2 className="text-2xl font-bold text-foreground">Technical Skills & Expertise</h2>
           <div className="flex flex-wrap gap-2">
             {skills.map((skill: string) => (
-              <Badge
-                key={skill}
-                variant="secondary"
-                className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white"
-              >
+              <Badge key={skill} variant="secondary">
                 {skill}
               </Badge>
             ))}
@@ -209,63 +196,47 @@ export default async function AboutPage() {
 
         {/* Blog Topics */}
         <section className="space-y-6">
-          <h2 className="text-2xl font-sans font-bold text-gray-900 dark:text-white">
-            What I Write About
-          </h2>
+          <h2 className="text-2xl font-bold text-foreground">What I Write About</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {blogTopics.map((topic: string) => (
-              <div
-                key={topic}
-                className="flex items-start gap-3 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg"
-              >
-                <div className="w-2 h-2 rounded-full bg-orange mt-2 flex-shrink-0" />
-                <p className="text-gray-700 dark:text-gray-300">{topic}</p>
+              <div key={topic} className="flex items-start gap-3 p-4 bg-muted rounded-lg">
+                <div className="w-2 h-2 rounded-full bg-foreground mt-2 flex-shrink-0" />
+                <p className="text-foreground">{topic}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* At a Glance & Contact (mobile/tablet) */}
-        <section className="lg:hidden bg-gray-900 dark:bg-gray-900 text-white rounded-lg p-8 space-y-6">
-          <h2 className="text-xl font-sans font-bold">Paul Philp: At a Glance</h2>
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-3">
-              <h3 className="text-base font-sans font-semibold text-orange">Current Focus</h3>
-              <ul className="space-y-2 text-white/80">
-                <li>• Human-AI collaboration frameworks</li>
-                <li>• Large-scale LLM application architecture</li>
-                <li>• Effect-TS and functional programming patterns</li>
-                <li>• Conversational AI and agent development</li>
-              </ul>
-            </div>
-            <div className="space-y-4">
-              <h3 className="text-base font-sans font-semibold text-orange">Connect</h3>
-              <div className="flex flex-col gap-3">
-                <Button
-                  variant="outline"
-                  asChild
-                  className="justify-start text-white border-white/20 hover:bg-white/10"
+        <section className="lg:hidden space-y-6">
+          <div className="space-y-3">
+            <h3 className="text-lg font-bold text-foreground">Current Focus</h3>
+            <ul className="space-y-2 text-muted-foreground">
+              <li>• Human-AI collaboration frameworks</li>
+              <li>• Large-scale LLM application architecture</li>
+              <li>• Effect-TS and functional programming patterns</li>
+              <li>• Conversational AI and agent development</li>
+            </ul>
+          </div>
+          <div className="space-y-3">
+            <h3 className="text-lg font-bold text-foreground">Connect</h3>
+            <div className="flex flex-col gap-2">
+              <Button variant="outline" asChild>
+                <a
+                  href="https://www.linkedin.com/in/pauljphilp/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <a
-                    href="https://www.linkedin.com/in/pauljphilp/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Linkedin className="w-4 h-4 mr-2" />
-                    LinkedIn Profile
-                  </a>
-                </Button>
-                <Button
-                  variant="outline"
-                  asChild
-                  className="justify-start text-white border-white/20 hover:bg-white/10"
-                >
-                  <Link href="/connect">
-                    <Mail className="w-4 h-4 mr-2" />
-                    Get in Touch
-                  </Link>
-                </Button>
-              </div>
+                  <Linkedin className="w-4 h-4 mr-2" />
+                  LinkedIn Profile
+                </a>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/connect">
+                  <Mail className="w-4 h-4 mr-2" />
+                  Get in Touch
+                </Link>
+              </Button>
             </div>
           </div>
         </section>
