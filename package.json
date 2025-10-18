@@ -2,6 +2,7 @@
   "name": "wetware-software",
   "version": "0.2.0",
   "private": true,
+  "packageManager": "bun@1.2.23",
   "workspaces": [
     "apps/*",
     "packages/*",
