@@ -30,7 +30,7 @@ const statusConfig = {
   },
 };
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return projects.map((project) => ({
     id: project.id,
   }));

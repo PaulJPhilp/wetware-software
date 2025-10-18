@@ -28,6 +28,8 @@ interface ProjectCardProps extends CardComponentProps {
   showDescription?: boolean;
   /** Whether to show the technology tags */
   showTechnologies?: boolean;
+  /** GitHub star count (only displayed if >= 10) */
+  stars?: number;
 }
 
 const statusColors = {
@@ -43,6 +45,7 @@ export function ProjectCard({
   className,
   testId,
   hoverable = true,
+  stars,
 }: ProjectCardProps) {
   return (
     <Card
@@ -73,13 +76,23 @@ export function ProjectCard({
       )}
 
       <CardHeader className="space-y-3">
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between gap-2">
           <CardTitle className="text-lg font-sans font-bold group-hover:text-orange transition-colors line-clamp-2">
             {project.name}
           </CardTitle>
-          <Badge variant="outline" className={`text-xs px-2 py-1 ${statusColors[project.status]}`}>
-            {project.status}
-          </Badge>
+          <div className="flex items-center gap-2 shrink-0">
+            {stars !== undefined && stars >= 10 && (
+              <span className="text-xs text-muted-foreground whitespace-nowrap">
+                • {stars.toLocaleString()}★
+              </span>
+            )}
+            <Badge
+              variant="outline"
+              className={`text-xs px-2 py-1 ${statusColors[project.status]}`}
+            >
+              {project.status}
+            </Badge>
+          </div>
         </div>
 
         {showDescription && (

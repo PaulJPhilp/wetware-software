@@ -33,11 +33,11 @@ export default function DesignSystemPage() {
                 <p className="text-brand">Primary text (.text-brand)</p>
                 <p className="text-muted">Secondary text (.text-muted)</p>
                 <p className="text-subtle">Subtle text (.text-subtle)</p>
-                <a href="#" className="link-brand">
+                <a href="/" className="link-brand">
                   Brand link (.link-brand)
                 </a>
                 <br />
-                <a href="#" className="link-brand-subtle">
+                <a href="/" className="link-brand-subtle">
                   Subtle link (.link-brand-subtle)
                 </a>
               </CardContent>
@@ -154,7 +154,7 @@ export default function DesignSystemPage() {
               <Button variant="outline" className="focus-ring">
                 Outline button
               </Button>
-              <a href="#" className="link-brand focus-ring px-3 py-2 rounded">
+              <a href="/" className="link-brand focus-ring px-3 py-2 rounded">
                 Link with focus ring
               </a>
             </div>
@@ -189,7 +189,7 @@ export default function DesignSystemPage() {
             <h2>Links and Interactive Elements</h2>
             <p>
               Here's a{" "}
-              <a href="#" className="link-brand">
+              <a href="/" className="link-brand">
                 branded link
               </a>{" "}
               that uses the orange accent color with hover effects. The link styling includes
