@@ -65,30 +65,22 @@ export default async function AboutPage() {
       {/* Left profile rail (desktop) */}
       <aside className="hidden lg:block">
         <div className="sticky top-20 space-y-6">
-          <div className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg p-6 text-center">
+          <div className="border border-border bg-card rounded-lg p-6 text-center">
             <Avatar className="w-28 h-28 mx-auto">
               <AvatarImage src="/images/avatar.jpeg" alt="Paul Philp" />
               <AvatarFallback>PP</AvatarFallback>
             </Avatar>
             <div className="mt-4 space-y-1">
-              <h1 className="text-xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
-                Paul Philp
-              </h1>
-              <p className="text-xs font-serif text-gray-600 dark:text-gray-400 leading-snug">
+              <h2 className="text-lg font-bold text-foreground leading-tight">Paul Philp</h2>
+              <p className="text-sm text-muted-foreground leading-snug">
                 Software/AI Engineer, Founder, Executive
               </p>
             </div>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg p-4 space-y-3">
-            <h3 className="text-sm font-sans font-semibold text-gray-900 dark:text-white">
-              Connect
-            </h3>
+          <div className="border border-border bg-card rounded-lg p-4 space-y-3">
+            <h3 className="text-sm font-semibold text-foreground">Connect</h3>
             <div className="flex flex-col gap-2">
-              <Button
-                variant="outline"
-                asChild
-                className="justify-start text-gray-900 dark:text-white border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
+              <Button variant="outline" asChild>
                 <a
                   href="https://www.linkedin.com/in/pauljphilp/"
                   target="_blank"
@@ -98,11 +90,7 @@ export default async function AboutPage() {
                   LinkedIn Profile
                 </a>
               </Button>
-              <Button
-                variant="outline"
-                asChild
-                className="justify-start text-gray-900 dark:text-white border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
+              <Button variant="outline" asChild>
                 <Link href="/connect">
                   <Mail className="w-4 h-4 mr-2" />
                   Get in Touch
@@ -110,11 +98,9 @@ export default async function AboutPage() {
               </Button>
             </div>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-lg p-4 space-y-2">
-            <h3 className="text-sm font-sans font-semibold text-gray-900 dark:text-white">
-              Current Focus
-            </h3>
-            <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
+          <div className="border border-border bg-card rounded-lg p-4 space-y-2">
+            <h3 className="text-sm font-semibold text-foreground">Current Focus</h3>
+            <ul className="space-y-1 text-sm text-muted-foreground">
               <li>• Human-AI collaboration frameworks</li>
               <li>• Large-scale LLM application architecture</li>
               <li>• Effect-TS and functional programming patterns</li>
