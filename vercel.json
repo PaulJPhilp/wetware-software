@@ -1,7 +1,6 @@
 {
     "$schema": "https://openapi.vercel.sh/vercel.json",
-    "installCommand": "bun install",
-    "buildCommand": "bun run build:web",
+    "buildCommand": "bun install && bun run build:web",
     "outputDirectory": "apps/web/.next",
     "regions": [
         "iad1"
