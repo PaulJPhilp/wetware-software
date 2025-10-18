@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 import { getFeaturedProjects, projects } from "@/lib/projects";
 import { Archive, Code, Github, Star, Wrench } from "lucide-react";
 
+// Hardcoded GitHub star counts (only for repos with >= 10 stars)
+const projectStars: Record<string, number> = {
+  "effect-patterns": 432,
+  "effective-agent": 38,
+  buddy: 12,
+};
+
 export default function ProjectsPage() {
   const featuredProjects = getFeaturedProjects();
   const featuredProject = featuredProjects[0]; // Only show the first featured project
@@ -57,11 +64,18 @@ export default function ProjectsPage() {
         <section className="space-y-6">
           <div className="flex items-center gap-3">
             <Star className="w-6 h-6 text-orange" />
-            <h2 className="text-3xl font-sans font-bold text-charcoal dark:text-white">Featured Project</h2>
+            <h2 className="text-3xl font-sans font-bold text-charcoal dark:text-white">
+              Featured Project
+            </h2>
           </div>
 
           <div className="max-w-4xl mx-auto">
-            <ProjectCard project={featuredProject} />
+            <ProjectCard
+              project={featuredProject}
+              {...(projectStars[featuredProject.id] && {
+                stars: projectStars[featuredProject.id],
+              })}
+            />
           </div>
         </section>
       )}
@@ -70,12 +84,20 @@ export default function ProjectsPage() {
       <section className="space-y-6">
         <div className="flex items-center gap-3">
           <Code className="w-5 h-5 text-orange" />
-          <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">All Projects</h2>
+          <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">
+            All Projects
+          </h2>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {otherProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+            <ProjectCard
+              key={project.id}
+              project={project}
+              {...(projectStars[project.id] && {
+                stars: projectStars[project.id],
+              })}
+            />
           ))}
         </div>
       </section>

@@ -14,7 +14,7 @@ export default async function Home() {
         {/* Main Content */}
         <main className="flex-1 min-w-0 lg:order-2">
           {/* Series Carousel Section */}
-          <section id="series-section" className="mb-6">
+          <section className="mb-6">
             <SeriesCarousel
               series={series}
               title="Featured Series"
