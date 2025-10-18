@@ -56,7 +56,12 @@ export default async function AboutPage() {
   ];
 
   return (
-    <main className="max-w-6xl mx-auto py-12 px-4 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-10">
+    <main className="max-w-6xl mx-auto py-12 px-4 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-10 space-y-12 lg:space-y-0">
+      {/* Page Title (desktop only) */}
+      <h1 className="hidden lg:block text-4xl sm:text-5xl font-bold tracking-tight text-foreground col-start-2">
+        About
+      </h1>
+
       {/* Left profile rail (desktop) */}
       <aside className="hidden lg:block">
         <div className="sticky top-20 space-y-6">
@@ -127,13 +132,12 @@ export default async function AboutPage() {
             <AvatarFallback>PP</AvatarFallback>
           </Avatar>
           <div className="space-y-2">
-            <h1 className="text-xl md:text-2xl font-sans font-bold text-gray-900 dark:text-white leading-tight">
-              Paul Philp
-            </h1>
-            <p className="text-sm font-serif text-gray-700 dark:text-gray-300 leading-snug">
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground">About</h1>
+            <h2 className="text-xl md:text-2xl font-bold text-foreground">Paul Philp</h2>
+            <p className="text-sm text-muted-foreground leading-snug">
               Software/AI Engineer, Founder, Executive
             </p>
-            <p className="text-xs text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-snug">
+            <p className="text-base text-foreground leading-relaxed max-w-2xl mx-auto">
               Engineering human-AI collaboration at the intersection of complex systems and emerging
               technology
             </p>
