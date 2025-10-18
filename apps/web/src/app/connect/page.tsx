@@ -58,18 +58,13 @@ export default function ConnectPage() {
       {/* Contact Methods */}
       <section className="max-w-3xl mx-auto px-4 grid gap-6 md:grid-cols-2">
         {contactMethods.map((method) => (
-          <Card
-            key={method.title}
-            className="group border-border hover:shadow-lg transition-all"
-          >
+          <Card key={method.title} className="group border-border hover:shadow-lg transition-all">
             <CardHeader className="space-y-3">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-muted rounded-lg text-foreground transition-colors">
                   {method.icon}
                 </div>
-                <CardTitle className="text-lg font-bold text-foreground">
-                  {method.title}
-                </CardTitle>
+                <CardTitle className="text-lg font-bold text-foreground">{method.title}</CardTitle>
               </div>
               <CardDescription className="text-muted-foreground">
                 {method.description}
@@ -91,17 +86,13 @@ export default function ConnectPage() {
 
       {/* What to Expect */}
       <section className="max-w-3xl mx-auto px-4 bg-muted rounded-lg p-8 space-y-6">
-        <h2 className="text-2xl font-bold text-foreground text-center">
-          What to Expect
-        </h2>
+        <h2 className="text-2xl font-bold text-foreground text-center">What to Expect</h2>
         <div className="grid gap-6 md:grid-cols-3 text-center">
           <div className="space-y-3">
             <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto">
               <Mail className="w-6 h-6 text-foreground" />
             </div>
-            <h3 className="font-semibold text-foreground">
-              Quick Response
-            </h3>
+            <h3 className="font-semibold text-foreground">Quick Response</h3>
             <p className="text-sm text-muted-foreground">
               I typically respond to emails within 24-48 hours and engage actively on social
               platforms.
@@ -111,9 +102,7 @@ export default function ConnectPage() {
             <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto">
               <MessageCircle className="w-6 h-6 text-foreground" />
             </div>
-            <h3 className="font-semibold text-foreground">
-              Thoughtful Discussion
-            </h3>
+            <h3 className="font-semibold text-foreground">Thoughtful Discussion</h3>
             <p className="text-sm text-muted-foreground">
               I love diving deep into complex topics and exploring new perspectives on human-AI
               collaboration.
@@ -123,9 +112,7 @@ export default function ConnectPage() {
             <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto">
               <Users className="w-6 h-6 text-foreground" />
             </div>
-            <h3 className="font-semibold text-foreground">
-              Meaningful Connections
-            </h3>
+            <h3 className="font-semibold text-foreground">Meaningful Connections</h3>
             <p className="text-sm text-muted-foreground">
               Whether for collaboration, learning, or professional opportunities, I value authentic
               connections.
@@ -136,9 +123,7 @@ export default function ConnectPage() {
 
       {/* Topics of Interest */}
       <section className="max-w-3xl mx-auto px-4 text-center space-y-6">
-        <h2 className="text-2xl font-bold text-foreground">
-          Great Conversation Starters
-        </h2>
+        <h2 className="text-2xl font-bold text-foreground">Great Conversation Starters</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 text-left">
           {[
             "Human-AI collaboration frameworks",
