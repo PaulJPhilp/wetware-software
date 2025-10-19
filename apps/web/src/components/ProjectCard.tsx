@@ -33,9 +33,9 @@ interface ProjectCardProps extends CardComponentProps {
 }
 
 const statusColors = {
-  active: "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400",
+  active: "bg-muted text-muted-foreground",
   archived: "bg-muted text-muted-foreground",
-  maintenance: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400",
+  maintenance: "bg-muted text-muted-foreground",
 };
 
 export function ProjectCard({
@@ -49,8 +49,8 @@ export function ProjectCard({
 }: ProjectCardProps) {
   return (
     <Card
-      className={`group relative flex flex-col h-full border-charcoal/20 transition-all duration-200 z-0 ${
-        hoverable ? "hover:border-orange/50 hover:shadow-lg" : ""
+      className={`group relative flex flex-col h-full border-border transition-all duration-200 z-0 ${
+        hoverable ? "hover:shadow-lg" : ""
       } ${className || ""}`}
       data-testid={testId}
     >
@@ -64,7 +64,7 @@ export function ProjectCard({
       </Link>
       {/* Project image */}
       {project.imageUrl && (
-        <div className="relative aspect-[16/9] w-full overflow-hidden bg-charcoal/5 rounded-t-xl">
+        <div className="relative aspect-[16/9] w-full overflow-hidden bg-muted/20 rounded-t-xl">
           <Image
             src={project.imageUrl}
             alt={project.name}
@@ -77,7 +77,7 @@ export function ProjectCard({
 
       <CardHeader className="space-y-3">
         <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg font-sans font-bold group-hover:text-orange transition-colors line-clamp-2">
+          <CardTitle className="text-lg font-bold transition-colors line-clamp-2">
             {project.name}
           </CardTitle>
           <div className="flex items-center gap-2 shrink-0">
@@ -110,7 +110,7 @@ export function ProjectCard({
               <Badge
                 key={tech}
                 variant="outline"
-                className="text-xs px-2 py-1 bg-silver/50 text-charcoal dark:bg-charcoal/50 dark:text-silver"
+                className="text-xs px-2 py-1 bg-secondary text-secondary-foreground"
               >
                 {tech}
               </Badge>
@@ -119,14 +119,9 @@ export function ProjectCard({
         )}
       </CardContent>
 
-      <CardFooter className="flex items-center pt-4 border-t border-charcoal/10 relative z-20">
+      <CardFooter className="flex items-center pt-4 border-t border-border relative z-20">
         <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            asChild
-            className="hover:text-orange hover:bg-orange/5 transition-colors"
-          >
+          <Button variant="outline" size="sm" asChild>
             <a
               href={project.githubUrl}
               target="_blank"
@@ -138,12 +133,7 @@ export function ProjectCard({
             </a>
           </Button>
           {project.demoUrl && (
-            <Button
-              variant="outline"
-              size="sm"
-              asChild
-              className="hover:text-orange hover:bg-orange/5 transition-colors"
-            >
+            <Button variant="outline" size="sm" asChild>
               <a
                 href={project.demoUrl}
                 target="_blank"
