@@ -83,6 +83,7 @@ module.exports = {
   },
   plugins: [
     require("@tailwindcss/typography"),
+    require("tailwindcss-animate"),
     // Note: tailwindcss-fluid-typography disabled (incompatible with Tailwind 4.1)
     // Use manual fluid typography with Tailwind's native viewport-relative sizing
   ],
