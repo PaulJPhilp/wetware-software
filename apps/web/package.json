@@ -21,6 +21,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@tanstack/react-table": "^8.21.3",
     "@wetware/shared": "workspace:*",
+    "@wetware/design-system": "workspace:*",
     "ai": "^5.0.63",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

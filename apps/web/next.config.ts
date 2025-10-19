@@ -7,7 +7,7 @@ const bundleAnalyzer = withBundleAnalyzer({
 
 const nextConfig: NextConfig = {
   // Transpile the shared package
-  transpilePackages: ["@wetware/shared"],
+  transpilePackages: ["@wetware/shared", "@wetware/design-system"],
 
   // Help Next/Vercel trace files from the monorepo root
   outputFileTracingRoot: "../../",
