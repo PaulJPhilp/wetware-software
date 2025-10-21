@@ -88,7 +88,10 @@ export function LatestPosts({
         </div>
       ) : (
         <div className="flex flex-col rounded-md overflow-hidden overflow-x-auto">
-          <div className="grid gap-2 px-1 pt-2 pb-1 bg-muted/40 text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground min-w-[800px]" style={{ gridTemplateColumns: "1fr 1fr 110px 90px 72px" }}>
+          <div
+            className="grid gap-2 px-1 pt-2 pb-1 bg-muted/40 text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground min-w-[800px]"
+            style={{ gridTemplateColumns: "1fr 1fr 110px 90px 72px" }}
+          >
             <div className="flex flex-col">
               <span className="leading-none">Title</span>
               <span className="mt-1 h-px bg-muted" />

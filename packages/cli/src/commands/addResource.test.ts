@@ -70,8 +70,7 @@ describe("CLI add resource", () => {
           notionCalledWith = data;
           return { pageId: "page_123", url: "https://notion.test/page_123" };
         }),
-      addSourceEntity: () =>
-        Effect.sync(() => ({ pageId: "s1", url: "https://notion.test/s1" })),
+      addSourceEntity: () => Effect.sync(() => ({ pageId: "s1", url: "https://notion.test/s1" })),
       listResources: () => Effect.succeed([]),
       listSourceEntities: () => Effect.succeed([]),
       listResourceSeries: () => Effect.succeed([]),
@@ -86,7 +85,7 @@ describe("CLI add resource", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+      Effect.provide(NodeContext.layer),
     );
 
     await Effect.runPromise(effect);
@@ -130,8 +129,7 @@ describe("CLI add resource", () => {
           notionCalledWith = data;
           return { pageId: "page_456", url: "https://notion.test/page_456" };
         }),
-      addSourceEntity: () =>
-        Effect.sync(() => ({ pageId: "s1", url: "https://notion.test/s1" })),
+      addSourceEntity: () => Effect.sync(() => ({ pageId: "s1", url: "https://notion.test/s1" })),
       listResources: () => Effect.succeed([]),
       listSourceEntities: () => Effect.succeed([]),
       listResourceSeries: () => Effect.succeed([]),
@@ -146,7 +144,7 @@ describe("CLI add resource", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+      Effect.provide(NodeContext.layer),
     );
 
     await Effect.runPromise(effect);
@@ -194,8 +192,7 @@ describe("CLI add resource", () => {
           notionCalledWith = data;
           return { pageId: "page_789", url: "https://notion.test/page_789" };
         }),
-      addSourceEntity: () =>
-        Effect.sync(() => ({ pageId: "s1", url: "https://notion.test/s1" })),
+      addSourceEntity: () => Effect.sync(() => ({ pageId: "s1", url: "https://notion.test/s1" })),
       listResources: () => Effect.succeed([]),
       listSourceEntities: () => Effect.succeed([]),
       listResourceSeries: () => Effect.succeed([]),
@@ -210,7 +207,7 @@ describe("CLI add resource", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+      Effect.provide(NodeContext.layer),
     );
 
     await Effect.runPromise(effect);
@@ -257,7 +254,7 @@ describe("CLI add resource", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+      Effect.provide(NodeContext.layer),
     );
 
     const result = await Effect.runPromiseExit(effect);
@@ -291,8 +288,7 @@ describe("CLI add resource", () => {
     };
 
     const fakeNotion = createNotionMock({
-      addResource: () =>
-        Effect.fail(new Error("Notion API Error: Failed to create page")),
+      addResource: () => Effect.fail(new Error("Notion API Error: Failed to create page")),
       addSourceEntity: () => Effect.succeed({ pageId: "", url: "" }),
       listResources: () => Effect.succeed([]),
       listSourceEntities: () => Effect.succeed([]),
@@ -308,7 +304,7 @@ describe("CLI add resource", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+      Effect.provide(NodeContext.layer),
     );
 
     const result = await Effect.runPromiseExit(effect);
@@ -342,9 +338,7 @@ describe("CLI add resource", () => {
 
     // Mock fetch to throw an error
     const originalFetch = global.fetch;
-    global.fetch = vi.fn(() =>
-      Promise.reject(new Error("Network error during fetch"))
-    );
+    global.fetch = vi.fn(() => Promise.reject(new Error("Network error during fetch")));
 
     const _fakeFs = {
       readFileString: vi.fn(() => Effect.succeed("PROMPT")),
@@ -355,7 +349,7 @@ describe("CLI add resource", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+      Effect.provide(NodeContext.layer),
     );
 
     const result = await Effect.runPromiseExit(effect);

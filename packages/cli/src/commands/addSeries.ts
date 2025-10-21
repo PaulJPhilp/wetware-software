@@ -14,13 +14,13 @@ import { buildSeriesSchema } from "../lib/seriesSchema";
 
 const verboseOption = Options.boolean("verbose").pipe(
   Options.withAlias("v"),
-  Options.withDescription("Enable verbose output")
+  Options.withDescription("Enable verbose output"),
 );
 
 const descriptionOption = Options.text("description").pipe(
   Options.withAlias("d"),
   Options.optional,
-  Options.withDescription("Optional description for the series")
+  Options.withDescription("Optional description for the series"),
 );
 
 export const seriesCommand = pipe(
@@ -33,12 +33,8 @@ export const seriesCommand = pipe(
   }),
   Command.withDescription("Add a new resource series to Notion"),
   Command.withHandler(({ args, options }) =>
-    runAddSeries(
-      args,
-      Option.getOrUndefined(options.description),
-      Boolean(options.verbose)
-    )
-  )
+    runAddSeries(args, Option.getOrUndefined(options.description), Boolean(options.verbose)),
+  ),
 );
 
 export interface RunAddSeriesOptions {
@@ -49,19 +45,13 @@ export function runAddSeries(
   seriesName: string,
   description: string | undefined,
   isVerbose: boolean,
-  options?: RunAddSeriesOptions
+  options?: RunAddSeriesOptions,
 ) {
   return Effect.gen(function* () {
     const ai = yield* OpenAI;
     const notion = yield* Notion;
 
-    const promptPath = NodePath.join(
-      process.cwd(),
-      "packages",
-      "cli",
-      "prompts",
-      "addSeries.txt"
-    );
+    const promptPath = NodePath.join(process.cwd(), "packages", "cli", "prompts", "addSeries.txt");
 
     let prompt: string;
     if (options?.promptOverride) {
@@ -96,9 +86,7 @@ export function runAddSeries(
       verbose: isVerbose,
     });
     yield* Console.log(
-      `Success: Created Series page ${res.pageId}${
-        res.url ? ` at ${res.url}` : ""
-      }`
+      `Success: Created Series page ${res.pageId}${res.url ? ` at ${res.url}` : ""}`,
     );
   });
 }

@@ -19,7 +19,7 @@ export type ResourceInput = z.infer<typeof schema>;
 
 export type ResourceDetails = {
   id: string;
-  url?: string;
+  url?: string | undefined;
   name: string;
   type?: string | null;
   sourceEntityName?: string | null;
@@ -33,7 +33,7 @@ export type ResourceDetails = {
 
 export type SourceEntityDetails = {
   id: string;
-  url?: string;
+  url?: string | undefined;
   name: string;
   type?: string | null;
   description?: string | null;
@@ -43,7 +43,7 @@ export type SourceEntityDetails = {
 
 export type SeriesDetails = {
   id: string;
-  url?: string;
+  url?: string | undefined;
   name: string;
   description?: string | null;
   goal?: string | null;
@@ -258,10 +258,8 @@ export const NotionClientLayer = Layer.effect(
                 parent: { database_id: databaseId },
                 properties,
               });
-              return {
-                pageId: page.id,
-                url: (page as unknown as { url?: string }).url,
-              };
+              const url = (page as unknown as { url?: string }).url;
+              return url === undefined ? { pageId: page.id } : { pageId: page.id, url };
             },
             catch: (e) => new Error(`Notion API error: ${String(e)}`),
           }),
@@ -307,10 +305,8 @@ export const NotionClientLayer = Layer.effect(
                 parent: { database_id: sourceEntitiesDatabaseId },
                 properties,
               });
-              return {
-                pageId: page.id,
-                url: (page as unknown as { url?: string }).url,
-              };
+              const url = (page as unknown as { url?: string }).url;
+              return url === undefined ? { pageId: page.id } : { pageId: page.id, url };
             },
             catch: (e) => new Error(`Notion API error: ${String(e)}`),
           }),
@@ -348,7 +344,7 @@ export const NotionClientLayer = Layer.effect(
               const url = (p as { url?: string }).url;
               return {
                 id: (p as { id: string }).id,
-                url,
+                ...(url !== undefined ? { url } : {}),
                 name,
                 type,
                 sourceEntityName,
@@ -379,7 +375,12 @@ export const NotionClientLayer = Layer.effect(
                     | undefined
                 )?.select?.name ?? null;
               const url = (p as { url?: string }).url;
-              return { id: (p as { id: string }).id, url, name, type };
+              return {
+                id: (p as { id: string }).id,
+                ...(url !== undefined ? { url } : {}),
+                name,
+                type,
+              };
             });
           },
           catch: (e) => new Error(`Notion API error: ${String(e)}`),
@@ -402,7 +403,7 @@ export const NotionClientLayer = Layer.effect(
                     | undefined
                 )?.title?.[0]?.plain_text?.trim?.() ?? "";
               const url = (p as { url?: string }).url;
-              return { id: (p as { id: string }).id, url, name };
+              return { id: (p as { id: string }).id, ...(url !== undefined ? { url } : {}), name };
             });
           },
           catch: (e) => new Error(`Notion API error: ${String(e)}`),
@@ -419,10 +420,8 @@ export const NotionClientLayer = Layer.effect(
                 parent: { database_id: resourceSeriesDatabaseId },
                 properties,
               });
-              return {
-                pageId: page.id,
-                url: (page as unknown as { url?: string }).url,
-              };
+              const url = (page as unknown as { url?: string }).url;
+              return url === undefined ? { pageId: page.id } : { pageId: page.id, url };
             },
             catch: (e) => new Error(`Notion API error: ${String(e)}`),
           }),
@@ -444,7 +443,7 @@ export const NotionClientLayer = Layer.effect(
         pipe(
           Effect.tryPromise({
             try: async () => {
-              await notion.pages.update({ page_id: pageId, properties });
+              await notion.pages.update({ page_id: pageId, properties: properties || {} });
             },
             catch: (e) => new Error(`Notion API error: ${String(e)}`),
           }),
@@ -662,7 +661,7 @@ export const NotionClientLayer = Layer.effect(
             }
             await notion.pages.update({
               page_id: pageId,
-              properties: properties as UpdatePageParameters["properties"],
+              properties: (properties as UpdatePageParameters["properties"]) || {},
             });
           },
           catch: (e) => new Error(`Notion API error: ${String(e)}`),
@@ -697,7 +696,7 @@ export const NotionClientLayer = Layer.effect(
             }
             await notion.pages.update({
               page_id: pageId,
-              properties: properties as UpdatePageParameters["properties"],
+              properties: (properties as UpdatePageParameters["properties"]) || {},
             });
           },
           catch: (e) => new Error(`Notion API error: ${String(e)}`),
@@ -721,7 +720,7 @@ export const NotionClientLayer = Layer.effect(
             }
             await notion.pages.update({
               page_id: pageId,
-              properties: properties as UpdatePageParameters["properties"],
+              properties: (properties as UpdatePageParameters["properties"]) || {},
             });
           },
           catch: (e) => new Error(`Notion API error: ${String(e)}`),

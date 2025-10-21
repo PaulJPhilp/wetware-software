@@ -422,11 +422,9 @@ export function getPostsByType(contentType: ContentType) {
  */
 async function enrichPostsWithSeriesNames(posts: Post[]): Promise<Post[]> {
   // Get unique series IDs from posts
-  const seriesIds = [...new Set(
-    posts
-      .filter((post) => post.seriesId)
-      .map((post) => post.seriesId)
-  )].filter(Boolean) as string[];
+  const seriesIds = [
+    ...new Set(posts.filter((post) => post.seriesId).map((post) => post.seriesId)),
+  ].filter(Boolean) as string[];
 
   if (seriesIds.length === 0) {
     return posts;
@@ -434,23 +432,22 @@ async function enrichPostsWithSeriesNames(posts: Post[]): Promise<Post[]> {
 
   // Fetch series names for all unique series IDs
   const seriesMap = new Map<string, string>();
-  
+
   for (const seriesId of seriesIds) {
     try {
-      const seriesPage = await notion.pages.retrieve({ 
-        page_id: seriesId 
+      const seriesPage = await notion.pages.retrieve({
+        page_id: seriesId,
       });
-      
+
       if ("properties" in seriesPage) {
         const nameProp = seriesPage.properties.Name;
-        if (nameProp && nameProp.type === "title" && 
-            nameProp.title[0]?.plain_text) {
+        if (nameProp && nameProp.type === "title" && nameProp.title[0]?.plain_text) {
           seriesMap.set(seriesId, nameProp.title[0].plain_text);
         }
       }
     } catch (error) {
-      logger.warn(`Failed to fetch series name for ID ${seriesId}`, { 
-        error 
+      logger.warn(`Failed to fetch series name for ID ${seriesId}`, {
+        error,
       });
     }
   }
@@ -514,9 +511,7 @@ async function _getRecentPosts(limit: number = 10): Promise<Post[]> {
       page_size: limit,
     });
 
-    const posts = parsePostsFromResponse(
-      response.results as PageObjectResponse[]
-    );
+    const posts = parsePostsFromResponse(response.results as PageObjectResponse[]);
 
     // Enrich posts with series names
     const enrichedPosts = await enrichPostsWithSeriesNames(posts);
@@ -709,7 +704,7 @@ async function _getPostBySlug(slug: string): Promise<Post | null> {
     });
 
     const posts = parsePostsFromResponse(response.results as PageObjectResponse[]);
-    
+
     if (posts.length === 0) {
       return null;
     }

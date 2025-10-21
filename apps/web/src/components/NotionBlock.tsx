@@ -407,7 +407,11 @@ export function NotionBlock({ block }: NotionBlockProps) {
         .replace(/[^\w\s]/g, "")
         .replace(/\s+/g, "-");
       return (
-        <AnchorHeading id={h1Id} level={1} className="fluid-h1 mt-6 mb-2 text-gray-900 dark:text-white">
+        <AnchorHeading
+          id={h1Id}
+          level={1}
+          className="fluid-h1 mt-6 mb-2 text-gray-900 dark:text-white"
+        >
           {block.heading_1.rich_text.map((text, idx) => (
             <RichText key={`${block.id}-${idx}-${text.plain_text}`} text={text} />
           ))}
@@ -421,7 +425,11 @@ export function NotionBlock({ block }: NotionBlockProps) {
         .replace(/[^\w\s]/g, "")
         .replace(/\s+/g, "-");
       return (
-        <AnchorHeading id={h2Id} level={2} className="fluid-h2 mt-6 mb-2 text-gray-900 dark:text-white">
+        <AnchorHeading
+          id={h2Id}
+          level={2}
+          className="fluid-h2 mt-6 mb-2 text-gray-900 dark:text-white"
+        >
           {block.heading_2.rich_text.map((text, idx) => (
             <RichText key={`${block.id}-${idx}-${text.plain_text}`} text={text} />
           ))}
@@ -435,7 +443,11 @@ export function NotionBlock({ block }: NotionBlockProps) {
         .replace(/[^\w\s]/g, "")
         .replace(/\s+/g, "-");
       return (
-        <AnchorHeading id={h3Id} level={3} className="fluid-h3 mt-4 mb-1 text-gray-900 dark:text-white">
+        <AnchorHeading
+          id={h3Id}
+          level={3}
+          className="fluid-h3 mt-4 mb-1 text-gray-900 dark:text-white"
+        >
           {block.heading_3.rich_text.map((text, idx) => (
             <RichText key={`${block.id}-${idx}-${text.plain_text}`} text={text} />
           ))}

@@ -1,5 +1,5 @@
 import { getSeries } from "../lib/notion-utils";
-import { SeriesSection } from "./Series";
+import { SeriesSection } from "./series";
 
 /**
  * NotionSeries Component

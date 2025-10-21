@@ -48,7 +48,9 @@ export function Footer({ links = defaultLinks }: { links?: LinkDef[] }) {
     >
       <div className="w-full px-2 xs:px-2 py-0 xs:py-0 flex flex-col xs:flex-col sm:flex-row justify-between items-center gap-0.5 xs:gap-0.5 font-sans">
         <div className="flex flex-col items-start text-muted-foreground text-left transition-colors hover:text-foreground">
-          <div style={{ fontSize: "0.5em" }}>© {new Date().getFullYear()} Paul J Philp. All rights reserved.</div>
+          <div style={{ fontSize: "0.5em" }}>
+            © {new Date().getFullYear()} Paul J Philp. All rights reserved.
+          </div>
         </div>
         <div className="flex flex-col items-center text-muted-foreground text-center transition-colors hover:text-foreground flex-1">
           <div style={{ fontSize: "0.5em" }}>

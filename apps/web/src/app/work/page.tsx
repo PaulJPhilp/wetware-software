@@ -27,8 +27,12 @@ export default function WorkPage() {
       {/* Coming Soon Section */}
       <section className="space-y-6">
         <div className="text-center space-y-2">
-          <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">Projects Coming Soon</h2>
-          <p className="text-charcoal/60 dark:text-gray-400">Building something interesting? Check back soon.</p>
+          <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">
+            Projects Coming Soon
+          </h2>
+          <p className="text-charcoal/60 dark:text-gray-400">
+            Building something interesting? Check back soon.
+          </p>
         </div>
 
         <div className="bg-silver/30 dark:bg-gray-800/30 rounded-lg border-2 border-dashed border-charcoal/20 dark:border-gray-700 p-12 text-center">

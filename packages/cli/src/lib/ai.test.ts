@@ -7,6 +7,7 @@ describe("AI service", () => {
     const svc: OpenAIService = {
       generateResourceJson: () => Effect.succeed('{"ok":true}'),
       generateSourceEntityJson: () => Effect.succeed('{"ok":true}'),
+      generateSeriesJson: () => Effect.succeed('{"ok":true}'),
     };
     const result = await Effect.runPromise(
       svc.generateResourceJson({ prompt: "p", resourceBlock: "r" }),

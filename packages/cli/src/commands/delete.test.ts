@@ -7,14 +7,8 @@ import { createNotionMock } from "../test/notionTestUtils";
 import { deleteEntity } from "./delete";
 
 describe("deleteEntity", () => {
-  let logSpy: MockInstance<
-    Parameters<typeof Console.log>,
-    ReturnType<typeof Console.log>
-  >;
-  let errorSpy: MockInstance<
-    Parameters<typeof Console.error>,
-    ReturnType<typeof Console.error>
-  >;
+  let logSpy: MockInstance<Parameters<typeof Console.log>, ReturnType<typeof Console.log>>;
+  let errorSpy: MockInstance<Parameters<typeof Console.error>, ReturnType<typeof Console.error>>;
 
   beforeEach(() => {
     logSpy = vi.spyOn(Console, "log").mockReturnValue(Effect.void);
@@ -33,15 +27,11 @@ describe("deleteEntity", () => {
         }),
     });
 
-    const program = deleteEntity("resource-123").pipe(
-      Effect.provideService(Notion, notion)
-    );
+    const program = deleteEntity("resource-123").pipe(Effect.provideService(Notion, notion));
 
     await Effect.runPromise(program);
 
-    expect(logSpy).toHaveBeenCalledWith(
-      "Successfully deleted entity with ID: resource-123"
-    );
+    expect(logSpy).toHaveBeenCalledWith("Successfully deleted entity with ID: resource-123");
     expect(errorSpy).not.toHaveBeenCalled();
   });
 
@@ -50,15 +40,11 @@ describe("deleteEntity", () => {
       deletePage: () => Effect.fail(new Error("Notion API error")),
     });
 
-    const program = deleteEntity("source-999").pipe(
-      Effect.provideService(Notion, notion)
-    );
+    const program = deleteEntity("source-999").pipe(Effect.provideService(Notion, notion));
 
     await Effect.runPromise(program);
 
     expect(errorSpy).toHaveBeenCalledWith("Error: Notion API error");
-    expect(logSpy).not.toHaveBeenCalledWith(
-      "Successfully deleted entity with ID: source-999"
-    );
+    expect(logSpy).not.toHaveBeenCalledWith("Successfully deleted entity with ID: source-999");
   });
 });

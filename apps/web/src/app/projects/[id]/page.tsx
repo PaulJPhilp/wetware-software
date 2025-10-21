@@ -113,7 +113,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </Badge>
               </div>
 
-              <p className="text-lg text-charcoal/80 dark:text-gray-300 leading-relaxed">{project.description}</p>
+              <p className="text-lg text-charcoal/80 dark:text-gray-300 leading-relaxed">
+                {project.description}
+              </p>
 
               {/* Technologies */}
               <div className="flex flex-wrap gap-2">
@@ -177,7 +179,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       {/* Detailed Description */}
       {project.longDescription && (
         <section className="space-y-6">
-          <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">About This Project</h2>
+          <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">
+            About This Project
+          </h2>
           <Card>
             <CardContent className="pt-6">
               <div className="prose prose-lg max-w-none dark:prose-invert">
@@ -198,7 +202,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       {/* Related Projects */}
       {relatedProjects.length > 0 && (
         <section className="space-y-6">
-          <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">Related Projects</h2>
+          <h2 className="text-2xl font-sans font-bold text-charcoal dark:text-white">
+            Related Projects
+          </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {relatedProjects.map((relatedProject) => (
               <ProjectCard

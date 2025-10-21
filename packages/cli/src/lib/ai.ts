@@ -1,5 +1,5 @@
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import type { LanguageModelV1 } from "ai";
+import type { LanguageModel } from "ai";
 import { generateText } from "ai";
 import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
@@ -11,17 +11,17 @@ export interface OpenAIService {
     prompt: string;
     resourceBlock: string;
     verbose?: boolean;
-  }) => Effect.Effect<string, Error>;
+  }) => Effect.Effect<string, Error, never>;
   generateSourceEntityJson: (args: {
     prompt: string;
     sourceBlock: string;
     verbose?: boolean;
-  }) => Effect.Effect<string, Error>;
+  }) => Effect.Effect<string, Error, never>;
   generateSeriesJson: (args: {
     prompt: string;
     seriesBlock: string;
     verbose?: boolean;
-  }) => Effect.Effect<string, Error>;
+  }) => Effect.Effect<string, Error, never>;
 }
 
 export class OpenAI extends Effect.Service<OpenAIService>()("OpenAI", {
@@ -46,7 +46,7 @@ export const OpenAIProviderLayer = Layer.effect(
           Effect.tryPromise({
             try: async () => {
               const { text } = await generateText({
-                model: model as LanguageModelV1,
+                model: model as LanguageModel,
                 system: prompt,
                 prompt: [
                   "Return ONLY a strict JSON object. No prose. No code fences.",
@@ -67,7 +67,7 @@ export const OpenAIProviderLayer = Layer.effect(
           Effect.tryPromise({
             try: async () => {
               const { text } = await generateText({
-                model: model as LanguageModelV1,
+                model: model as LanguageModel,
                 system: prompt,
                 prompt: [
                   "Return ONLY a strict JSON object. No prose. No code fences.",
@@ -88,7 +88,7 @@ export const OpenAIProviderLayer = Layer.effect(
           Effect.tryPromise({
             try: async () => {
               const { text } = await generateText({
-                model: model as LanguageModelV1,
+                model: model as LanguageModel,
                 system: prompt,
                 prompt: [
                   "Return ONLY a strict JSON object. No prose. No code fences.",

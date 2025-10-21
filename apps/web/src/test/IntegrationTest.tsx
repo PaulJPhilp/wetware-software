@@ -6,7 +6,7 @@
  * to verify everything works correctly.
  */
 
-import { SeriesSection } from "../components/Series";
+import { SeriesSection } from "../components/series";
 import { getSeries } from "../lib/notion-utils";
 
 export async function IntegrationTest() {

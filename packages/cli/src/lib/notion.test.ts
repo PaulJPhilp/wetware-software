@@ -1,12 +1,7 @@
 import type { GetPageResponse } from "@notionhq/client/build/src/api-endpoints";
 import * as Effect from "effect/Effect";
 import { describe, expect, it } from "vitest";
-import type {
-  NotionService,
-  ResourceDetails,
-  SeriesDetails,
-  SourceEntityDetails,
-} from "./notion";
+import type { NotionService, ResourceDetails, SeriesDetails, SourceEntityDetails } from "./notion";
 
 describe("Notion service", () => {
   it("addResource returns page id and url", async () => {
@@ -40,7 +35,7 @@ describe("Notion service", () => {
         icon_name: null,
         resource_series_name: null,
         resource_series_part_number: null,
-      })
+      }),
     );
     expect(res.pageId).toBe("p1");
     expect(res.url).toBe("u1");

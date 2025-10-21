@@ -1,0 +1,95 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TransitMapSvg > matches snapshot 1`] = `
+<svg
+  class="transit-map-svg"
+  style="background-color: white;"
+  viewBox="80 180 240 140"
+>
+  <polyline
+    fill="none"
+    points="100,200 150,250"
+    stroke="#ff0000"
+    stroke-width="4"
+  />
+  <polyline
+    fill="none"
+    points="150,250 200,300"
+    stroke="#0000ff"
+    stroke-width="4"
+  />
+  <g
+    class="station"
+  >
+    <circle
+      cx="100"
+      cy="200"
+      fill="black"
+      r="8"
+      stroke-width="0"
+    />
+    <text
+      dominant-baseline="middle"
+      fill="black"
+      font-size="12"
+      text-anchor="start"
+      x="112"
+      y="204"
+    >
+      Station One
+    </text>
+    <title>
+      Station One (2020-2025)
+    </title>
+  </g>
+  <g
+    class="station"
+  >
+    <circle
+      cx="150"
+      cy="250"
+      fill="black"
+      r="12"
+      stroke="white"
+      stroke-width="2"
+    />
+    <text
+      dominant-baseline="middle"
+      fill="black"
+      font-size="12"
+      text-anchor="start"
+      x="166"
+      y="254"
+    >
+      Station Two
+    </text>
+    <title>
+      Station Two (2021-2025)
+    </title>
+  </g>
+  <g
+    class="station"
+  >
+    <circle
+      cx="200"
+      cy="300"
+      fill="black"
+      r="8"
+      stroke-width="0"
+    />
+    <text
+      dominant-baseline="middle"
+      fill="black"
+      font-size="12"
+      text-anchor="start"
+      x="212"
+      y="304"
+    >
+      Station Three
+    </text>
+    <title>
+      Station Three (2022-2025)
+    </title>
+  </g>
+</svg>
+`;

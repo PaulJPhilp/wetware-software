@@ -12,10 +12,11 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { useHeaderHeight } from "./HeaderContext";
+import { useHeaderHeight } from "./header-context";
 
 // Use theme-agnostic tokens so SSR and client class lists match
-const HEADER_CLASS = "fixed inset-x-0 top-0 w-full text-foreground border-b border-border bg-brand";
+const HEADER_CLASS =
+  "fixed inset-x-0 top-0 w-full text-foreground border-b border-border bg-brand z-header";
 const NAV_CLASS = "w-full px-2 md:px-3 py-0.5 flex items-center justify-between font-sans";
 const NAV_LINK_CLASS =
   "text-xs text-foreground hover:text-orange transition-colors px-1 py-0.5 hover:underline cursor-pointer leading-none h-6 flex items-center";
@@ -142,12 +143,7 @@ export function Header() {
   }, []);
 
   return (
-    <header
-      ref={headerRef}
-      className={HEADER_CLASS}
-      style={{ zIndex: 99999, isolation: "isolate" }}
-      suppressHydrationWarning
-    >
+    <header ref={headerRef} className={HEADER_CLASS} suppressHydrationWarning>
       <nav className={NAV_CLASS}>
         <div className="flex items-center gap-1">
           <Image

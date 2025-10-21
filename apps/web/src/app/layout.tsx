@@ -1,6 +1,6 @@
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { HeaderProvider } from "@/components/HeaderContext";
+import { HeaderProvider } from "@/components/header-context";
 import { ServiceWorker } from "@/components/ServiceWorker";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { firaCode, merriweather, montserrat } from "@/lib/fonts";

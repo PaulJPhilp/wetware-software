@@ -46,17 +46,12 @@ describe("CLI add source", () => {
       listResourceSeries: () => Effect.succeed([]),
     });
 
-    const effect = runAddSource(
-      "Test Source",
-      "https://example.com/test-source",
-      true,
-      {
-        promptOverride: "PROMPT Override For Tests",
-      }
-    ).pipe(
+    const effect = runAddSource("Test Source", "https://example.com/test-source", true, {
+      promptOverride: "PROMPT Override For Tests",
+    }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+      Effect.provide(NodeContext.layer),
     );
 
     await Effect.runPromise(effect);
@@ -93,17 +88,12 @@ describe("CLI add source", () => {
       listResourceSeries: () => Effect.succeed([]),
     });
 
-    const effect = runAddSource(
-      "Invalid Source",
-      "https://example.com/invalid-source",
-      true,
-      {
-        promptOverride: "PROMPT Override For Tests",
-      }
-    ).pipe(
+    const effect = runAddSource("Invalid Source", "https://example.com/invalid-source", true, {
+      promptOverride: "PROMPT Override For Tests",
+    }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+      Effect.provide(NodeContext.layer),
     );
 
     const result = await Effect.runPromiseExit(effect);
@@ -139,17 +129,12 @@ describe("CLI add source", () => {
       listResourceSeries: () => Effect.succeed([]),
     });
 
-    const effect = runAddSource(
-      "Invalid JSON Source",
-      "https://example.com/invalid-json",
-      true,
-      {
-        promptOverride: "PROMPT Override For Tests",
-      }
-    ).pipe(
+    const effect = runAddSource("Invalid JSON Source", "https://example.com/invalid-json", true, {
+      promptOverride: "PROMPT Override For Tests",
+    }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+      Effect.provide(NodeContext.layer),
     );
 
     const result = await Effect.runPromiseExit(effect);
@@ -186,25 +171,18 @@ describe("CLI add source", () => {
     const fakeNotion = createNotionMock({
       addResource: () => Effect.succeed({ pageId: "", url: "" }),
       addSourceEntity: () =>
-        Effect.fail(
-          new Error("Notion API Error: Failed to create source entity page")
-        ),
+        Effect.fail(new Error("Notion API Error: Failed to create source entity page")),
       listResources: () => Effect.succeed([]),
       listSourceEntities: () => Effect.succeed([]),
       listResourceSeries: () => Effect.succeed([]),
     });
 
-    const effect = runAddSource(
-      "Notion Error Source",
-      "https://example.com/notion-error",
-      true,
-      {
-        promptOverride: "PROMPT Override For Tests",
-      }
-    ).pipe(
+    const effect = runAddSource("Notion Error Source", "https://example.com/notion-error", true, {
+      promptOverride: "PROMPT Override For Tests",
+    }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+      Effect.provide(NodeContext.layer),
     );
 
     const result = await Effect.runPromiseExit(effect);

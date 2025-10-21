@@ -1,0 +1,19 @@
+# Ignore Next.js build output
+apps/**/.next
+apps/**/build
+
+# Ignore package build outputs and lockfiles
+packages/**/dist
+packages/**/build
+
+# Ignore node modules and bun cache
+**/node_modules
+.bun
+
+# Ignore editor and system files
+.DS_Store
+*.log
+
+# Ignore generated vite/webpack/turbopack chunks
+apps/**/.next/**
+**/*.loader.mjs

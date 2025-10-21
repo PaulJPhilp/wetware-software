@@ -1,0 +1,54 @@
+import { renderToString } from 'react-dom/server';
+import { loadMap } from './src/loadMap';
+import { TransitMapSvg } from './src/svg/TransitMapSvg';
+
+const testData = loadMap({
+    stops: [
+        {
+            id: 'stop1',
+            title: 'Station One',
+            years: '2020-2025',
+            x: 100,
+            y: 200,
+            bullets: ['Bullet 1'],
+        },
+        {
+            id: 'stop2',
+            title: 'Station Two',
+            years: '2021-2025',
+            x: 150,
+            y: 250,
+            bullets: ['Bullet A'],
+        },
+        {
+            id: 'stop3',
+            title: 'Station Three',
+            years: '2022-2025',
+            x: 200,
+            y: 300,
+            bullets: ['Bullet X'],
+        },
+    ],
+    lines: [
+        {
+            id: 'line1',
+            name: 'Red Line',
+            color: '#ff0000',
+            stops: ['stop1', 'stop2'],
+        },
+        {
+            id: 'line2',
+            name: 'Blue Line',
+            color: '#0000ff',
+            stops: ['stop2', 'stop3'],
+        },
+    ],
+    interchanges: [
+        {
+            stopIds: ['stop2'],
+        },
+    ],
+} as any);
+
+const svgString = renderToString(<TransitMapSvg data={testData} />);
+console.log(svgString);

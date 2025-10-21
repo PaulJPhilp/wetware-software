@@ -5,6 +5,7 @@ import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
 import { pipe } from "effect/Function";
 import * as Option from "effect/Option";
+import type { ResourceDetails, SeriesDetails, SourceEntityDetails } from "../lib/notion";
 import { Notion } from "../lib/notion";
 
 const idArgument = Args.text().pipe(Args.withDescription("ID of the entity to update"));
@@ -82,20 +83,67 @@ export const updateResourceCommand = pipe(
   Command.withHandler(({ args, options }) =>
     Effect.gen(function* () {
       const notion = yield* Notion;
-      const updates: Record<string, any> = {};
-      Option.map(options.name, (n) => (updates.name = n));
-      Option.map(options.url, (u) => (updates.url = u));
-      Option.map(options.type, (t) => (updates.type = t));
-      Option.map(options.icon, (i) => (updates.icon = i));
-      Option.map(options.curatorNote, (cn) => (updates.curatorNote = cn));
-      Option.map(
-        options.focusArea,
-        (fa) => (updates.focusArea = fa.split(",").map((s) => s.trim())),
-      );
-      Option.map(options.tags, (t) => (updates.tags = t.split(",").map((s) => s.trim())));
-      Option.map(options.readTimeMinutes, (rtm) => (updates.readTimeMinutes = rtm));
-      Option.map(options.seriesName, (sn) => (updates.seriesName = sn));
-      Option.map(options.sourceEntityName, (sen) => (updates.sourceEntityName = sen));
+      const updates: Partial<ResourceDetails> = {};
+      Option.match(options.name, {
+        onNone: () => undefined,
+        onSome: (n: string) => {
+          updates.name = n;
+        },
+      });
+      Option.match(options.url, {
+        onNone: () => undefined,
+        onSome: (u: string) => {
+          updates.url = u;
+        },
+      });
+      Option.match(options.type, {
+        onNone: () => undefined,
+        onSome: (t: string) => {
+          updates.type = t;
+        },
+      });
+      Option.match(options.icon, {
+        onNone: () => undefined,
+        onSome: (i: string) => {
+          updates.icon = i;
+        },
+      });
+      Option.match(options.curatorNote, {
+        onNone: () => undefined,
+        onSome: (cn: string) => {
+          updates.curatorNote = cn;
+        },
+      });
+      Option.match(options.focusArea, {
+        onNone: () => undefined,
+        onSome: (fa: string) => {
+          updates.focusArea = fa.split(",").map((s) => s.trim());
+        },
+      });
+      Option.match(options.tags, {
+        onNone: () => undefined,
+        onSome: (t: string) => {
+          updates.tags = t.split(",").map((s) => s.trim());
+        },
+      });
+      Option.match(options.readTimeMinutes, {
+        onNone: () => undefined,
+        onSome: (rtm: number) => {
+          updates.readTimeMinutes = rtm;
+        },
+      });
+      Option.match(options.seriesName, {
+        onNone: () => undefined,
+        onSome: (sn: string) => {
+          updates.seriesName = sn;
+        },
+      });
+      Option.match(options.sourceEntityName, {
+        onNone: () => undefined,
+        onSome: (sen: string) => {
+          updates.sourceEntityName = sen;
+        },
+      });
 
       if (Object.keys(updates).length === 0) {
         yield* Console.log("No update options provided.");
@@ -124,16 +172,43 @@ export const updateSourceCommand = pipe(
   Command.withHandler(({ args, options }) =>
     Effect.gen(function* () {
       const notion = yield* Notion;
-      const updates: Record<string, any> = {};
-      Option.map(options.name, (n) => (updates.name = n));
-      Option.map(options.url, (u) => (updates.url = u));
-      Option.map(options.type, (t) => (updates.type = t));
-      Option.map(options.description, (d) => (updates.description = d));
-      Option.map(options.endorsement, (e) => (updates.endorsement = e));
-      Option.map(
-        options.focusArea,
-        (fa) => (updates.focusArea = fa.split(",").map((s) => s.trim())),
-      );
+      const updates: Partial<SourceEntityDetails> = {};
+      Option.match(options.name, {
+        onNone: () => undefined,
+        onSome: (n: string) => {
+          updates.name = n;
+        },
+      });
+      Option.match(options.url, {
+        onNone: () => undefined,
+        onSome: (u: string) => {
+          updates.url = u;
+        },
+      });
+      Option.match(options.type, {
+        onNone: () => undefined,
+        onSome: (t: string) => {
+          updates.type = t;
+        },
+      });
+      Option.match(options.description, {
+        onNone: () => undefined,
+        onSome: (d: string) => {
+          updates.description = d;
+        },
+      });
+      Option.match(options.endorsement, {
+        onNone: () => undefined,
+        onSome: (e: string) => {
+          updates.endorsement = e;
+        },
+      });
+      Option.match(options.focusArea, {
+        onNone: () => undefined,
+        onSome: (fa: string) => {
+          updates.focusArea = fa.split(",").map((s) => s.trim());
+        },
+      });
 
       if (Object.keys(updates).length === 0) {
         yield* Console.log("No update options provided.");
@@ -159,10 +234,25 @@ export const updateSeriesCommand = pipe(
   Command.withHandler(({ args, options }) =>
     Effect.gen(function* () {
       const notion = yield* Notion;
-      const updates: Record<string, any> = {};
-      Option.map(options.name, (n) => (updates.name = n));
-      Option.map(options.description, (d) => (updates.description = d));
-      Option.map(options.goal, (g) => (updates.goal = g));
+      const updates: Partial<SeriesDetails> = {};
+      Option.match(options.name, {
+        onNone: () => undefined,
+        onSome: (n: string) => {
+          updates.name = n;
+        },
+      });
+      Option.match(options.description, {
+        onNone: () => undefined,
+        onSome: (d: string) => {
+          updates.description = d;
+        },
+      });
+      Option.match(options.goal, {
+        onNone: () => undefined,
+        onSome: (g: string) => {
+          updates.goal = g;
+        },
+      });
 
       if (Object.keys(updates).length === 0) {
         yield* Console.log("No update options provided.");
