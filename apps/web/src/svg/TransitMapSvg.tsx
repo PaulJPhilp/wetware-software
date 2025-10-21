@@ -79,13 +79,7 @@ export function TransitMapSvg({ data, theme = {}, onMount }: TransitMapSvgProps)
           mergedTheme,
         );
         return (
-          <g
-            key={stop.id}
-            className="station"
-            role="button"
-            tabIndex={0}
-            aria-label={`${stop.title} (${stop.years})`}
-          >
+          <g key={stop.id} className="station" aria-label={`${stop.title} (${stop.years})`}>
             <circle
               cx={stop.x}
               cy={stop.y}
@@ -107,6 +101,31 @@ export function TransitMapSvg({ data, theme = {}, onMount }: TransitMapSvgProps)
               {stop.title}
             </text>
             <title>{`${stop.title} (${stop.years})`}</title>
+            {/* Accessible button overlay for keyboard and screen reader users */}
+            <foreignObject
+              x={stop.x - radius}
+              y={stop.y - radius}
+              width={radius * 2}
+              height={radius * 2}
+              style={{ pointerEvents: "none" }}
+            >
+              <div style={{ width: "100%", height: "100%" }}>
+                <button
+                  type="button"
+                  aria-label={`${stop.title} (${stop.years})`}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    opacity: 0,
+                    border: "none",
+                    background: "transparent",
+                    pointerEvents: "auto",
+                    padding: 0,
+                    margin: 0,
+                  }}
+                />
+              </div>
+            </foreignObject>
           </g>
         );
       })}

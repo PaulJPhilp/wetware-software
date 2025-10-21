@@ -1,11 +1,11 @@
 "use client";
 
-import * as React from "react";
 import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import * as React from "react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -119,16 +119,14 @@ const Carousel = React.forwardRef<
         canScrollNext,
       }}
     >
-      <div
-        ref={ref}
+      <section
+        ref={ref as unknown as React.RefObject<HTMLElement>}
         onKeyDownCapture={handleKeyDown}
         className={cn("relative", className)}
-        role="region"
-        aria-roledescription="carousel"
         {...props}
       >
         {children}
-      </div>
+      </section>
     </CarouselContext.Provider>
   );
 });
@@ -160,16 +158,15 @@ const CarouselItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
     const { orientation } = useCarousel();
 
     return (
-      <div
-        ref={ref}
-        role="group"
+      <fieldset
+        ref={ref as unknown as React.RefObject<HTMLFieldSetElement>}
         aria-roledescription="slide"
         className={cn(
           "min-w-0 shrink-0 grow-0 basis-full",
           orientation === "horizontal" ? "pl-4" : "pt-4",
           className,
         )}
-        {...props}
+        {...(props as unknown as React.ComponentPropsWithoutRef<"fieldset">)}
       />
     );
   },
@@ -233,10 +230,10 @@ const CarouselNext = React.forwardRef<HTMLButtonElement, React.ComponentProps<ty
 CarouselNext.displayName = "CarouselNext";
 
 export {
-  type CarouselApi,
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
   CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
 };
