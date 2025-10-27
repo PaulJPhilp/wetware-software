@@ -1,6 +1,9 @@
+"use client";
+
 import type { LucideProps } from "lucide-react";
 import { Github, Mail, Rss, Twitter } from "lucide-react";
 import type { ComponentType } from "react";
+import { useEffect, useState } from "react";
 
 type IconProps = Omit<LucideProps, "ref">;
 type IconComponent = ComponentType<IconProps>;
@@ -41,6 +44,21 @@ const defaultLinks: LinkDef[] = [
 ];
 
 export function Footer({ links = defaultLinks }: { links?: LinkDef[] }) {
+  const [currentYear, setCurrentYear] = useState<string>("");
+  const [lastUpdated, setLastUpdated] = useState<string>("");
+
+  useEffect(() => {
+    const now = new Date();
+    setCurrentYear(now.getFullYear().toString());
+    setLastUpdated(
+      now.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }),
+    );
+  }, []);
+
   return (
     <footer
       className="z-footer fixed bottom-0 inset-x-0 w-full border-t border-border bg-brand text-foreground overflow-hidden"
@@ -49,17 +67,12 @@ export function Footer({ links = defaultLinks }: { links?: LinkDef[] }) {
       <div className="w-full px-2 xs:px-2 py-0 xs:py-0 flex flex-col xs:flex-col sm:flex-row justify-between items-center gap-0.5 xs:gap-0.5 font-sans">
         <div className="flex flex-col items-start text-muted-foreground text-left transition-colors hover:text-foreground">
           <div style={{ fontSize: "0.5em" }}>
-            © {new Date().getFullYear()} Paul J Philp. All rights reserved.
+            {currentYear || ""} Paul J Philp. All rights reserved.
           </div>
         </div>
         <div className="flex flex-col items-center text-muted-foreground text-center transition-colors hover:text-foreground flex-1">
           <div style={{ fontSize: "0.5em" }}>
-            Last updated:{" "}
-            {new Date().toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })}
+            Last updated: {lastUpdated || ""}
           </div>
         </div>
         <div className="flex items-center gap-1.5 xs:gap-1 ml-auto">

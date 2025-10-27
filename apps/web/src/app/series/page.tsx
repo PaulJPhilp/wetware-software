@@ -8,8 +8,6 @@ export const metadata: Metadata = {
     "Explore in-depth series covering human-AI collaboration, software architecture, and the intersection of technology and human systems.",
 };
 
-export const revalidate = 300; // Revalidate every 5 minutes
-
 export default async function SeriesPage() {
   try {
     const series = await getSeries();

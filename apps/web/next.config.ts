@@ -1,5 +1,6 @@
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
+import path from "node:path";
 
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
@@ -10,7 +11,7 @@ const nextConfig: NextConfig = {
   transpilePackages: ["@wetware/shared", "@wetware/design-system"],
 
   // Help Next/Vercel trace files from the monorepo root
-  outputFileTracingRoot: "../../",
+  outputFileTracingRoot: path.resolve(__dirname, "../../"),
 
   // CDN and caching optimizations
   async headers() {
@@ -51,11 +52,7 @@ const nextConfig: NextConfig = {
   // Compression and performance
   compress: true,
   poweredByHeader: false,
-
-  // Experimental features for better caching
-  experimental: {
-    scrollRestoration: true,
-  },
+  cacheComponents: true,
 
   images: {
     formats: ["image/webp", "image/avif"],

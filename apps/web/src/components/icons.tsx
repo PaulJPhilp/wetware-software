@@ -1,4 +1,3 @@
-export * from "./icons";
 export function BrainIcon({ className = "" }: { className?: string }) {
   return (
     <svg

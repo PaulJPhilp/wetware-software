@@ -4,9 +4,8 @@ import { focusAreaIcons } from "@/lib/icons";
 import { getSeriesWithPosts } from "@/lib/notion-utils";
 import { Brain } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-
-export const revalidate = 300; // Revalidate every 5 minutes
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -96,7 +95,13 @@ export default async function SeriesDetailPage({ params }: Props) {
                 {posts
                   .sort((a, b) => (a.partNumber || 0) - (b.partNumber || 0))
                   .map((post) => (
-                    <PostCard key={post.id} post={post} />
+                    <Link
+                      key={post.id}
+                      href={`/posts/${post.slug}`}
+                      className="block group"
+                    >
+                      <PostCard post={post} />
+                    </Link>
                   ))}
               </div>
             )}

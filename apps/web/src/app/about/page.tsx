@@ -23,8 +23,6 @@ const Button = dynamic(() =>
 );
 
 // Refresh the About page content from Notion regularly
-export const revalidate = 60;
-
 export default async function AboutPage() {
   // Load the About page from Notion. Fallback to local content.
   const aboutData = await getAboutPage();

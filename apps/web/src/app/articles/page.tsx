@@ -1,14 +1,13 @@
 import { PostCard } from "@/components/PostCard";
 import { getPostsByType } from "@/lib/notion-utils";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Articles - Wetware & Software",
   description:
     "Technical articles on software engineering, AI development, and human-AI collaboration patterns.",
 };
-
-export const revalidate = 300; // Revalidate every 5 minutes
 
 export default async function ArticlesPage() {
   try {
@@ -41,10 +40,18 @@ export default async function ArticlesPage() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {articles
                 .sort(
-                  (a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime(),
+                  (a, b) =>
+                    new Date(b.publishDate).getTime() -
+                    new Date(a.publishDate).getTime(),
                 )
                 .map((post) => (
-                  <PostCard key={post.id} post={post} />
+                  <Link
+                    key={post.id}
+                    href={`/posts/${post.slug}`}
+                    className="block group"
+                  >
+                    <PostCard post={post} />
+                  </Link>
                 ))}
             </div>
           )}

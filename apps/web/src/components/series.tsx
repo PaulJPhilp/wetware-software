@@ -1,4 +1,8 @@
-export * from "./series";
+import type { BaseComponentProps } from "@/lib/component-types";
+import type { Series } from "@/lib/notion-utils";
+import Link from "next/link";
+import type React from "react";
+import { SeriesCard } from "./SeriesCard";
 
 /**
  * Display the series section.

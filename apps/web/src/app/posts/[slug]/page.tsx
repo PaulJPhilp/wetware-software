@@ -17,8 +17,6 @@ const SeriesNavigation = dynamic(() =>
   import("@/components/SeriesNavigation").then((mod) => ({ default: mod.SeriesNavigation })),
 );
 
-export const revalidate = 3600; // Revalidate every hour
-
 export async function generateMetadata({
   params,
 }: {
@@ -161,7 +159,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                         className="block group"
                       >
                         <ClientOnly>
-                          <PostCard post={relatedPost} />
+                          <PostCard post={relatedPost} interactive />
                         </ClientOnly>
                       </Link>
                     ))}

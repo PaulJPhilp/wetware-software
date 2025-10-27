@@ -4,6 +4,7 @@ import { HeaderProvider } from "@/components/header-context";
 import { ServiceWorker } from "@/components/ServiceWorker";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { firaCode, merriweather, montserrat } from "@/lib/fonts";
+import { Suspense } from "react";
 
 import type { Metadata } from "next";
 import "./globals.css";
@@ -53,27 +54,29 @@ export default function RootLayout({
       className={`${montserrat.variable} ${merriweather.variable} ${firaCode.variable}`}
     >
       <body className="font-serif min-h-screen grid grid-rows-[auto_1fr_auto]">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <HeaderProvider>
-            <ServiceWorker />
-            <Header />
-            {/* Main site column layout offset by fixed header height and footer */}
-            <div className="pt-14 md:pt-16 pb-5 w-full min-h-0">
-              {/* Main content container - sidebar is now handled per-page */}
-              <main className="min-w-0 flex flex-col">
-                <div className="py-2 flex-1">
-                  <div className="w-full min-w-0">{children}</div>
-                </div>
-              </main>
-            </div>
-          </HeaderProvider>
-          <Footer />
-        </ThemeProvider>
+        <Suspense fallback={<div className="min-h-screen" />}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <HeaderProvider>
+              <ServiceWorker />
+              <Header />
+              {/* Main site column layout offset by fixed header height and footer */}
+              <div className="pt-14 md:pt-16 pb-5 w-full min-h-0">
+                {/* Main content container - sidebar is now handled per-page */}
+                <main className="min-w-0 flex flex-col">
+                  <div className="py-2 flex-1">
+                    <div className="w-full min-w-0">{children}</div>
+                  </div>
+                </main>
+              </div>
+            </HeaderProvider>
+            <Footer />
+          </ThemeProvider>
+        </Suspense>
       </body>
     </html>
   );

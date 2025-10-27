@@ -1,15 +1,24 @@
-import * as matchers from "@testing-library/jest-dom/matchers";
 import { cleanup } from "@testing-library/react";
-import React from "react";
-import { afterEach, expect } from "vitest";
+import { parseHTML } from "linkedom";
+import { afterEach } from "vitest";
 
-// Make React available globally for tests
-global.React = React;
+// Create a minimal global DOM for tests that need document/window
+const { window } = parseHTML(`<!doctype html><html><body></body></html>`);
+// set on both global and globalThis so different modules can access it
+(global as any).window = window as any;
+(global as any).document = window.document as any;
+(globalThis as any).window = window as any;
+(globalThis as any).document = window.document as any;
 
-// Extend expect with jest-dom matchers
-expect.extend(matchers);
+// Debug: confirm setup executed
+// eslint-disable-next-line no-console
+console.log("[test setup] linkedom DOM initialized");
 
 // Cleanup after each test
 afterEach(() => {
   cleanup();
+  // clear document body between tests
+  while (document.body.firstChild) {
+    document.body.removeChild(document.body.firstChild);
+  }
 });
