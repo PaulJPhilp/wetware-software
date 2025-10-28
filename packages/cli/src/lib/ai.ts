@@ -38,7 +38,7 @@ export const OpenAIProviderLayer = Layer.effect(
     const google = createGoogleGenerativeAI({ apiKey: config.apiKey });
     const model = google("models/gemini-2.5-flash");
 
-    return Effect.succeed<OpenAIService>({
+    return {
       generateResourceJson: ({ prompt, resourceBlock, verbose }) =>
         pipe(
           Effect.tryPromise({
@@ -102,6 +102,6 @@ export const OpenAIProviderLayer = Layer.effect(
           }),
           Effect.tap(() => (verbose ? Console.log("AI response received") : Effect.void))
         ),
-    });
+    };
   })
 );

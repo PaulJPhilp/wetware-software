@@ -239,7 +239,7 @@ export const NotionClientLayer = Layer.effect(
 
     const notion = new Client({ auth: config.apiKey });
 
-    return Effect.succeed<NotionService>({
+    return {
       addResource: (input, opts) =>
         pipe(
           Effect.tryPromise({
@@ -720,6 +720,6 @@ export const NotionClientLayer = Layer.effect(
           },
           catch: (e) => new Error(`Notion API error: ${String(e)}`),
         }),
-    });
+    };
   })
 );
