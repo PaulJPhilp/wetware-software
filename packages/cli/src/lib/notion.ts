@@ -13,6 +13,7 @@ import type { z } from "zod";
 import { buildSchema } from "./schema";
 import type { SeriesInput } from "./seriesSchema";
 import type { SourceEntityInput } from "./sourceEntitySchema";
+import { EnvService, type EnvService as EnvServiceType } from "./env";
 
 const schema = buildSchema();
 export type ResourceInput = z.infer<typeof schema>;
@@ -52,11 +53,11 @@ export type SeriesDetails = {
 export interface NotionService {
   addResource: (
     data: ResourceInput,
-    opts?: { verbose?: boolean },
+    opts?: { verbose?: boolean }
   ) => Effect.Effect<{ pageId: string; url?: string }, Error>;
   addSourceEntity: (
     data: SourceEntityInput,
-    opts?: { verbose?: boolean },
+    opts?: { verbose?: boolean }
   ) => Effect.Effect<{ pageId: string; url?: string }, Error>;
   listResources: (opts?: { limit?: number }) => Effect.Effect<
     ReadonlyArray<{
@@ -91,17 +92,17 @@ export interface NotionService {
   updateResource: (pageId: string, updates: Partial<ResourceDetails>) => Effect.Effect<void, Error>;
   updateSourceEntity: (
     pageId: string,
-    updates: Partial<SourceEntityDetails>,
+    updates: Partial<SourceEntityDetails>
   ) => Effect.Effect<void, Error>;
   updateSeries: (pageId: string, updates: Partial<SeriesDetails>) => Effect.Effect<void, Error>;
   addSeries: (
     data: SeriesInput,
-    opts?: { verbose?: boolean },
+    opts?: { verbose?: boolean }
   ) => Effect.Effect<{ pageId: string; url?: string }, Error>;
   deletePage: (pageId: string) => Effect.Effect<void, Error>;
   updatePage: (
     pageId: string,
-    properties: UpdatePageParameters["properties"],
+    properties: UpdatePageParameters["properties"]
   ) => Effect.Effect<void, Error>;
   getPage: (pageId: string) => Effect.Effect<GetPageResponse, Error>;
 }
@@ -211,7 +212,7 @@ async function validateSelectOptions(notion: Client, databaseId: string, input: 
   const ensureAllowed = (
     prop: NotionSelectProperty | NotionMultiSelectProperty | undefined,
     values: readonly string[],
-    propName: string,
+    propName: string
   ) => {
     if (!prop || (prop.type !== "select" && prop.type !== "multi_select")) return;
     const options = prop.type === "select" ? prop.select.options : prop.multi_select.options;
@@ -219,7 +220,7 @@ async function validateSelectOptions(notion: Client, databaseId: string, input: 
     for (const v of values) {
       if (!allowed.has(v)) {
         throw new Error(
-          `Value '${v}' is not an allowed option for ${propName}. Please add it manually in Notion.`,
+          `Value '${v}' is not an allowed option for ${propName}. Please add it manually in Notion.`
         );
       }
     }
@@ -232,17 +233,11 @@ async function validateSelectOptions(notion: Client, databaseId: string, input: 
 
 export const NotionClientLayer = Layer.effect(
   Notion,
-  Effect.suspend(() => {
-    const apiKey = process.env["NOTION_API_KEY"];
-    const databaseId = process.env["NOTION_RESOURCES_DATABASE_ID"];
-    const sourceEntitiesDatabaseId = process.env["NOTION_SOURCE_ENTITIES_DATABASE_ID"];
-    const resourceSeriesDatabaseId = process.env["NOTION_RESOURCE_SERIES_DATABASE_ID"];
-    if (!apiKey) return Effect.fail(new Error("Missing NOTION_API_KEY"));
-    if (!databaseId) return Effect.fail(new Error("Missing NOTION_RESOURCES_DATABASE_ID"));
-    if (!sourceEntitiesDatabaseId)
-      return Effect.fail(new Error("Missing NOTION_SOURCE_ENTITIES_DATABASE_ID"));
+  Effect.gen(function* () {
+    const env = yield* EnvService;
+    const config = yield* env.getNotionConfig();
 
-    const notion = new Client({ auth: apiKey });
+    const notion = new Client({ auth: config.apiKey });
 
     return Effect.succeed<NotionService>({
       addResource: (input, opts) =>
@@ -250,12 +245,12 @@ export const NotionClientLayer = Layer.effect(
           Effect.tryPromise({
             try: async () => {
               // Enforce option existence
-              await validateSelectOptions(notion, databaseId, input);
+              await validateSelectOptions(notion, config.resourcesDatabaseId, input);
 
               const properties = mapResourceToProperties(input);
 
               const page = await notion.pages.create({
-                parent: { database_id: databaseId },
+                parent: { database_id: config.resourcesDatabaseId },
                 properties,
               });
               const url = (page as unknown as { url?: string }).url;
@@ -263,7 +258,7 @@ export const NotionClientLayer = Layer.effect(
             },
             catch: (e) => new Error(`Notion API error: ${String(e)}`),
           }),
-          Effect.tap(() => (opts?.verbose ? Console.log("Notion page created") : Effect.void)),
+          Effect.tap(() => (opts?.verbose ? Console.log("Notion page created") : Effect.void))
         ),
       addSourceEntity: (input, opts) =>
         pipe(
@@ -271,7 +266,7 @@ export const NotionClientLayer = Layer.effect(
             try: async () => {
               // Validate select/multi-select allowed options on Source Entities db
               const db = (await notion.databases.retrieve({
-                database_id: sourceEntitiesDatabaseId,
+                database_id: config.sourceEntitiesDatabaseId,
               })) as unknown as NotionDatabase;
 
               const typeProp = db.properties["Type"] as NotionSelectProperty | undefined;
@@ -282,7 +277,7 @@ export const NotionClientLayer = Layer.effect(
               const ensureAllowed = (
                 prop: NotionSelectProperty | NotionMultiSelectProperty | undefined,
                 values: readonly string[],
-                propName: string,
+                propName: string
               ) => {
                 if (!prop || (prop.type !== "select" && prop.type !== "multi_select")) return;
                 const options =
@@ -291,7 +286,7 @@ export const NotionClientLayer = Layer.effect(
                 for (const v of values) {
                   if (!allowed.has(v)) {
                     throw new Error(
-                      `Value '${v}' is not an allowed option for ${propName}. Please add it manually in Notion.`,
+                      `Value '${v}' is not an allowed option for ${propName}. Please add it manually in Notion.`
                     );
                   }
                 }
@@ -302,7 +297,7 @@ export const NotionClientLayer = Layer.effect(
 
               const properties = mapSourceEntityToProperties(input);
               const page = await notion.pages.create({
-                parent: { database_id: sourceEntitiesDatabaseId },
+                parent: { database_id: config.sourceEntitiesDatabaseId },
                 properties,
               });
               const url = (page as unknown as { url?: string }).url;
@@ -311,14 +306,14 @@ export const NotionClientLayer = Layer.effect(
             catch: (e) => new Error(`Notion API error: ${String(e)}`),
           }),
           Effect.tap(() =>
-            opts?.verbose ? Console.log("Notion source entity page created") : Effect.void,
-          ),
+            opts?.verbose ? Console.log("Notion source entity page created") : Effect.void
+          )
         ),
       listResources: (opts) =>
         Effect.tryPromise({
           try: async () => {
             const res = await notion.databases.query({
-              database_id: databaseId,
+              database_id: config.resourcesDatabaseId,
               page_size: Math.min(Math.max(opts?.limit ?? 25, 1), 100),
             });
             return res.results.map((p) => {
@@ -357,7 +352,7 @@ export const NotionClientLayer = Layer.effect(
         Effect.tryPromise({
           try: async () => {
             const res = await notion.databases.query({
-              database_id: sourceEntitiesDatabaseId,
+              database_id: config.sourceEntitiesDatabaseId,
               page_size: Math.min(Math.max(opts?.limit ?? 25, 1), 100),
             });
             return res.results.map((p) => {
@@ -388,10 +383,10 @@ export const NotionClientLayer = Layer.effect(
       listResourceSeries: (opts) =>
         Effect.tryPromise({
           try: async () => {
-            if (!resourceSeriesDatabaseId)
+            if (!config.resourceSeriesDatabaseId)
               throw new Error("Missing NOTION_RESOURCE_SERIES_DATABASE_ID");
             const res = await notion.databases.query({
-              database_id: resourceSeriesDatabaseId,
+              database_id: config.resourceSeriesDatabaseId,
               page_size: Math.min(Math.max(opts?.limit ?? 25, 1), 100),
             });
             return res.results.map((p) => {
@@ -412,12 +407,12 @@ export const NotionClientLayer = Layer.effect(
         pipe(
           Effect.tryPromise({
             try: async () => {
-              if (!resourceSeriesDatabaseId) {
+              if (!config.resourceSeriesDatabaseId) {
                 throw new Error("Missing NOTION_RESOURCE_SERIES_DATABASE_ID");
               }
               const properties = mapSeriesToProperties(input);
               const page = await notion.pages.create({
-                parent: { database_id: resourceSeriesDatabaseId },
+                parent: { database_id: config.resourceSeriesDatabaseId },
                 properties,
               });
               const url = (page as unknown as { url?: string }).url;
@@ -426,8 +421,8 @@ export const NotionClientLayer = Layer.effect(
             catch: (e) => new Error(`Notion API error: ${String(e)}`),
           }),
           Effect.tap(() =>
-            opts?.verbose ? Console.log("Notion series page created") : Effect.void,
-          ),
+            opts?.verbose ? Console.log("Notion series page created") : Effect.void
+          )
         ),
       deletePage: (pageId: string) =>
         pipe(
@@ -437,7 +432,7 @@ export const NotionClientLayer = Layer.effect(
             },
             catch: (e) => new Error(`Notion API error: ${String(e)}`),
           }),
-          Effect.tap(() => Console.log(`Page ${pageId} archived.`)),
+          Effect.tap(() => Console.log(`Page ${pageId} archived.`))
         ),
       updatePage: (pageId: string, properties: UpdatePageParameters["properties"]) =>
         pipe(
@@ -447,7 +442,7 @@ export const NotionClientLayer = Layer.effect(
             },
             catch: (e) => new Error(`Notion API error: ${String(e)}`),
           }),
-          Effect.tap(() => Console.log(`Page ${pageId} updated.`)),
+          Effect.tap(() => Console.log(`Page ${pageId} updated.`))
         ),
       getPage: (pageId: string) =>
         Effect.tryPromise({
@@ -726,5 +721,5 @@ export const NotionClientLayer = Layer.effect(
           catch: (e) => new Error(`Notion API error: ${String(e)}`),
         }),
     });
-  }),
+  })
 );

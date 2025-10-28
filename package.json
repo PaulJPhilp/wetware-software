@@ -18,19 +18,21 @@
     "build:shared": "cd packages/shared && bun run build",
     "test:all": "bun run test:cli",
     "test:cli": "cd packages/cli && bun run test",
-    "format": "bunx biome format --write apps/ packages/",
-    "lint:fix": "bunx biome check --apply-unsafe apps/ packages/",
-    "check": "bunx biome check apps/ packages/",
+    "format": "bunx ultracite fix apps/ packages/",
+    "lint:fix": "bunx ultracite fix apps/ packages/",
+    "check": "bunx ultracite check apps/ packages/",
     "bootstrap": "bun install"
   },
   "dependencies": {
     "@types/react-syntax-highlighter": "^15.5.13",
-    "react-syntax-highlighter": "^15.6.6",
+    "effect-env": "^0.1.1",
+    "react-syntax-highlighter": "^16.0.0",
     "tailwindcss-fluid-typography": "^1.0.5",
-    "vercel": "^48.5.0"
+    "vercel": "^48.6.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.7",
-    "typescript": "^5.9.3"
+    "@biomejs/biome": "2.3.0",
+    "typescript": "^5.9.3",
+    "ultracite": "6.0.4"
   }
 }
