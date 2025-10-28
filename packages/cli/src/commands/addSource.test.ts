@@ -1,8 +1,10 @@
 /** biome-ignore-all lint/complexity/useLiteralKeys: <> */
 import * as NodeContext from "@effect/platform-node/NodeContext";
 import * as Effect from "effect/Effect";
+import * as Layer from "effect/Layer";
 import { describe, expect, it } from "vitest";
-import { OpenAI, type OpenAIService } from "../lib/ai";
+import { type AIService as OpenAIService, AIServiceTypeId } from "../services/ai";
+import { OpenAI } from "../lib/ai";
 import { Notion } from "../lib/notion";
 import { createNotionMock } from "../test/notionTestUtils";
 import { runAddSource } from "./addSource";
@@ -12,6 +14,7 @@ describe("CLI add source", () => {
     let notionCalledWith: unknown | null = null;
 
     const fakeAI: OpenAIService = {
+      [AIServiceTypeId]: AIServiceTypeId,
       generateResourceJson: () => Effect.succeed("{ }"), // Not used in this test
       generateSourceEntityJson: ({ prompt, sourceBlock }) =>
         Effect.sync(() => {
@@ -46,12 +49,20 @@ describe("CLI add source", () => {
       listResourceSeries: () => Effect.succeed([]),
     });
 
-    const effect = runAddSource("Test Source", "https://example.com/test-source", true, {
+    const testLayer = Layer.merge(
+      Layer.succeed(OpenAI, fakeAI),
+      Layer.succeed(Notion, fakeNotion)
+    );
+
+    const effect = runAddSource(
+      "Test Source",
+      "https://example.com/test-source",
+      true,
+      {
       promptOverride: "PROMPT Override For Tests",
-    }).pipe(
-      Effect.provideService(OpenAI, fakeAI),
-      Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+    }
+    ).pipe(
+      Effect.provide(Layer.merge(testLayer, NodeContext.layer))
     );
 
     await Effect.runPromise(effect);
@@ -65,6 +76,7 @@ describe("CLI add source", () => {
 
   it("handles AI returning invalid JSON (schema validation failure)", async () => {
     const fakeAI: OpenAIService = {
+      [AIServiceTypeId]: AIServiceTypeId,
       generateResourceJson: () => Effect.succeed("{ }"),
       generateSourceEntityJson: () =>
         Effect.sync(() => {
@@ -88,12 +100,20 @@ describe("CLI add source", () => {
       listResourceSeries: () => Effect.succeed([]),
     });
 
-    const effect = runAddSource("Invalid Source", "https://example.com/invalid-source", true, {
+    const testLayer = Layer.merge(
+      Layer.succeed(OpenAI, fakeAI),
+      Layer.succeed(Notion, fakeNotion)
+    );
+
+    const effect = runAddSource(
+      "Invalid Source",
+      "https://example.com/invalid-source",
+      true,
+      {
       promptOverride: "PROMPT Override For Tests",
-    }).pipe(
-      Effect.provideService(OpenAI, fakeAI),
-      Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+    }
+    ).pipe(
+      Effect.provide(Layer.merge(testLayer, NodeContext.layer))
     );
 
     const result = await Effect.runPromiseExit(effect);
@@ -101,7 +121,11 @@ describe("CLI add source", () => {
     if (result._tag === "Failure") {
       const failure = result.cause;
       if (failure._tag === "Fail") {
-        expect(failure.error.message).toContain("Validation failed");
+        if (failure.error instanceof Error) {
+          expect(failure.error.message).toContain("Validation failed");
+        } else {
+          throw new Error("Expected Error object but got: " + typeof failure.error);
+        }
       } else {
         throw new Error("Expected Fail cause");
       }
@@ -112,6 +136,7 @@ describe("CLI add source", () => {
 
   it("handles AI returning syntactically invalid JSON", async () => {
     const fakeAI: OpenAIService = {
+      [AIServiceTypeId]: AIServiceTypeId,
       generateResourceJson: () => Effect.succeed("{ }"),
       generateSourceEntityJson: () =>
         Effect.sync(() => {
@@ -129,12 +154,20 @@ describe("CLI add source", () => {
       listResourceSeries: () => Effect.succeed([]),
     });
 
-    const effect = runAddSource("Invalid JSON Source", "https://example.com/invalid-json", true, {
+    const testLayer = Layer.merge(
+      Layer.succeed(OpenAI, fakeAI),
+      Layer.succeed(Notion, fakeNotion)
+    );
+
+    const effect = runAddSource(
+      "Invalid JSON Source",
+      "https://example.com/invalid-json",
+      true,
+      {
       promptOverride: "PROMPT Override For Tests",
-    }).pipe(
-      Effect.provideService(OpenAI, fakeAI),
-      Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+    }
+    ).pipe(
+      Effect.provide(Layer.merge(testLayer, NodeContext.layer))
     );
 
     const result = await Effect.runPromiseExit(effect);
@@ -142,7 +175,11 @@ describe("CLI add source", () => {
     if (result._tag === "Failure") {
       const failure = result.cause;
       if (failure._tag === "Fail") {
-        expect(failure.error.message).toContain("Validation failed");
+        if (failure.error instanceof Error) {
+          expect(failure.error.message).toContain("Validation failed");
+        } else {
+          throw new Error("Expected Error object but got: " + typeof failure.error);
+        }
       } else {
         throw new Error("Expected Fail cause");
       }
@@ -153,6 +190,7 @@ describe("CLI add source", () => {
 
   it("handles Notion API errors during addSourceEntity", async () => {
     const fakeAI: OpenAIService = {
+      [AIServiceTypeId]: AIServiceTypeId,
       generateResourceJson: () => Effect.succeed("{}"),
       generateSourceEntityJson: () =>
         Effect.sync(() =>
@@ -177,12 +215,20 @@ describe("CLI add source", () => {
       listResourceSeries: () => Effect.succeed([]),
     });
 
-    const effect = runAddSource("Notion Error Source", "https://example.com/notion-error", true, {
+    const testLayer = Layer.merge(
+      Layer.succeed(OpenAI, fakeAI),
+      Layer.succeed(Notion, fakeNotion)
+    );
+
+    const effect = runAddSource(
+      "Notion Error Source",
+      "https://example.com/notion-error",
+      true,
+      {
       promptOverride: "PROMPT Override For Tests",
-    }).pipe(
-      Effect.provideService(OpenAI, fakeAI),
-      Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer)
+    }
+    ).pipe(
+      Effect.provide(Layer.merge(testLayer, NodeContext.layer))
     );
 
     const result = await Effect.runPromiseExit(effect);
@@ -190,7 +236,13 @@ describe("CLI add source", () => {
     if (result._tag === "Failure") {
       const failure = result.cause;
       if (failure._tag === "Fail") {
-        expect(failure.error.message).toContain("Notion API Error");
+        if (failure.error instanceof Error) {
+          expect(failure.error.message).toContain("Notion API Error");
+        } else {
+          throw new Error(
+            "Expected Error object but got: " + typeof failure.error
+          );
+        }
       } else {
         throw new Error("Expected Fail cause");
       }

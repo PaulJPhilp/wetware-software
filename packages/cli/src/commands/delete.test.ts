@@ -2,6 +2,13 @@ import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
 import type { MockInstance } from "vitest";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("effect/Console", () => {
+  return {
+    log: vi.fn(() => Effect.void),
+    error: vi.fn(() => Effect.void),
+  };
+});
 import { Notion } from "../lib/notion";
 import { createNotionMock } from "../test/notionTestUtils";
 import { deleteEntity } from "./delete";
@@ -11,12 +18,18 @@ describe("deleteEntity", () => {
   let errorSpy: MockInstance<Parameters<typeof Console.error>, ReturnType<typeof Console.error>>;
 
   beforeEach(() => {
-    logSpy = vi.spyOn(Console, "log").mockReturnValue(Effect.void);
-    errorSpy = vi.spyOn(Console, "error").mockReturnValue(Effect.void);
+    logSpy = Console.log as unknown as MockInstance<
+      Parameters<typeof Console.log>,
+      ReturnType<typeof Console.log>
+    >;
+    errorSpy = Console.error as unknown as MockInstance<
+      Parameters<typeof Console.error>,
+      ReturnType<typeof Console.error>
+    >;
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it("archives the requested page and reports success", async () => {

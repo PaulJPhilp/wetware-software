@@ -11,7 +11,7 @@ import { getCommand } from "./commands/get";
 import { updateCommand } from "./commands/update";
 import { listCommand, listResourcesTop, listSeriesTop, listSourcesTop } from "./commands/list";
 import { validateCommand } from "./commands/validate";
-import { OpenAIProviderLayer } from "./lib/ai";
+import { AIServiceLive as OpenAIProviderLayer } from "./services/ai";
 import { NotionClientLayer } from "./lib/notion";
 import { EnvLayer } from "./lib/env";
 

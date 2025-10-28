@@ -28,7 +28,7 @@
     "effect-env": "^0.1.1",
     "react-syntax-highlighter": "^16.0.0",
     "tailwindcss-fluid-typography": "^1.0.5",
-    "vercel": "^48.6.0"
+    "vercel": "^48.6.6"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.0",

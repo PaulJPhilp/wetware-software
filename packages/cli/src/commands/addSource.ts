@@ -68,7 +68,9 @@ export function handler(
         yield* Console.log(`Reading prompt from ${promptPath}`);
       }
       const fs = yield* FileSystem;
-      prompt = yield* fs.readFileString(promptPath);
+      prompt = yield* fs
+        .readFileString(promptPath)
+        .pipe(Effect.mapError((e) => new Error(String(e))));
     }
 
     const sourceBlock = [`Source Name: "${sourceName}"`, `Source URL: "${sourceUrl ?? ""}"`].join(

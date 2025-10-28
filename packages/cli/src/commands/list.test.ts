@@ -1,8 +1,12 @@
 import * as NodeContext from "@effect/platform-node/NodeContext";
-import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
 import type { MockInstance } from "vitest";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+vi.mock("effect/Console", () => ({
+  log: vi.fn(() => Effect.void),
+  error: vi.fn(() => Effect.void),
+}));
+import * as Console from "effect/Console";
 import { Notion } from "../lib/notion";
 import { createNotionMock } from "../test/notionTestUtils";
 import { listResources, listSeries, listSources } from "./list";
@@ -15,12 +19,18 @@ describe("CLI list sources", () => {
   >;
 
   beforeEach(() => {
-    consoleSpy = vi.spyOn(Console, "log").mockReturnValue(Effect.void);
-    consoleErrorSpy = vi.spyOn(Console, "error").mockReturnValue(Effect.void);
+    consoleSpy = Console.log as unknown as MockInstance<
+      Parameters<typeof Console.log>,
+      ReturnType<typeof Console.log>
+    >;
+    consoleErrorSpy = Console.error as unknown as MockInstance<
+      Parameters<typeof Console.error>,
+      ReturnType<typeof Console.error>
+    >;
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it("lists source entities from Notion (happy path)", async () => {
