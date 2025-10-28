@@ -10,7 +10,7 @@ describe("AI service", () => {
       generateSeriesJson: () => Effect.succeed('{"ok":true}'),
     };
     const result = await Effect.runPromise(
-      svc.generateResourceJson({ prompt: "p", resourceBlock: "r" }),
+      svc.generateResourceJson({ prompt: "p", resourceBlock: "r" })
     );
     expect(result).toBe('{"ok":true}');
   });

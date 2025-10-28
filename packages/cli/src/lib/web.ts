@@ -3,7 +3,7 @@ import * as Effect from "effect/Effect";
 function extractMeta(html: string, name: string): string | null {
   const re = new RegExp(
     `<meta[^>]+(?:name|property)=["']${name}["'][^>]+content=["']([^"']+)["'][^>]*>`,
-    "i",
+    "i"
   );
   const m = html.match(re);
   return m?.[1] ?? null;

@@ -13,7 +13,7 @@ import { fetchPageMetadata } from "../lib/web";
 
 const verboseOption = Options.boolean("verbose").pipe(
   Options.withAlias("v"),
-  Options.withDescription("Enable verbose output"),
+  Options.withDescription("Enable verbose output")
 );
 
 export const resourceCommand = pipe(
@@ -22,13 +22,13 @@ export const resourceCommand = pipe(
     options: Options.all({ verbose: verboseOption }),
   }),
   Command.withDescription("Add a single resource by URL"),
-  Command.withHandler(({ args, options }) => runAddResource(args, Boolean(options.verbose))),
+  Command.withHandler(({ args, options }) => runAddResource(args, Boolean(options.verbose)))
 );
 
 export const addResourceCommand = pipe(
   Command.make("add"),
   Command.withDescription("Add resources to Notion"),
-  Command.withSubcommands([resourceCommand]),
+  Command.withSubcommands([resourceCommand])
 );
 
 export interface RunAddResourceOptions {
@@ -38,7 +38,7 @@ export interface RunAddResourceOptions {
 export function runAddResource(
   resourceUrl: string,
   isVerbose: boolean,
-  options?: RunAddResourceOptions,
+  options?: RunAddResourceOptions
 ) {
   return Effect.gen(function* () {
     const ai = yield* OpenAI;
@@ -77,7 +77,7 @@ export function runAddResource(
 
     const res = yield* notion.addResource(validated, { verbose: isVerbose });
     yield* Console.log(
-      `Success: Created Notion page ${res.pageId}${res.url ? ` at ${res.url}` : ""}`,
+      `Success: Created Notion page ${res.pageId}${res.url ? ` at ${res.url}` : ""}`
     );
   });
 }

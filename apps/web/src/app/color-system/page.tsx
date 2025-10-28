@@ -4,9 +4,9 @@ export default function ColorSystemPage() {
   return (
     <main className="min-h-screen bg-brand">
       <div className="container mx-auto py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-sans font-bold text-brand mb-4">Brand Color System</h1>
-          <p className="text-brand-muted max-w-2xl mx-auto">
+        <div className="mb-12 text-center">
+          <h1 className="mb-4 font-bold font-sans text-4xl text-brand">Brand Color System</h1>
+          <p className="mx-auto max-w-2xl text-brand-muted">
             A comprehensive color system using CSS variables for consistent theming across light and
             dark modes. All colors automatically adapt based on the current theme.
           </p>
@@ -15,14 +15,14 @@ export default function ColorSystemPage() {
         <ColorSystemExamples />
 
         <div className="mt-16">
-          <h2 className="text-2xl font-sans font-bold text-brand mb-8 text-center">
+          <h2 className="mb-8 text-center font-bold font-sans text-2xl text-brand">
             Theme-Aware SVG Example
           </h2>
           <ExampleSVG />
         </div>
 
-        <div className="mt-16 bg-charcoal text-silver rounded-lg p-8">
-          <h2 className="text-2xl font-sans font-bold mb-4">Implementation Notes</h2>
+        <div className="mt-16 rounded-lg bg-charcoal p-8 text-silver">
+          <h2 className="mb-4 font-bold font-sans text-2xl">Implementation Notes</h2>
           <div className="prose prose-invert max-w-none">
             <p>
               This color system uses CSS variables defined in <code>globals.css</code> and mapped to

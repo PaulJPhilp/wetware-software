@@ -3,7 +3,7 @@ import { parseHTML } from "linkedom";
 import { afterEach } from "vitest";
 
 // Create a minimal global DOM for tests that need document/window
-const { window } = parseHTML(`<!doctype html><html><body></body></html>`);
+const { window } = parseHTML("<!doctype html><html><body></body></html>");
 // set on both global and globalThis so different modules can access it
 (global as any).window = window as any;
 (global as any).document = window.document as any;

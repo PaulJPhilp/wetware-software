@@ -27,8 +27,8 @@ export const getResourceCommand = pipe(
       yield* Console.log(`  Focus Area: ${resource.focusArea?.join(", ") ?? "N/A"}`);
       yield* Console.log(`  Tags: ${resource.tags?.join(", ") ?? "N/A"}`);
       yield* Console.log(`  Read Time (min): ${resource.readTimeMinutes ?? "N/A"}`);
-    }).pipe(Effect.catchAll((e) => Console.error(String(e)))),
-  ),
+    }).pipe(Effect.catchAll((e) => Console.error(String(e))))
+  )
 );
 
 export const getSourceCommand = pipe(
@@ -47,8 +47,8 @@ export const getSourceCommand = pipe(
       yield* Console.log(`  Description: ${source.description ?? "N/A"}`);
       yield* Console.log(`  Paul's Endorsement: ${source.endorsement ?? "N/A"}`);
       yield* Console.log(`  Focus Area: ${source.focusArea?.join(", ") ?? "N/A"}`);
-    }).pipe(Effect.catchAll((e) => Console.error(String(e)))),
-  ),
+    }).pipe(Effect.catchAll((e) => Console.error(String(e))))
+  )
 );
 
 export const getSeriesCommand = pipe(
@@ -65,12 +65,12 @@ export const getSeriesCommand = pipe(
       yield* Console.log(`  URL: ${series.url ?? "N/A"}`);
       yield* Console.log(`  Description: ${series.description ?? "N/A"}`);
       yield* Console.log(`  Goal: ${series.goal ?? "N/A"}`);
-    }).pipe(Effect.catchAll((e) => Console.error(String(e)))),
-  ),
+    }).pipe(Effect.catchAll((e) => Console.error(String(e))))
+  )
 );
 
 export const getCommand = pipe(
   Command.make("get"),
   Command.withDescription("Retrieve detailed information from Notion tables"),
-  Command.withSubcommands([getResourceCommand, getSourceCommand, getSeriesCommand]),
+  Command.withSubcommands([getResourceCommand, getSourceCommand, getSeriesCommand])
 );

@@ -14,11 +14,11 @@ describe("addSeries", () => {
     });
     const mockAI: OpenAIService = {
       generateSeriesJson: vi.fn(() =>
-        Effect.succeed('{ "name": "test", "description": "test", "goal": "test" }'),
+        Effect.succeed('{ "name": "test", "description": "test", "goal": "test" }')
       ),
       generateResourceJson: vi.fn((_args) => notImplementedEffect<string>("generateResourceJson")),
       generateSourceEntityJson: vi.fn((_args) =>
-        notImplementedEffect<string>("generateSourceEntityJson"),
+        notImplementedEffect<string>("generateSourceEntityJson")
       ),
     };
 
@@ -30,7 +30,7 @@ describe("addSeries", () => {
     }).pipe(
       Effect.provide(TestNotion),
       Effect.provide(TestAI),
-      Effect.provide(NodeFileSystem.layer),
+      Effect.provide(NodeFileSystem.layer)
     );
 
     const result = await Effect.runPromise(program);

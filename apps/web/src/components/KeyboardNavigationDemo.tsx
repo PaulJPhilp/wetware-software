@@ -43,52 +43,52 @@ export function KeyboardNavigationDemo() {
   };
 
   return (
-    <div ref={demoRef} className="max-w-4xl mx-auto p-8 space-y-8">
-      <div className="text-center space-y-4">
-        <h1 className="text-3xl font-bold text-foreground">Keyboard Navigation Demo</h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
+    <div className="mx-auto max-w-4xl space-y-8 p-8" ref={demoRef}>
+      <div className="space-y-4 text-center">
+        <h1 className="font-bold text-3xl text-foreground">Keyboard Navigation Demo</h1>
+        <p className="mx-auto max-w-2xl text-muted-foreground">
           This demo showcases the enhanced keyboard navigation features. Try navigating using only
           your keyboard: Tab, Arrow keys, Enter, Space, and Escape.
         </p>
       </div>
 
       {/* Keyboard Instructions */}
-      <div className="bg-muted/20 rounded-lg p-6">
-        <h2 className="text-xl font-semibold mb-4">Keyboard Shortcuts</h2>
-        <div className="grid md:grid-cols-2 gap-4 text-sm">
+      <div className="rounded-lg bg-muted/20 p-6">
+        <h2 className="mb-4 font-semibold text-xl">Keyboard Shortcuts</h2>
+        <div className="grid gap-4 text-sm md:grid-cols-2">
           <div>
-            <h3 className="font-medium mb-2">General Navigation</h3>
+            <h3 className="mb-2 font-medium">General Navigation</h3>
             <ul className="space-y-1 text-muted-foreground">
               <li>
-                <kbd className="bg-muted px-1 rounded">Tab</kbd> - Move to next element
+                <kbd className="rounded bg-muted px-1">Tab</kbd> - Move to next element
               </li>
               <li>
-                <kbd className="bg-muted px-1 rounded">Shift + Tab</kbd> - Move to previous element
+                <kbd className="rounded bg-muted px-1">Shift + Tab</kbd> - Move to previous element
               </li>
               <li>
-                <kbd className="bg-muted px-1 rounded">Enter</kbd> /{" "}
-                <kbd className="bg-muted px-1 rounded">Space</kbd> - Activate button
+                <kbd className="rounded bg-muted px-1">Enter</kbd> /{" "}
+                <kbd className="rounded bg-muted px-1">Space</kbd> - Activate button
               </li>
               <li>
-                <kbd className="bg-muted px-1 rounded">Escape</kbd> - Close modal/dropdown
+                <kbd className="rounded bg-muted px-1">Escape</kbd> - Close modal/dropdown
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="font-medium mb-2">Menu Navigation</h3>
+            <h3 className="mb-2 font-medium">Menu Navigation</h3>
             <ul className="space-y-1 text-muted-foreground">
               <li>
-                <kbd className="bg-muted px-1 rounded">↑</kbd> /{" "}
-                <kbd className="bg-muted px-1 rounded">↓</kbd> - Navigate menu items
+                <kbd className="rounded bg-muted px-1">↑</kbd> /{" "}
+                <kbd className="rounded bg-muted px-1">↓</kbd> - Navigate menu items
               </li>
               <li>
-                <kbd className="bg-muted px-1 rounded">Enter</kbd> - Select menu item
+                <kbd className="rounded bg-muted px-1">Enter</kbd> - Select menu item
               </li>
               <li>
-                <kbd className="bg-muted px-1 rounded">Home</kbd> - First item
+                <kbd className="rounded bg-muted px-1">Home</kbd> - First item
               </li>
               <li>
-                <kbd className="bg-muted px-1 rounded">End</kbd> - Last item
+                <kbd className="rounded bg-muted px-1">End</kbd> - Last item
               </li>
             </ul>
           </div>
@@ -96,38 +96,38 @@ export function KeyboardNavigationDemo() {
       </div>
 
       {/* Demo Components */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {/* Dropdown Demo */}
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Enhanced Dropdown</h3>
-          <p className="text-sm text-muted-foreground">
+          <h3 className="font-semibold text-lg">Enhanced Dropdown</h3>
+          <p className="text-muted-foreground text-sm">
             Full keyboard navigation with arrow keys, proper ARIA attributes, and focus management.
           </p>
 
           <Dropdown>
             <DropdownTrigger className="w-full justify-between">
-              Actions <ChevronDown className="w-4 h-4" />
+              Actions <ChevronDown className="h-4 w-4" />
             </DropdownTrigger>
             <DropdownContent align="start">
               <DropdownItem onClick={() => console.log("Edit clicked")}>
-                <Edit className="w-4 h-4 mr-2" />
+                <Edit className="mr-2 h-4 w-4" />
                 Edit
               </DropdownItem>
               <DropdownItem onClick={() => console.log("Share clicked")}>
-                <Share className="w-4 h-4 mr-2" />
+                <Share className="mr-2 h-4 w-4" />
                 Share
               </DropdownItem>
               <DropdownItem onClick={() => console.log("Download clicked")}>
-                <Download className="w-4 h-4 mr-2" />
+                <Download className="mr-2 h-4 w-4" />
                 Download
               </DropdownItem>
               <DropdownSeparator />
               <DropdownItem onClick={() => console.log("Settings clicked")}>
-                <Settings className="w-4 h-4 mr-2" />
+                <Settings className="mr-2 h-4 w-4" />
                 Settings
               </DropdownItem>
               <DropdownItem onClick={() => console.log("Delete clicked")}>
-                <Trash className="w-4 h-4 mr-2 text-destructive" />
+                <Trash className="mr-2 h-4 w-4 text-destructive" />
                 <span className="text-destructive">Delete</span>
               </DropdownItem>
             </DropdownContent>
@@ -136,8 +136,8 @@ export function KeyboardNavigationDemo() {
 
         {/* Modal Demo */}
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Enhanced Modal</h3>
-          <p className="text-sm text-muted-foreground">
+          <h3 className="font-semibold text-lg">Enhanced Modal</h3>
+          <p className="text-muted-foreground text-sm">
             Focus trapping, escape key handling, and proper ARIA attributes for screen readers.
           </p>
 
@@ -148,20 +148,20 @@ export function KeyboardNavigationDemo() {
                 <ModalTitle>Demo Modal</ModalTitle>
               </ModalHeader>
               <ModalBody>
-                <p className="text-muted-foreground mb-4">
+                <p className="mb-4 text-muted-foreground">
                   This modal demonstrates proper focus management. Notice how:
                 </p>
-                <ul className="text-sm text-muted-foreground space-y-2 mb-4">
+                <ul className="mb-4 space-y-2 text-muted-foreground text-sm">
                   <li>• Focus is trapped within the modal</li>
                   <li>• Tab cycles through focusable elements</li>
                   <li>• Escape key closes the modal</li>
                   <li>• Focus returns to the trigger button when closed</li>
                 </ul>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
+                  <Button size="sm" variant="outline">
                     Sample Button 1
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button size="sm" variant="outline">
                     Sample Button 2
                   </Button>
                 </div>
@@ -176,13 +176,13 @@ export function KeyboardNavigationDemo() {
 
         {/* Search Modal Demo */}
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Search Modal</h3>
-          <p className="text-sm text-muted-foreground">
+          <h3 className="font-semibold text-lg">Search Modal</h3>
+          <p className="text-muted-foreground text-sm">
             Complex modal with search functionality, arrow key navigation through results.
           </p>
 
-          <Button onClick={() => setIsSearchOpen(true)} className="w-full" variant="outline">
-            <Search className="w-4 h-4 mr-2" />
+          <Button className="w-full" onClick={() => setIsSearchOpen(true)} variant="outline">
+            <Search className="mr-2 h-4 w-4" />
             Open Search
           </Button>
 
@@ -191,34 +191,34 @@ export function KeyboardNavigationDemo() {
       </div>
 
       {/* Accessibility Testing */}
-      <div className="bg-muted/20 rounded-lg p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">Accessibility Testing</h2>
-          <Button onClick={runTests} variant="outline" size="sm">
+      <div className="rounded-lg bg-muted/20 p-6">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="font-semibold text-xl">Accessibility Testing</h2>
+          <Button onClick={runTests} size="sm" variant="outline">
             Run Tests
           </Button>
         </div>
 
-        <p className="text-sm text-muted-foreground mb-4">
+        <p className="mb-4 text-muted-foreground text-sm">
           Click "Run Tests" to validate the accessibility of the components above. Results will be
           logged to the console and displayed below.
         </p>
 
         {testResults && (
-          <div className="bg-background rounded border p-4 max-h-64 overflow-y-auto">
-            <pre className="text-xs whitespace-pre-wrap">{testResults}</pre>
+          <div className="max-h-64 overflow-y-auto rounded border bg-background p-4">
+            <pre className="whitespace-pre-wrap text-xs">{testResults}</pre>
           </div>
         )}
       </div>
 
       {/* Implementation Notes */}
-      <div className="bg-blue-50 dark:bg-blue-950/20 rounded-lg p-6">
-        <h2 className="text-xl font-semibold mb-4 text-blue-900 dark:text-blue-100">
+      <div className="rounded-lg bg-blue-50 p-6 dark:bg-blue-950/20">
+        <h2 className="mb-4 font-semibold text-blue-900 text-xl dark:text-blue-100">
           Implementation Highlights
         </h2>
-        <div className="grid md:grid-cols-2 gap-6 text-sm">
+        <div className="grid gap-6 text-sm md:grid-cols-2">
           <div>
-            <h3 className="font-medium mb-2 text-blue-800 dark:text-blue-200">
+            <h3 className="mb-2 font-medium text-blue-800 dark:text-blue-200">
               Enhanced Components
             </h3>
             <ul className="space-y-1 text-blue-700 dark:text-blue-300">
@@ -230,7 +230,7 @@ export function KeyboardNavigationDemo() {
             </ul>
           </div>
           <div>
-            <h3 className="font-medium mb-2 text-blue-800 dark:text-blue-200">
+            <h3 className="mb-2 font-medium text-blue-800 dark:text-blue-200">
               WCAG 2.1 Compliance
             </h3>
             <ul className="space-y-1 text-blue-700 dark:text-blue-300">

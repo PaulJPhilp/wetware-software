@@ -4,12 +4,12 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="mx-auto max-w-7xl px-4 py-12">
       <div className="relative grid grid-cols-1 gap-y-10 md:grid-cols-12 md:gap-x-10 md:gap-y-0">
-        <div className="flex flex-col gap-y-6 md:col-span-8 md:gap-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both">
+        <div className="fade-in slide-in-from-bottom-4 flex animate-in flex-col gap-y-6 fill-mode-both duration-700 md:col-span-8 md:gap-y-10">
           {/* Minimal Hero Section */}
           <section className="mb-12">
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground">
+            <h1 className="font-bold text-4xl text-foreground tracking-tight sm:text-5xl">
               <span className="text-primary">Sound AI systems</span>—from prototype to production.
             </h1>
             <p className="mt-3 text-lg text-muted-foreground">
@@ -21,8 +21,8 @@ export default function Home() {
               Effect + TypeScript + Vercel AI SDK for reliable, maintainable, observable AI—evals,
               guardrails, and tracing from day one. Read:{" "}
               <Link
-                href="/blog/what-soundness-means"
                 className="text-primary underline-offset-4 hover:underline"
+                href="/blog/what-soundness-means"
               >
                 What 'soundness' means in practice →
               </Link>
@@ -45,24 +45,24 @@ export default function Home() {
 
           {/* Proof Chips */}
           <p
-            className="mt-8 text-xs text-muted-foreground break-words"
-            role="note"
             aria-label="Proof of recent work"
+            className="mt-8 break-words text-muted-foreground text-xs"
+            role="note"
           >
             Effect Patterns • 432★ | effect-notion • released | effect-mdx • 1.0 pending |
             EffectiveAgent/effect‑ai‑sdk • in progress
           </p>
         </div>
 
-        <div className="mt-8 flex flex-col items-end md:col-span-4 md:mt-0 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150 fill-mode-both">
+        <div className="fade-in slide-in-from-bottom-4 mt-8 flex animate-in flex-col items-end fill-mode-both delay-150 duration-700 md:col-span-4 md:mt-0">
           <Image
-            src="/images/avatar.jpeg"
             alt="Paul Philp's robotic horse avatar"
-            width={500}
+            className="h-auto w-full max-w-xs rounded-lg border shadow-md"
             height={500}
             priority
             sizes="(min-width: 768px) 300px, 100vw"
-            className="h-auto w-full max-w-xs rounded-lg border shadow-md"
+            src="/images/avatar.jpeg"
+            width={500}
           />
         </div>
       </div>

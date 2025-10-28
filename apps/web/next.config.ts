@@ -60,7 +60,7 @@ const nextConfig: NextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    minimumCacheTTL: 31536000, // 1 year
+    minimumCacheTTL: 31_536_000, // 1 year
     remotePatterns: [
       {
         protocol: "https",

@@ -72,7 +72,7 @@ describe("TransitMapSvg", () => {
     const circles = container.querySelectorAll("circle");
     // stop2 is interchange
     const interchangeCircle = Array.from(circles).find(
-      (circle) => circle.getAttribute("cx") === "150",
+      (circle) => circle.getAttribute("cx") === "150"
     );
     expect(interchangeCircle?.getAttribute("r")).toBe("12"); // interchangeRadius
     expect(interchangeCircle?.getAttribute("stroke")).toBe("white"); // background color
@@ -82,7 +82,7 @@ describe("TransitMapSvg", () => {
     const { container } = render(<TransitMapSvg data={testData} />);
     const circles = container.querySelectorAll("circle");
     const regularCircles = Array.from(circles).filter(
-      (circle) => circle.getAttribute("cx") !== "150",
+      (circle) => circle.getAttribute("cx") !== "150"
     );
     regularCircles.forEach((circle) => {
       expect(circle.getAttribute("r")).toBe("8"); // stationRadius
@@ -114,7 +114,7 @@ describe("TransitMapSvg", () => {
     const dataWithLabelPos = {
       ...testData,
       stops: testData.stops.map((stop) =>
-        stop.id === "stop1" ? { ...stop, labelPos: "top" as const } : stop,
+        stop.id === "stop1" ? { ...stop, labelPos: "top" as const } : stop
       ),
     };
     const { container } = render(<TransitMapSvg data={dataWithLabelPos} />);

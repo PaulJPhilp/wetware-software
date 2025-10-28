@@ -57,7 +57,7 @@ const EnvSchema = z
     notion_database_id_series: z.string().trim().min(1).optional(),
   })
   .superRefine((env, ctx) => {
-    if (!env.NOTION_API_KEY && !env.notion_api_key) {
+    if (!(env.NOTION_API_KEY || env.notion_api_key)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Provide NOTION_API_KEY or notion_api_key with a non-empty value.",
@@ -65,7 +65,7 @@ const EnvSchema = z
       });
     }
 
-    if (!env.NOTION_DATABASE_ID_BLOG_POSTS && !env.notion_database_id_blog_posts) {
+    if (!(env.NOTION_DATABASE_ID_BLOG_POSTS || env.notion_database_id_blog_posts)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Provide NOTION_DATABASE_ID_BLOG_POSTS or notion_database_id_blog_posts.",
@@ -73,7 +73,7 @@ const EnvSchema = z
       });
     }
 
-    if (!env.NOTION_DATABASE_ID_SERIES && !env.notion_database_id_series) {
+    if (!(env.NOTION_DATABASE_ID_SERIES || env.notion_database_id_series)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Provide NOTION_DATABASE_ID_SERIES or notion_database_id_series.",

@@ -74,7 +74,7 @@ export const SeriesCarousel: React.FC<SeriesCarouselProps> = ({
       slidesToShow.lg === 3 && "lg:w-1/3",
       slidesToShow.lg === 4 && "lg:w-1/4",
       slidesToShow.lg === 5 && "lg:w-1/5",
-      slidesToShow.xl === 5 && "xl:w-1/5",
+      slidesToShow.xl === 5 && "xl:w-1/5"
     );
   };
 
@@ -114,13 +114,13 @@ export const SeriesCarousel: React.FC<SeriesCarouselProps> = ({
       <div className={cn("space-y-4", className)} data-testid={testId}>
         {title && (
           <div className="space-y-2">
-            <h2 className="text-xl font-sans font-bold text-foreground leading-tight">{title}</h2>
+            <h2 className="font-bold font-sans text-foreground text-xl leading-tight">{title}</h2>
             {description && (
-              <p className="text-sm text-muted-foreground leading-tight">{description}</p>
+              <p className="text-muted-foreground text-sm leading-tight">{description}</p>
             )}
           </div>
         )}
-        <div className="text-center py-12">
+        <div className="py-12 text-center">
           <p className="text-muted-foreground">No series available yet. Check back soon!</p>
         </div>
       </div>
@@ -128,15 +128,15 @@ export const SeriesCarousel: React.FC<SeriesCarouselProps> = ({
   }
 
   return (
-    <div className={cn("space-y-2 w-full", className)} data-testid={testId}>
+    <div className={cn("w-full space-y-2", className)} data-testid={testId}>
       {/* Header Section */}
       {(title || description) && (
         <div className="space-y-2">
           {title && (
-            <h2 className="text-xl font-sans font-bold text-foreground leading-tight">{title}</h2>
+            <h2 className="font-bold font-sans text-foreground text-xl leading-tight">{title}</h2>
           )}
           {description && (
-            <p className="text-sm text-muted-foreground leading-tight">{description}</p>
+            <p className="text-muted-foreground text-sm leading-tight">{description}</p>
           )}
         </div>
       )}
@@ -150,20 +150,20 @@ export const SeriesCarousel: React.FC<SeriesCarouselProps> = ({
             slidesToShow.sm && `sm:grid-cols-${slidesToShow.sm}`,
             slidesToShow.md && `md:grid-cols-${slidesToShow.md}`,
             slidesToShow.lg && `lg:grid-cols-${slidesToShow.lg}`,
-            slidesToShow.xl && `xl:grid-cols-${slidesToShow.xl}`,
+            slidesToShow.xl && `xl:grid-cols-${slidesToShow.xl}`
           )}
         >
           {series.map((seriesItem, index) => (
             <SeriesCard
-              key={seriesItem.id}
-              series={seriesItem}
-              variant="carousel"
-              size="sm"
               className={cardClassName || ""}
-              showDescription={showDescription}
+              key={seriesItem.id}
+              priority={imagePriority && index < 3}
+              series={seriesItem}
               showArticleCount={showArticleCount}
-              priority={imagePriority && index < 3} // Prioritize first 3 images
-              testId={`carousel-series-${seriesItem.slug}`}
+              showDescription={showDescription}
+              size="sm"
+              testId={`carousel-series-${seriesItem.slug}`} // Prioritize first 3 images
+              variant="carousel"
             />
           ))}
         </div>

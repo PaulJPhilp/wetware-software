@@ -16,40 +16,40 @@ export function NotionContent({ blocks }: { blocks: BlockObjectResponse[] }) {
         if (currentList.length > 0) {
           elements.push(
             currentListType === "bulleted" ? (
-              <ul key={`list-${block.id}`} className="list-disc pl-6 space-y-2">
+              <ul className="list-disc space-y-2 pl-6" key={`list-${block.id}`}>
                 {currentList}
               </ul>
             ) : (
-              <ol key={`list-${block.id}`} className="list-decimal pl-6 space-y-2">
+              <ol className="list-decimal space-y-2 pl-6" key={`list-${block.id}`}>
                 {currentList}
               </ol>
-            ),
+            )
           );
           currentList = [];
         }
         currentListType = listType;
       }
 
-      currentList.push(<NotionBlock key={block.id} block={block} />);
+      currentList.push(<NotionBlock block={block} key={block.id} />);
     } else {
       // Push any existing list to elements
       if (currentList.length > 0) {
         elements.push(
           currentListType === "bulleted" ? (
-            <ul key={`list-${block.id}`} className="list-disc pl-6 space-y-2">
+            <ul className="list-disc space-y-2 pl-6" key={`list-${block.id}`}>
               {currentList}
             </ul>
           ) : (
-            <ol key={`list-${block.id}`} className="list-decimal pl-6 space-y-2">
+            <ol className="list-decimal space-y-2 pl-6" key={`list-${block.id}`}>
               {currentList}
             </ol>
-          ),
+          )
         );
         currentList = [];
         currentListType = null;
       }
 
-      elements.push(<NotionBlock key={block.id} block={block} />);
+      elements.push(<NotionBlock block={block} key={block.id} />);
     }
   });
 
@@ -57,14 +57,14 @@ export function NotionContent({ blocks }: { blocks: BlockObjectResponse[] }) {
   if (currentList.length > 0) {
     elements.push(
       currentListType === "bulleted" ? (
-        <ul key="list-final" className="list-disc pl-6 space-y-2">
+        <ul className="list-disc space-y-2 pl-6" key="list-final">
           {currentList}
         </ul>
       ) : (
-        <ol key="list-final" className="list-decimal pl-6 space-y-2">
+        <ol className="list-decimal space-y-2 pl-6" key="list-final">
           {currentList}
         </ol>
-      ),
+      )
     );
   }
 

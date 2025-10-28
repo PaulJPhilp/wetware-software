@@ -121,42 +121,42 @@ export const SeriesCard: React.FC<SeriesCardProps> = memo(
 
     return (
       <Link
-        href={seriesHref}
-        className="block focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2 rounded-lg"
         aria-label={`View ${series.name} series`}
+        className="block rounded-lg focus:outline-none focus:ring-2 focus:ring-orange focus:ring-offset-2"
         data-testid={testId}
+        href={seriesHref}
       >
         <Card
           className={cn(
-            "group h-full hover:shadow-lg transition-all duration-200 border-border overflow-hidden p-0 gap-0",
+            "group h-full gap-0 overflow-hidden border-border p-0 transition-all duration-200 hover:shadow-lg",
             variantClasses.container,
             sizeClasses.container,
-            className,
+            className
           )}
         >
           <div className="flex h-full">
             <div
               className={cn(
-                "relative overflow-hidden bg-charcoal/5 flex-shrink-0",
+                "relative flex-shrink-0 overflow-hidden bg-charcoal/5",
                 variantClasses.image,
-                sizeClasses.image,
+                sizeClasses.image
               )}
             >
               <Image
-                src={coverImage}
                 alt={`${series.name} series cover`}
-                fill
                 className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                fill
                 priority={priority}
                 sizes="(max-width: 768px) 64px, (max-width: 1024px) 80px, 96px"
+                src={coverImage}
               />
             </div>
-            <div className={cn("flex flex-col justify-center min-w-0", variantClasses.content)}>
+            <div className={cn("flex min-w-0 flex-col justify-center", variantClasses.content)}>
               <h3
                 className={cn(
-                  "group-hover:text-orange transition-colors break-words",
+                  "break-words transition-colors group-hover:text-orange",
                   variantClasses.title,
-                  sizeClasses.title,
+                  sizeClasses.title
                 )}
               >
                 {series.name}
@@ -164,9 +164,9 @@ export const SeriesCard: React.FC<SeriesCardProps> = memo(
               {showDescription && series.description && (
                 <p
                   className={cn(
-                    "text-muted-foreground mt-1",
+                    "mt-1 text-muted-foreground",
                     variantClasses.description,
-                    sizeClasses.description,
+                    sizeClasses.description
                   )}
                 >
                   {series.description}
@@ -175,9 +175,9 @@ export const SeriesCard: React.FC<SeriesCardProps> = memo(
               {showArticleCount && (
                 <div
                   className={cn(
-                    "flex items-center gap-1 text-muted-foreground mt-1",
+                    "mt-1 flex items-center gap-1 text-muted-foreground",
                     variantClasses.meta,
-                    sizeClasses.meta,
+                    sizeClasses.meta
                   )}
                 >
                   <span>{articleCount} articles</span>
@@ -194,7 +194,7 @@ export const SeriesCard: React.FC<SeriesCardProps> = memo(
         </Card>
       </Link>
     );
-  },
+  }
 );
 
 SeriesCard.displayName = "SeriesCard";

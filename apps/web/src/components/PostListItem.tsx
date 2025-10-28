@@ -21,7 +21,7 @@ const columns = [
   columnHelper.accessor("name", {
     header: () => null,
     cell: (info) => (
-      <h5 className="m-0 truncate text-[11px] leading-none font-sans group-hover:text-orange transition-colors">
+      <h5 className="m-0 truncate font-sans text-[11px] leading-none transition-colors group-hover:text-orange">
         {info.getValue()}
       </h5>
     ),
@@ -37,17 +37,17 @@ const columns = [
       cell: (info) => {
         const { seriesName, partNumber } = info.getValue();
         return (
-          <div className="text-xs leading-none text-orange truncate">
+          <div className="truncate text-orange text-xs leading-none">
             {seriesName ? (partNumber ? `${seriesName} • Part ${partNumber}` : seriesName) : ""}
           </div>
         );
       },
-    },
+    }
   ),
   columnHelper.accessor("publishDate", {
     header: () => null,
     cell: (info) => (
-      <div className="text-xs leading-none text-muted-foreground whitespace-nowrap">
+      <div className="whitespace-nowrap text-muted-foreground text-xs leading-none">
         {info.getValue()}
       </div>
     ),
@@ -55,7 +55,7 @@ const columns = [
   columnHelper.accessor("type", {
     header: () => null,
     cell: (info) => (
-      <div className="text-xs leading-none text-muted-foreground whitespace-nowrap">
+      <div className="whitespace-nowrap text-muted-foreground text-xs leading-none">
         {info.getValue()}
       </div>
     ),
@@ -64,7 +64,7 @@ const columns = [
   columnHelper.accessor("readTime", {
     header: () => null,
     cell: (info) => (
-      <div className="text-xs leading-none text-muted-foreground whitespace-nowrap">
+      <div className="whitespace-nowrap text-muted-foreground text-xs leading-none">
         {info.getValue()}m
       </div>
     ),
@@ -86,7 +86,7 @@ export function PostListItem({ post, className, testId }: PostListItemProps) {
   });
 
   return (
-    <div className={`hover:bg-muted/40 transition-colors ${className || ""}`} data-testid={testId}>
+    <div className={`transition-colors hover:bg-muted/40 ${className || ""}`} data-testid={testId}>
       <div
         className="grid items-center gap-2 px-1 py-2"
         style={{ gridTemplateColumns: "1fr 1fr 110px 90px 72px" }}
@@ -95,7 +95,7 @@ export function PostListItem({ post, className, testId }: PostListItemProps) {
           .getRowModel()
           .rows[0]?.getVisibleCells()
           .map((cell) => (
-            <div key={cell.id} className="min-w-0 flex items-center h-6">
+            <div className="flex h-6 min-w-0 items-center" key={cell.id}>
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </div>
           ))}

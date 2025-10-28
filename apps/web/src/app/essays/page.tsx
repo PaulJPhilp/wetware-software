@@ -14,13 +14,13 @@ export default async function EssaysPage() {
     const essays = await getPostsByType("Essay");
 
     return (
-      <main className="max-w-6xl xl:max-w-7xl mx-auto px-4 md:px-6 py-8">
+      <main className="mx-auto max-w-6xl px-4 py-8 md:px-6 xl:max-w-7xl">
         <div className="space-y-8">
           <div className="space-y-2">
-            <h1 className="text-xl font-sans font-bold text-charcoal dark:text-white leading-tight">
+            <h1 className="font-bold font-sans text-charcoal text-xl leading-tight dark:text-white">
               Essays
             </h1>
-            <p className="text-xs text-charcoal/80 dark:text-gray-300 max-w-2xl leading-snug">
+            <p className="max-w-2xl text-charcoal/80 text-xs leading-snug dark:text-gray-300">
               Thoughtful explorations and reflections on the intersection of human systems and
               artificial intelligence, examining both the technical and philosophical implications
               of our evolving relationship with technology.
@@ -28,7 +28,7 @@ export default async function EssaysPage() {
           </div>
 
           {essays.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="py-12 text-center">
               <p className="text-charcoal/60 dark:text-gray-400">
                 No essays available yet. Check back soon!
               </p>
@@ -37,16 +37,10 @@ export default async function EssaysPage() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {essays
                 .sort(
-                  (a, b) =>
-                    new Date(b.publishDate).getTime() -
-                    new Date(a.publishDate).getTime(),
+                  (a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
                 )
                 .map((post) => (
-                  <Link
-                    key={post.id}
-                    href={`/posts/${post.slug}`}
-                    className="block group"
-                  >
+                  <Link className="group block" href={`/posts/${post.slug}`} key={post.id}>
                     <PostCard post={post} />
                   </Link>
                 ))}
@@ -59,15 +53,15 @@ export default async function EssaysPage() {
     console.error("Error fetching essays:", error);
 
     return (
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="mx-auto max-w-4xl px-4 py-8">
         <div className="space-y-8">
           <div className="space-y-4">
-            <h1 className="text-4xl font-bold text-charcoal dark:text-white">Essays</h1>
-            <p className="text-lg text-charcoal/80 dark:text-gray-300 max-w-2xl">
+            <h1 className="font-bold text-4xl text-charcoal dark:text-white">Essays</h1>
+            <p className="max-w-2xl text-charcoal/80 text-lg dark:text-gray-300">
               Thoughtful explorations on human-AI collaboration.
             </p>
           </div>
-          <div className="text-center py-12">
+          <div className="py-12 text-center">
             <p className="text-charcoal/60 dark:text-gray-400">
               Unable to load essays. Please try again later.
             </p>

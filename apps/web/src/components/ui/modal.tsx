@@ -78,7 +78,7 @@ export function ModalTrigger({ children, className, asChild = false }: ModalTrig
   if (asChild) {
     // Clone the child and add click handler
     return (
-      <button type="button" onClick={handleClick} className={className}>
+      <button className={className} onClick={handleClick} type="button">
         {children}
       </button>
     );
@@ -86,12 +86,12 @@ export function ModalTrigger({ children, className, asChild = false }: ModalTrig
 
   return (
     <button
-      type="button"
-      onClick={handleClick}
       className={cn(
-        "inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 focus-ring transition-colors",
-        className,
+        "focus-ring inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground text-sm transition-colors hover:bg-primary/90",
+        className
       )}
+      onClick={handleClick}
+      type="button"
     >
       {children}
     </button>
@@ -150,31 +150,31 @@ export function ModalContent({
   }
 
   const modalContent = (
-    <div className="fixed inset-0 z-modal-backdrop bg-black/50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-modal-backdrop flex items-center justify-center bg-black/50 p-4">
       <button
-        type="button"
-        className="absolute inset-0"
         aria-label="Dismiss dialog"
+        className="absolute inset-0"
         onClick={handleOverlayClick}
         onKeyDown={handleOverlayKeyDown}
+        type="button"
       />
       <div
+        aria-labelledby="modal-title"
+        aria-modal="true"
+        className={cn(
+          "fade-in-0 zoom-in-95 relative z-modal w-full animate-in rounded-lg border border-border bg-background p-6 shadow-lg duration-200",
+          sizeClasses[size],
+          className
+        )}
         ref={focusTrapRef as React.RefObject<HTMLDivElement>}
         role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
-        className={cn(
-          "relative z-modal w-full rounded-lg border border-border bg-background p-6 shadow-lg animate-in fade-in-0 zoom-in-95 duration-200",
-          sizeClasses[size],
-          className,
-        )}
       >
         {showCloseButton && (
           <button
-            type="button"
-            onClick={() => setIsOpen(false)}
-            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
             aria-label="Close dialog"
+            className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+            onClick={() => setIsOpen(false)}
+            type="button"
           >
             <X className="h-4 w-4" />
           </button>
@@ -215,7 +215,7 @@ import { useId } from "react";
 export function ModalTitle({ children, className }: ModalTitleProps) {
   const id = useId();
   return (
-    <h2 id={id} className={cn("text-lg font-semibold leading-none tracking-tight", className)}>
+    <h2 className={cn("font-semibold text-lg leading-none tracking-tight", className)} id={id}>
       {children}
     </h2>
   );
@@ -227,7 +227,7 @@ interface ModalDescriptionProps {
 }
 
 export function ModalDescription({ children, className }: ModalDescriptionProps) {
-  return <p className={cn("text-sm text-muted-foreground", className)}>{children}</p>;
+  return <p className={cn("text-muted-foreground text-sm", className)}>{children}</p>;
 }
 
 interface ModalBodyProps {
@@ -267,7 +267,7 @@ export function ModalClose({ children, className, asChild = false }: ModalCloseP
 
   if (asChild) {
     return (
-      <button type="button" onClick={handleClick} className={className}>
+      <button className={className} onClick={handleClick} type="button">
         {children}
       </button>
     );
@@ -275,12 +275,12 @@ export function ModalClose({ children, className, asChild = false }: ModalCloseP
 
   return (
     <button
-      type="button"
-      onClick={handleClick}
       className={cn(
-        "inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-muted/50 focus-ring transition-colors",
-        className,
+        "focus-ring inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 font-medium text-sm transition-colors hover:bg-muted/50",
+        className
       )}
+      onClick={handleClick}
+      type="button"
     >
       {children}
     </button>

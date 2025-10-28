@@ -20,7 +20,7 @@ export function calculateLabelPosition(
   stop: Stop,
   allStops: Stop[],
   interchanges: Interchange[],
-  theme: Theme,
+  theme: Theme
 ): { x: number; y: number; textAnchor: TextAnchor; dominantBaseline: DominantBaseline } {
   const { x, y, labelPos } = stop;
   const radius = isInterchange(stop.id, interchanges)
@@ -55,7 +55,7 @@ function getPositionForDirection(
   x: number,
   y: number,
   radius: number,
-  theme: Theme,
+  theme: Theme
 ): { x: number; y: number; textAnchor: TextAnchor; dominantBaseline: DominantBaseline } {
   const padding = radius + theme.labelPadding;
 

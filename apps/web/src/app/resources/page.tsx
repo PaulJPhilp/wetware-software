@@ -2,10 +2,10 @@ import { HardHat } from "lucide-react";
 
 export default function ResourcesPage() {
   return (
-    <main className="max-w-4xl mx-auto py-12 px-4 space-y-12 flex flex-col items-center justify-center text-center min-h-[50vh]">
+    <main className="mx-auto flex min-h-[50vh] max-w-4xl flex-col items-center justify-center space-y-12 px-4 py-12 text-center">
       <div className="space-y-4">
-        <HardHat className="w-16 h-16 text-orange mx-auto" />
-        <h1 className="text-3xl font-sans font-bold text-charcoal dark:text-white leading-tight">
+        <HardHat className="mx-auto h-16 w-16 text-orange" />
+        <h1 className="font-bold font-sans text-3xl text-charcoal leading-tight dark:text-white">
           Under Construction
         </h1>
         <p className="text-charcoal/80 dark:text-gray-300">

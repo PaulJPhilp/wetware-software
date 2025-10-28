@@ -68,7 +68,7 @@ export function safeExtractProperty<T>(
   page: NotionPage,
   propertyName: string,
   extractor: (property: unknown) => T | null,
-  required = false,
+  required = false
 ): T | null {
   try {
     const property = page.properties[propertyName];
@@ -219,7 +219,7 @@ export function parsePostFromPage(page: NotionPage): PostMeta {
     logger.debug(`Successfully parsed post: ${post.title}`, { pageId: page.id });
     return post;
   } catch (error) {
-    logger.parsing.error(`Failed to parse post`, page.id, error);
+    logger.parsing.error("Failed to parse post", page.id, error);
     throw error;
   }
 }
@@ -245,7 +245,7 @@ export function parseSeriesFromPage(page: NotionPage): SeriesMeta {
     logger.debug(`Successfully parsed series: ${series.title}`, { pageId: page.id });
     return series;
   } catch (error) {
-    logger.parsing.error(`Failed to parse series`, page.id, error);
+    logger.parsing.error("Failed to parse series", page.id, error);
     throw error;
   }
 }

@@ -14,7 +14,7 @@ import { notFound } from "next/navigation";
 
 // Lazy load SeriesNavigation since it's only needed for posts in series
 const SeriesNavigation = dynamic(() =>
-  import("@/components/SeriesNavigation").then((mod) => ({ default: mod.SeriesNavigation })),
+  import("@/components/SeriesNavigation").then((mod) => ({ default: mod.SeriesNavigation }))
 );
 
 export async function generateMetadata({
@@ -62,39 +62,30 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   // Get related posts (same focus area, excluding current post)
   const relatedPosts = await getPublishedPosts().then((posts) =>
-    posts.filter((p) => p.focusArea === post.focusArea && p.id !== post.id).slice(0, 3),
+    posts.filter((p) => p.focusArea === post.focusArea && p.id !== post.id).slice(0, 3)
   );
 
   return (
-    <div className="max-w-7xl mx-auto py-8 px-4 md:px-8">
-      <div className="flex flex-col lg:flex-row gap-8">
+    <div className="mx-auto max-w-7xl px-4 py-8 md:px-8">
+      <div className="flex flex-col gap-8 lg:flex-row">
         {/* Main Content */}
-        <div className="flex-1 min-w-0 space-y-8 lg:order-2">
+        <div className="min-w-0 flex-1 space-y-8 lg:order-2">
           {/* Series Navigation */}
           {post.seriesId && seriesPosts.length > 1 && (
             <SeriesNavigation currentPost={post} seriesPosts={seriesPosts} />
           )}
 
-          <article className="bg-card rounded-xl shadow-lg space-y-8 p-6">
+          <article className="space-y-8 rounded-xl bg-card p-6 shadow-lg">
             {/* Header */}
-            <header
-              className="space-y-4 text-center pb-4 border-b 
-              border-card"
-            >
-              <div
-                className="flex items-center justify-center gap-4 
-                mb-2"
-              >
-                <Badge variant="secondary" className="font-sans text-base px-3 py-1">
+            <header className="space-y-4 border-card border-b pb-4 text-center">
+              <div className="mb-2 flex items-center justify-center gap-4">
+                <Badge className="px-3 py-1 font-sans text-base" variant="secondary">
                   {post.type}
                 </Badge>
-                <FocusIcon className="w-6 h-6 text-orange" />
+                <FocusIcon className="h-6 w-6 text-orange" />
               </div>
-              <h1 className="fluid-h1 font-bold mb-2">{post.name}</h1>
-              <div
-                className="flex flex-wrap items-center justify-center 
-                gap-4 text-sm text-muted mb-2"
-              >
+              <h1 className="fluid-h1 mb-2 font-bold">{post.name}</h1>
+              <div className="mb-2 flex flex-wrap items-center justify-center gap-4 text-muted text-sm">
                 <time>{post.publishDate}</time>
                 <span>•</span>
                 <span>{post.readTime} min read</span>
@@ -102,15 +93,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <span>Last updated: {post.publishDate}</span>
               </div>
               {post.tags.length > 0 && (
-                <div
-                  className="flex flex-wrap items-center 
-                  justify-center gap-2 text-sm text-charcoal/60"
-                >
+                <div className="flex flex-wrap items-center justify-center gap-2 text-charcoal/60 text-sm">
                   {post.tags.map((tag) => (
                     <span
+                      className="rounded bg-silver px-2 py-1 transition-colors hover:text-orange"
                       key={tag.name}
-                      className="hover:text-orange transition-colors 
-                        bg-silver px-2 py-1 rounded"
                     >
                       #{tag.name}
                     </span>
@@ -128,12 +115,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
             {/* Footer */}
             <footer className="border-t pt-8">
-              <div className="flex justify-center mb-8">
+              <div className="mb-8 flex justify-center">
                 <Link
+                  className="rounded-lg bg-silver px-4 py-2 font-sans text-charcoal/60 text-sm shadow transition-colors hover:text-orange"
                   href="/"
-                  className="text-sm font-sans text-charcoal/60 
-                    hover:text-orange transition-colors px-4 py-2 
-                    rounded-lg bg-silver shadow"
                 >
                   ← Back to all posts
                 </Link>
@@ -142,24 +127,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               {/* Related Posts */}
               {relatedPosts.length > 0 && (
                 <div className="mt-8">
-                  <h3
-                    className="fluid-h3 font-bold mb-6 text-center 
-                    text-charcoal"
-                  >
+                  <h3 className="fluid-h3 mb-6 text-center font-bold text-charcoal">
                     More on {post.focusArea}
                   </h3>
-                  <div
-                    className="grid gap-6 md:grid-cols-2 
-                    lg:grid-cols-3"
-                  >
+                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {relatedPosts.map((relatedPost) => (
                       <Link
-                        key={relatedPost.id}
+                        className="group block"
                         href={`/posts/${relatedPost.slug}`}
-                        className="block group"
+                        key={relatedPost.id}
                       >
                         <ClientOnly>
-                          <PostCard post={relatedPost} interactive />
+                          <PostCard interactive post={relatedPost} />
                         </ClientOnly>
                       </Link>
                     ))}
@@ -171,7 +150,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </div>
 
         {/* Author Bio Sidebar */}
-        <aside className="w-full lg:w-80 lg:flex-shrink-0 lg:order-1">
+        <aside className="w-full lg:order-1 lg:w-80 lg:flex-shrink-0">
           <AuthorBioSidebar />
         </aside>
       </div>

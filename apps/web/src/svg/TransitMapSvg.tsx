@@ -32,20 +32,19 @@ export function TransitMapSvg({ data, theme = {}, onMount }: TransitMapSvgProps)
   const height = maxY - minY;
 
   // Helper to check if stop is interchange
-  const isInterchange = (stopId: string) => {
-    return data.interchanges?.some((interchange) => interchange.stopIds.includes(stopId)) ?? false;
-  };
+  const isInterchange = (stopId: string) =>
+    data.interchanges?.some((interchange) => interchange.stopIds.includes(stopId)) ?? false;
 
   // Create stop map for quick lookup
   const stopMap = new Map(data.stops.map((stop) => [stop.id, stop]));
 
   return (
     <svg
-      ref={svgRef}
-      viewBox={`${minX} ${minY} ${width} ${height}`}
-      className="transit-map-svg"
       aria-label="Transit map"
+      className="transit-map-svg"
+      ref={svgRef}
       style={{ backgroundColor: mergedTheme.colors.background }}
+      viewBox={`${minX} ${minY} ${width} ${height}`}
     >
       <title>Transit map</title>
       {/* Render lines */}
@@ -57,11 +56,11 @@ export function TransitMapSvg({ data, theme = {}, onMount }: TransitMapSvgProps)
         const points = buildPolylinePoints(stops);
         return (
           <polyline
+            fill="none"
             key={line.id}
             points={points}
             stroke={line.color}
             strokeWidth={mergedTheme.lineWidth}
-            fill="none"
           />
         );
       })}
@@ -76,42 +75,41 @@ export function TransitMapSvg({ data, theme = {}, onMount }: TransitMapSvgProps)
           stop,
           data.stops,
           data.interchanges || [],
-          mergedTheme,
+          mergedTheme
         );
         return (
-          <g key={stop.id} className="station" aria-label={`${stop.title} (${stop.years})`}>
+          <g aria-label={`${stop.title} (${stop.years})`} className="station" key={stop.id}>
             <circle
               cx={stop.x}
               cy={stop.y}
-              r={radius}
               fill={mergedTheme.colors.text}
+              r={radius}
               stroke={isInterchangeStop ? mergedTheme.colors.background : undefined}
               strokeWidth={isInterchangeStop ? 2 : 0}
             />
             <text
-              x={labelPosition.x}
-              y={labelPosition.y}
-              fontSize={mergedTheme.fontSize}
-              fill={mergedTheme.colors.text}
-              textAnchor={labelPosition.textAnchor as import("./helpers/label").TextAnchor}
               dominantBaseline={
                 labelPosition.dominantBaseline as import("./helpers/label").DominantBaseline
               }
+              fill={mergedTheme.colors.text}
+              fontSize={mergedTheme.fontSize}
+              textAnchor={labelPosition.textAnchor as import("./helpers/label").TextAnchor}
+              x={labelPosition.x}
+              y={labelPosition.y}
             >
               {stop.title}
             </text>
             <title>{`${stop.title} (${stop.years})`}</title>
             {/* Accessible button overlay for keyboard and screen reader users */}
             <foreignObject
-              x={stop.x - radius}
-              y={stop.y - radius}
-              width={radius * 2}
               height={radius * 2}
               style={{ pointerEvents: "none" }}
+              width={radius * 2}
+              x={stop.x - radius}
+              y={stop.y - radius}
             >
               <div style={{ width: "100%", height: "100%" }}>
                 <button
-                  type="button"
                   aria-label={`${stop.title} (${stop.years})`}
                   style={{
                     width: "100%",
@@ -123,6 +121,7 @@ export function TransitMapSvg({ data, theme = {}, onMount }: TransitMapSvgProps)
                     padding: 0,
                     margin: 0,
                   }}
+                  type="button"
                 />
               </div>
             </foreignObject>

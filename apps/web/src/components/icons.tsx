@@ -2,14 +2,14 @@ export function BrainIcon({ className = "" }: { className?: string }) {
   return (
     <svg
       className={className}
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
       fill="none"
+      height="24"
       stroke="currentColor"
-      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
+      strokeWidth="1.5"
+      viewBox="0 0 24 24"
+      width="24"
     >
       <title>Brain icon</title>
       {/* Left hemisphere */}
@@ -37,21 +37,21 @@ export function RobotIcon({ className = "" }: { className?: string }) {
   return (
     <svg
       className={className}
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
       fill="none"
+      height="24"
       stroke="currentColor"
-      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
+      strokeWidth="1.5"
+      viewBox="0 0 24 24"
+      width="24"
     >
       <title>Robot icon</title>
       {/* Head */}
-      <rect x="4" y="6" width="16" height="14" rx="2" />
+      <rect height="14" rx="2" width="16" x="4" y="6" />
       {/* Antenna */}
       <path d="M12 6V3" />
-      <circle cx="12" cy="3" r="0.5" fill="currentColor" />
+      <circle cx="12" cy="3" fill="currentColor" r="0.5" />
       {/* Eyes */}
       <circle cx="9" cy="12" r="1.5" />
       <circle cx="15" cy="12" r="1.5" />

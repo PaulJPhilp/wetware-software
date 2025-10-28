@@ -7,7 +7,7 @@ export default function ConnectPage() {
     {
       title: "Email",
       description: "For opportunities, collaboration, or detailed discussions",
-      icon: <Mail className="w-6 h-6" />,
+      icon: <Mail className="h-6 w-6" />,
       action: "Send Email",
       href: "mailto:paul@paulphilp.com",
       display: "paul@paulphilp.com",
@@ -15,7 +15,7 @@ export default function ConnectPage() {
     {
       title: "LinkedIn",
       description: "Professional networking and career opportunities",
-      icon: <Linkedin className="w-6 h-6" />,
+      icon: <Linkedin className="h-6 w-6" />,
       action: "Connect on LinkedIn",
       href: "https://www.linkedin.com/in/pauljphilp/",
       display: "linkedin.com/in/pauljphilp",
@@ -23,7 +23,7 @@ export default function ConnectPage() {
     {
       title: "X (Twitter)",
       description: "Quick questions and ongoing conversations",
-      icon: <Twitter className="w-6 h-6" />,
+      icon: <Twitter className="h-6 w-6" />,
       action: "Follow on X",
       href: "https://twitter.com/PaulJPhilp",
       display: "@PaulJPhilp",
@@ -31,7 +31,7 @@ export default function ConnectPage() {
     {
       title: "Bluesky",
       description: "Emerging social platform for tech discussions",
-      icon: <MessageCircle className="w-6 h-6" />,
+      icon: <MessageCircle className="h-6 w-6" />,
       action: "Follow on Bluesky",
       href: "https://bsky.app/profile/pauljphilp.com",
       display: "pauljphilp.com",
@@ -41,8 +41,8 @@ export default function ConnectPage() {
   return (
     <main className="space-y-12">
       {/* Header Section */}
-      <section className="max-w-3xl mx-auto px-4 py-12 space-y-6">
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground">Connect</h1>
+      <section className="mx-auto max-w-3xl space-y-6 px-4 py-12">
+        <h1 className="font-bold text-4xl text-foreground tracking-tight sm:text-5xl">Connect</h1>
         <div className="space-y-4">
           <p className="text-lg text-muted-foreground">
             Let's explore human-AI collaboration together
@@ -56,26 +56,26 @@ export default function ConnectPage() {
       </section>
 
       {/* Contact Methods */}
-      <section className="max-w-3xl mx-auto px-4 grid gap-6 md:grid-cols-2">
+      <section className="mx-auto grid max-w-3xl gap-6 px-4 md:grid-cols-2">
         {contactMethods.map((method) => (
-          <Card key={method.title} className="group border-border hover:shadow-lg transition-all">
+          <Card className="group border-border transition-all hover:shadow-lg" key={method.title}>
             <CardHeader className="space-y-3">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-muted rounded-lg text-foreground transition-colors">
+                <div className="rounded-lg bg-muted p-2 text-foreground transition-colors">
                   {method.icon}
                 </div>
-                <CardTitle className="text-lg font-bold text-foreground">{method.title}</CardTitle>
+                <CardTitle className="font-bold text-foreground text-lg">{method.title}</CardTitle>
               </div>
               <CardDescription className="text-muted-foreground">
                 {method.description}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm font-mono text-muted-foreground bg-muted p-3 rounded">
+              <p className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
                 {method.display}
               </p>
-              <Button variant="default" asChild className="w-full">
-                <a href={method.href} target="_blank" rel="noopener noreferrer">
+              <Button asChild className="w-full" variant="default">
+                <a href={method.href} rel="noopener noreferrer" target="_blank">
                   {method.action}
                 </a>
               </Button>
@@ -85,35 +85,35 @@ export default function ConnectPage() {
       </section>
 
       {/* What to Expect */}
-      <section className="max-w-3xl mx-auto px-4 bg-muted rounded-lg p-8 space-y-6">
-        <h2 className="text-2xl font-bold text-foreground text-center">What to Expect</h2>
-        <div className="grid gap-6 md:grid-cols-3 text-center">
+      <section className="mx-auto max-w-3xl space-y-6 rounded-lg bg-muted p-8 px-4">
+        <h2 className="text-center font-bold text-2xl text-foreground">What to Expect</h2>
+        <div className="grid gap-6 text-center md:grid-cols-3">
           <div className="space-y-3">
-            <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto">
-              <Mail className="w-6 h-6 text-foreground" />
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+              <Mail className="h-6 w-6 text-foreground" />
             </div>
             <h3 className="font-semibold text-foreground">Quick Response</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               I typically respond to emails within 24-48 hours and engage actively on social
               platforms.
             </p>
           </div>
           <div className="space-y-3">
-            <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto">
-              <MessageCircle className="w-6 h-6 text-foreground" />
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+              <MessageCircle className="h-6 w-6 text-foreground" />
             </div>
             <h3 className="font-semibold text-foreground">Thoughtful Discussion</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               I love diving deep into complex topics and exploring new perspectives on human-AI
               collaboration.
             </p>
           </div>
           <div className="space-y-3">
-            <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center mx-auto">
-              <Users className="w-6 h-6 text-foreground" />
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+              <Users className="h-6 w-6 text-foreground" />
             </div>
             <h3 className="font-semibold text-foreground">Meaningful Connections</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Whether for collaboration, learning, or professional opportunities, I value authentic
               connections.
             </p>
@@ -122,9 +122,9 @@ export default function ConnectPage() {
       </section>
 
       {/* Topics of Interest */}
-      <section className="max-w-3xl mx-auto px-4 text-center space-y-6">
-        <h2 className="text-2xl font-bold text-foreground">Great Conversation Starters</h2>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 text-left">
+      <section className="mx-auto max-w-3xl space-y-6 px-4 text-center">
+        <h2 className="font-bold text-2xl text-foreground">Great Conversation Starters</h2>
+        <div className="grid gap-4 text-left md:grid-cols-2 lg:grid-cols-3">
           {[
             "Human-AI collaboration frameworks",
             "Effect-TS and functional programming patterns",
@@ -134,10 +134,10 @@ export default function ConnectPage() {
             "Philosophy of technology and human connection",
           ].map((topic) => (
             <div
+              className="flex items-start gap-3 rounded-lg border border-border bg-card p-4"
               key={topic}
-              className="flex items-start gap-3 p-4 bg-card rounded-lg border border-border"
             >
-              <div className="w-2 h-2 rounded-full bg-foreground mt-2 flex-shrink-0" />
+              <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-foreground" />
               <p className="text-foreground">{topic}</p>
             </div>
           ))}

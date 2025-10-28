@@ -85,7 +85,7 @@ describe("CLI add resource", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
@@ -144,7 +144,7 @@ describe("CLI add resource", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
@@ -207,7 +207,7 @@ describe("CLI add resource", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
@@ -254,7 +254,7 @@ describe("CLI add resource", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     const result = await Effect.runPromiseExit(effect);
@@ -274,15 +274,15 @@ describe("CLI add resource", () => {
   it("handles Notion API errors during addResource", async () => {
     const fakeAI: OpenAIService = {
       generateResourceJson: () =>
-        Effect.sync(() => {
-          return JSON.stringify({
+        Effect.sync(() =>
+          JSON.stringify({
             resource_name: "Test Resource",
             resource_url: `${baseUrl}/notion-error`,
             resource_type: "Article",
             curator_note: "Test note.",
             focus_area: ["Tech-Centric"],
-          });
-        }),
+          })
+        ),
       generateSourceEntityJson: () => Effect.succeed("{}"),
       generateSeriesJson: () => Effect.succeed("{}"),
     };
@@ -304,7 +304,7 @@ describe("CLI add resource", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     const result = await Effect.runPromiseExit(effect);
@@ -349,7 +349,7 @@ describe("CLI add resource", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     const result = await Effect.runPromiseExit(effect);

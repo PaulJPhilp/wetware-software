@@ -9,9 +9,9 @@ export default function DesignSystemPage() {
   return (
     <main className="min-h-screen bg-brand">
       <div className="container mx-auto py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-sans font-bold text-brand mb-4">Design System</h1>
-          <p className="text-muted max-w-2xl mx-auto">
+        <div className="mb-12 text-center">
+          <h1 className="mb-4 font-bold font-sans text-4xl text-brand">Design System</h1>
+          <p className="mx-auto max-w-2xl text-muted">
             A comprehensive design system with semantic utilities, reusable components, and
             theme-aware styling for consistent, accessible user interfaces.
           </p>
@@ -19,10 +19,10 @@ export default function DesignSystemPage() {
 
         {/* Semantic Utilities Demo */}
         <section className="mb-16">
-          <h2 className="text-3xl font-sans font-bold text-brand mb-8">Semantic Utilities</h2>
+          <h2 className="mb-8 font-bold font-sans text-3xl text-brand">Semantic Utilities</h2>
 
           <div className="grid gap-6 md:grid-cols-2">
-            <Card className="bg-elevated border-brand">
+            <Card className="border-brand bg-elevated">
               <CardHeader>
                 <CardTitle className="text-brand">Text Utilities</CardTitle>
                 <CardDescription className="text-muted">
@@ -33,17 +33,17 @@ export default function DesignSystemPage() {
                 <p className="text-brand">Primary text (.text-brand)</p>
                 <p className="text-muted">Secondary text (.text-muted)</p>
                 <p className="text-subtle">Subtle text (.text-subtle)</p>
-                <a href="/" className="link-brand">
+                <a className="link-brand" href="/">
                   Brand link (.link-brand)
                 </a>
                 <br />
-                <a href="/" className="link-brand-subtle">
+                <a className="link-brand-subtle" href="/">
                   Subtle link (.link-brand-subtle)
                 </a>
               </CardContent>
             </Card>
 
-            <Card className="bg-elevated border-brand">
+            <Card className="border-brand bg-elevated">
               <CardHeader>
                 <CardTitle className="text-brand">Background & Border</CardTitle>
                 <CardDescription className="text-muted">
@@ -51,13 +51,13 @@ export default function DesignSystemPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="p-3 bg-brand rounded border border-brand">
+                <div className="rounded border border-brand bg-brand p-3">
                   <p className="text-brand text-sm">Brand background (.bg-brand)</p>
                 </div>
-                <div className="p-3 bg-elevated rounded border border-subtle">
+                <div className="rounded border border-subtle bg-elevated p-3">
                   <p className="text-brand text-sm">Elevated background (.bg-elevated)</p>
                 </div>
-                <div className="p-3 bg-orange/5 rounded border-l-4 border-orange/60">
+                <div className="rounded border-orange/60 border-l-4 bg-orange/5 p-3">
                   <p className="text-brand text-sm">Accent border example</p>
                 </div>
               </CardContent>
@@ -67,21 +67,21 @@ export default function DesignSystemPage() {
 
         {/* Component Examples */}
         <section className="mb-16">
-          <h2 className="text-3xl font-sans font-bold text-brand mb-8">Reusable Components</h2>
+          <h2 className="mb-8 font-bold font-sans text-3xl text-brand">Reusable Components</h2>
 
           {/* Callout Examples */}
           <div className="mb-8">
-            <h3 className="text-2xl font-sans font-bold text-brand mb-4">Callouts</h3>
+            <h3 className="mb-4 font-bold font-sans text-2xl text-brand">Callouts</h3>
             <div className="space-y-4">
-              <Callout variant="info" title="Information">
+              <Callout title="Information" variant="info">
                 This is an informational callout using the info variant with orange accent.
               </Callout>
 
-              <Callout variant="tip" title="Pro Tip">
+              <Callout title="Pro Tip" variant="tip">
                 This is a tip callout with slightly stronger orange background for emphasis.
               </Callout>
 
-              <Callout variant="warning" title="Warning">
+              <Callout title="Warning" variant="warning">
                 This is a warning callout with the strongest orange accent for important notices.
               </Callout>
             </div>
@@ -89,7 +89,7 @@ export default function DesignSystemPage() {
 
           {/* CustomTag Examples */}
           <div className="mb-8">
-            <h3 className="text-2xl font-sans font-bold text-brand mb-4">CustomTag Variants</h3>
+            <h3 className="mb-4 font-bold font-sans text-2xl text-brand">CustomTag Variants</h3>
             <div className="space-y-4">
               <p className="text-muted">
                 Flexible tag component with multiple visual variants for different contexts and
@@ -102,11 +102,11 @@ export default function DesignSystemPage() {
                 <CustomTag variant="success">Success</CustomTag>
                 <CustomTag variant="warning">Warning</CustomTag>
               </div>
-              <div className="text-sm text-muted space-y-2">
+              <div className="space-y-2 text-muted text-sm">
                 <p>
                   <strong>Usage:</strong> Use different variants to convey meaning:
                 </p>
-                <ul className="list-disc list-inside space-y-1">
+                <ul className="list-inside list-disc space-y-1">
                   <li>
                     <code>default</code>: General purpose tags (backwards compatible)
                   </li>
@@ -129,9 +129,9 @@ export default function DesignSystemPage() {
 
           {/* Figure Example */}
           <div className="mb-8">
-            <h3 className="text-2xl font-sans font-bold text-brand mb-4">Figure Component</h3>
+            <h3 className="mb-4 font-bold font-sans text-2xl text-brand">Figure Component</h3>
             <Figure caption="Example diagram showing the new Figure component with consistent styling">
-              <div className="bg-silver dark:bg-charcoal rounded-lg p-8 text-center">
+              <div className="rounded-lg bg-silver p-8 text-center dark:bg-charcoal">
                 <p className="text-muted">Your diagram or image content goes here</p>
               </div>
             </Figure>
@@ -140,10 +140,10 @@ export default function DesignSystemPage() {
 
         {/* Focus States Demo */}
         <section className="mb-16">
-          <h2 className="text-3xl font-sans font-bold text-brand mb-8">Accessibility</h2>
+          <h2 className="mb-8 font-bold font-sans text-3xl text-brand">Accessibility</h2>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-sans font-bold text-brand">Focus States</h3>
+            <h3 className="font-bold font-sans text-brand text-xl">Focus States</h3>
             <p className="text-muted">
               All interactive elements use the .focus-ring utility for consistent, accessible focus
               indicators.
@@ -151,10 +151,10 @@ export default function DesignSystemPage() {
 
             <div className="flex flex-wrap gap-4">
               <Button className="focus-ring">Button with focus ring</Button>
-              <Button variant="outline" className="focus-ring">
+              <Button className="focus-ring" variant="outline">
                 Outline button
               </Button>
-              <a href="/" className="link-brand focus-ring px-3 py-2 rounded">
+              <a className="link-brand focus-ring rounded px-3 py-2" href="/">
                 Link with focus ring
               </a>
             </div>
@@ -163,9 +163,9 @@ export default function DesignSystemPage() {
 
         {/* Typography Demo */}
         <section className="mb-16">
-          <h2 className="text-3xl font-sans font-bold text-brand mb-8">Typography</h2>
+          <h2 className="mb-8 font-bold font-sans text-3xl text-brand">Typography</h2>
 
-          <div className="prose max-w-none dark:prose-invert prose-headings:font-sans prose-p:font-serif">
+          <div className="prose dark:prose-invert max-w-none prose-headings:font-sans prose-p:font-serif">
             <h1>Heading 1 with Montserrat</h1>
             <p>
               Body text using Merriweather for optimal readability. This demonstrates the
@@ -189,7 +189,7 @@ export default function DesignSystemPage() {
             <h2>Links and Interactive Elements</h2>
             <p>
               Here's a{" "}
-              <a href="/" className="link-brand">
+              <a className="link-brand" href="/">
                 branded link
               </a>{" "}
               that uses the orange accent color with hover effects. The link styling includes
@@ -200,7 +200,7 @@ export default function DesignSystemPage() {
 
         {/* SVG Demo */}
         <section className="mb-16">
-          <h2 className="text-3xl font-sans font-bold text-brand mb-8">Theme-Aware SVGs</h2>
+          <h2 className="mb-8 font-bold font-sans text-3xl text-brand">Theme-Aware SVGs</h2>
           <ExampleSVG />
         </section>
 
@@ -208,8 +208,8 @@ export default function DesignSystemPage() {
         <ColorSystemExamples />
 
         {/* Implementation Notes */}
-        <section className="mt-16 bg-charcoal text-silver rounded-lg p-8">
-          <h2 className="text-2xl font-sans font-bold mb-4">Implementation Notes</h2>
+        <section className="mt-16 rounded-lg bg-charcoal p-8 text-silver">
+          <h2 className="mb-4 font-bold font-sans text-2xl">Implementation Notes</h2>
           <div className="prose prose-invert max-w-none">
             <p>
               This design system provides a comprehensive foundation for building consistent,

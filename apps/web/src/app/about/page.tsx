@@ -7,19 +7,19 @@ import Link from "next/link";
 
 // Lazy load UI components that are not immediately visible
 const Avatar = dynamic(() =>
-  import("@/components/ui/avatar").then((mod) => ({ default: mod.Avatar })),
+  import("@/components/ui/avatar").then((mod) => ({ default: mod.Avatar }))
 );
 const AvatarFallback = dynamic(() =>
-  import("@/components/ui/avatar").then((mod) => ({ default: mod.AvatarFallback })),
+  import("@/components/ui/avatar").then((mod) => ({ default: mod.AvatarFallback }))
 );
 const AvatarImage = dynamic(() =>
-  import("@/components/ui/avatar").then((mod) => ({ default: mod.AvatarImage })),
+  import("@/components/ui/avatar").then((mod) => ({ default: mod.AvatarImage }))
 );
 const Badge = dynamic(() =>
-  import("@/components/ui/badge").then((mod) => ({ default: mod.Badge })),
+  import("@/components/ui/badge").then((mod) => ({ default: mod.Badge }))
 );
 const Button = dynamic(() =>
-  import("@/components/ui/button").then((mod) => ({ default: mod.Button })),
+  import("@/components/ui/button").then((mod) => ({ default: mod.Button }))
 );
 
 // Refresh the About page content from Notion regularly
@@ -54,51 +54,51 @@ export default async function AboutPage() {
   ];
 
   return (
-    <main className="max-w-6xl mx-auto py-12 px-4 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-10 space-y-12 lg:space-y-0">
+    <main className="mx-auto max-w-6xl space-y-12 px-4 py-12 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-10 lg:space-y-0">
       {/* Page Title (desktop only) */}
-      <h1 className="hidden lg:block text-4xl sm:text-5xl font-bold tracking-tight text-foreground col-start-2">
+      <h1 className="col-start-2 hidden font-bold text-4xl text-foreground tracking-tight sm:text-5xl lg:block">
         About
       </h1>
 
       {/* Left profile rail (desktop) */}
       <aside className="hidden lg:block">
         <div className="sticky top-20 space-y-6">
-          <div className="border border-border bg-card rounded-lg p-6 text-center">
-            <Avatar className="w-28 h-28 mx-auto">
-              <AvatarImage src="/images/avatar.jpeg" alt="Paul Philp" />
+          <div className="rounded-lg border border-border bg-card p-6 text-center">
+            <Avatar className="mx-auto h-28 w-28">
+              <AvatarImage alt="Paul Philp" src="/images/avatar.jpeg" />
               <AvatarFallback>PP</AvatarFallback>
             </Avatar>
             <div className="mt-4 space-y-1">
-              <h2 className="text-lg font-bold text-foreground leading-tight">Paul Philp</h2>
-              <p className="text-sm text-muted-foreground leading-snug">
+              <h2 className="font-bold text-foreground text-lg leading-tight">Paul Philp</h2>
+              <p className="text-muted-foreground text-sm leading-snug">
                 Software/AI Engineer, Founder, Executive
               </p>
             </div>
           </div>
-          <div className="border border-border bg-card rounded-lg p-4 space-y-3">
-            <h3 className="text-sm font-semibold text-foreground">Connect</h3>
+          <div className="space-y-3 rounded-lg border border-border bg-card p-4">
+            <h3 className="font-semibold text-foreground text-sm">Connect</h3>
             <div className="flex flex-col gap-2">
-              <Button variant="outline" asChild>
+              <Button asChild variant="outline">
                 <a
                   href="https://www.linkedin.com/in/pauljphilp/"
-                  target="_blank"
                   rel="noopener noreferrer"
+                  target="_blank"
                 >
-                  <Linkedin className="w-4 h-4 mr-2" />
+                  <Linkedin className="mr-2 h-4 w-4" />
                   LinkedIn Profile
                 </a>
               </Button>
-              <Button variant="outline" asChild>
+              <Button asChild variant="outline">
                 <Link href="/connect">
-                  <Mail className="w-4 h-4 mr-2" />
+                  <Mail className="mr-2 h-4 w-4" />
                   Get in Touch
                 </Link>
               </Button>
             </div>
           </div>
-          <div className="border border-border bg-card rounded-lg p-4 space-y-2">
-            <h3 className="text-sm font-semibold text-foreground">Current Focus</h3>
-            <ul className="space-y-1 text-sm text-muted-foreground">
+          <div className="space-y-2 rounded-lg border border-border bg-card p-4">
+            <h3 className="font-semibold text-foreground text-sm">Current Focus</h3>
+            <ul className="space-y-1 text-muted-foreground text-sm">
               <li>• Human-AI collaboration frameworks</li>
               <li>• Large-scale LLM application architecture</li>
               <li>• Effect-TS and functional programming patterns</li>
@@ -110,18 +110,18 @@ export default async function AboutPage() {
 
       <div className="space-y-12">
         {/* Header Section (mobile/tablet) */}
-        <section className="lg:hidden text-center space-y-4">
-          <Avatar className="w-32 h-32 mx-auto">
-            <AvatarImage src="/images/avatar.jpeg" alt="Paul Philp" />
+        <section className="space-y-4 text-center lg:hidden">
+          <Avatar className="mx-auto h-32 w-32">
+            <AvatarImage alt="Paul Philp" src="/images/avatar.jpeg" />
             <AvatarFallback>PP</AvatarFallback>
           </Avatar>
           <div className="space-y-2">
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground">About</h1>
-            <h2 className="text-xl md:text-2xl font-bold text-foreground">Paul Philp</h2>
-            <p className="text-sm text-muted-foreground leading-snug">
+            <h1 className="font-bold text-4xl text-foreground tracking-tight sm:text-5xl">About</h1>
+            <h2 className="font-bold text-foreground text-xl md:text-2xl">Paul Philp</h2>
+            <p className="text-muted-foreground text-sm leading-snug">
               Software/AI Engineer, Founder, Executive
             </p>
-            <p className="text-base text-foreground leading-relaxed max-w-2xl mx-auto">
+            <p className="mx-auto max-w-2xl text-base text-foreground leading-relaxed">
               Engineering human-AI collaboration at the intersection of complex systems and emerging
               technology
             </p>
@@ -130,8 +130,8 @@ export default async function AboutPage() {
 
         {/* Main Bio Section */}
         <section className="prose max-w-none">
-          <div className="border border-border bg-card rounded-lg p-8 space-y-6">
-            <h2 className="text-2xl font-bold text-foreground m-0">About Paul</h2>
+          <div className="space-y-6 rounded-lg border border-border bg-card p-8">
+            <h2 className="m-0 font-bold text-2xl text-foreground">About Paul</h2>
             {aboutBlocks ? (
               <div className="space-y-4 text-foreground">
                 <NotionContent blocks={aboutBlocks.results as BlockObjectResponse[]} />
@@ -163,18 +163,18 @@ export default async function AboutPage() {
         </section>
 
         {/* Featured Essay Callout */}
-        <section className="border border-border bg-muted rounded-lg p-8">
+        <section className="rounded-lg border border-border bg-muted p-8">
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-foreground">Featured Essay</h3>
+            <h3 className="font-bold text-foreground text-lg">Featured Essay</h3>
             <p className="text-foreground">
               "What My Marriage Falling Apart Taught Me About LLMs" - A deeply personal exploration
               of complex systems, failure modes, and the surprising parallels between human
               relationships and AI architectures.
             </p>
-            <Button variant="default" asChild>
+            <Button asChild variant="default">
               <Link href="/posts/my-marriage-and-ai">
                 Read the Essay
-                <ExternalLink className="w-4 h-4 ml-2" />
+                <ExternalLink className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -182,7 +182,7 @@ export default async function AboutPage() {
 
         {/* Skills & Expertise */}
         <section className="space-y-6">
-          <h2 className="text-2xl font-bold text-foreground">Technical Skills & Expertise</h2>
+          <h2 className="font-bold text-2xl text-foreground">Technical Skills & Expertise</h2>
           <div className="flex flex-wrap gap-2">
             {skills.map((skill: string) => (
               <Badge key={skill} variant="secondary">
@@ -194,11 +194,11 @@ export default async function AboutPage() {
 
         {/* Blog Topics */}
         <section className="space-y-6">
-          <h2 className="text-2xl font-bold text-foreground">What I Write About</h2>
+          <h2 className="font-bold text-2xl text-foreground">What I Write About</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {blogTopics.map((topic: string) => (
-              <div key={topic} className="flex items-start gap-3 p-4 bg-muted rounded-lg">
-                <div className="w-2 h-2 rounded-full bg-foreground mt-2 flex-shrink-0" />
+              <div className="flex items-start gap-3 rounded-lg bg-muted p-4" key={topic}>
+                <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-foreground" />
                 <p className="text-foreground">{topic}</p>
               </div>
             ))}
@@ -206,9 +206,9 @@ export default async function AboutPage() {
         </section>
 
         {/* At a Glance & Contact (mobile/tablet) */}
-        <section className="lg:hidden space-y-6">
+        <section className="space-y-6 lg:hidden">
           <div className="space-y-3">
-            <h3 className="text-lg font-bold text-foreground">Current Focus</h3>
+            <h3 className="font-bold text-foreground text-lg">Current Focus</h3>
             <ul className="space-y-2 text-muted-foreground">
               <li>• Human-AI collaboration frameworks</li>
               <li>• Large-scale LLM application architecture</li>
@@ -217,21 +217,21 @@ export default async function AboutPage() {
             </ul>
           </div>
           <div className="space-y-3">
-            <h3 className="text-lg font-bold text-foreground">Connect</h3>
+            <h3 className="font-bold text-foreground text-lg">Connect</h3>
             <div className="flex flex-col gap-2">
-              <Button variant="outline" asChild>
+              <Button asChild variant="outline">
                 <a
                   href="https://www.linkedin.com/in/pauljphilp/"
-                  target="_blank"
                   rel="noopener noreferrer"
+                  target="_blank"
                 >
-                  <Linkedin className="w-4 h-4 mr-2" />
+                  <Linkedin className="mr-2 h-4 w-4" />
                   LinkedIn Profile
                 </a>
               </Button>
-              <Button variant="outline" asChild>
+              <Button asChild variant="outline">
                 <Link href="/connect">
-                  <Mail className="w-4 h-4 mr-2" />
+                  <Mail className="mr-2 h-4 w-4" />
                   Get in Touch
                 </Link>
               </Button>

@@ -2,8 +2,8 @@
 // (react/jsx-dev-runtime) is not injected by the JSX transform. This
 // prevents tooling from trying to import the dev runtime which can
 // be subject to export resolution differences during tests.
-if (typeof process.env.NODE_ENV === 'undefined') {
-  // @ts-ignore - intentionally set for test transforms
+if (typeof process.env.NODE_ENV === "undefined") {
+  // @ts-expect-error - intentionally set for test transforms
   process.env.NODE_ENV = "production";
 }
 
@@ -46,7 +46,7 @@ export default defineConfig({
   // Ensure code transforms (including JSX) see NODE_ENV=production so
   // the automatic JSX transform won't inject the dev runtime import.
   define: {
-    'process.env.NODE_ENV': JSON.stringify('production'),
+    "process.env.NODE_ENV": JSON.stringify("production"),
   },
   plugins: [react(), resolveReactJsxRuntimePlugin],
   resolve: {

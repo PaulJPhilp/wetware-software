@@ -102,7 +102,7 @@ export function DropdownTrigger({ children, className, asChild = false }: Dropdo
           break;
       }
     },
-    [isOpen, setIsOpen],
+    [isOpen, setIsOpen]
   );
 
   useEffect(() => {
@@ -117,14 +117,14 @@ export function DropdownTrigger({ children, className, asChild = false }: Dropdo
     // Clone the child element and add our props
     return (
       <button
-        ref={triggerRef}
-        type="button"
-        onClick={handleClick}
-        id={triggerId}
+        aria-controls={contentId}
         aria-expanded={isOpen}
         aria-haspopup="true"
-        aria-controls={contentId}
         className={className}
+        id={triggerId}
+        onClick={handleClick}
+        ref={triggerRef}
+        type="button"
       >
         {children}
       </button>
@@ -133,17 +133,17 @@ export function DropdownTrigger({ children, className, asChild = false }: Dropdo
 
   return (
     <button
-      ref={triggerRef}
-      type="button"
-      onClick={handleClick}
-      id={triggerId}
+      aria-controls={contentId}
       aria-expanded={isOpen}
       aria-haspopup="true"
-      aria-controls={contentId}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-muted/50 focus-ring transition-colors",
-        className,
+        "focus-ring inline-flex items-center justify-center gap-2 rounded-md border border-border bg-background px-3 py-2 font-medium text-foreground text-sm transition-colors hover:bg-muted/50",
+        className
       )}
+      id={triggerId}
+      onClick={handleClick}
+      ref={triggerRef}
+      type="button"
     >
       {children}
       <ChevronDown
@@ -232,21 +232,21 @@ export function DropdownContent({
 
   return (
     <div
+      aria-labelledby={triggerId}
+      className={cn(
+        "fade-in-0 zoom-in-95 absolute z-dropdown min-w-[8rem] animate-in overflow-hidden rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-lg",
+        positionClasses[side],
+        alignClasses[align],
+        className
+      )}
+      id={contentId}
       ref={(node) => {
         contentRef.current = node;
         if (clickOutsideRef) {
           clickOutsideRef.current = node;
         }
       }}
-      id={contentId}
       role="menu"
-      aria-labelledby={triggerId}
-      className={cn(
-        "absolute z-dropdown min-w-[8rem] overflow-hidden rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95",
-        positionClasses[side],
-        alignClasses[align],
-        className,
-      )}
       style={{ marginTop: side === "bottom" ? sideOffset : undefined }}
     >
       {children}
@@ -285,7 +285,7 @@ export function DropdownItem({
       disabled
         ? "pointer-events-none opacity-50"
         : "hover:bg-muted focus:bg-muted focus:text-accent-foreground",
-      className,
+      className
     ),
     onClick: handleClick,
     tabIndex: -1, // Managed by roving tabindex
@@ -307,7 +307,7 @@ interface DropdownSeparatorProps {
 }
 
 export function DropdownSeparator({ className }: DropdownSeparatorProps) {
-  return <div className={cn("my-1 h-px bg-border", className)} aria-hidden="true" />;
+  return <div aria-hidden="true" className={cn("my-1 h-px bg-border", className)} />;
 }
 
 interface DropdownLabelProps {
@@ -318,8 +318,8 @@ interface DropdownLabelProps {
 export function DropdownLabel({ children, className }: DropdownLabelProps) {
   return (
     <div
+      className={cn("px-2 py-1.5 font-semibold text-muted-foreground text-xs", className)}
       role="presentation"
-      className={cn("px-2 py-1.5 text-xs font-semibold text-muted-foreground", className)}
     >
       {children}
     </div>

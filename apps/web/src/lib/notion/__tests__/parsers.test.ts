@@ -141,7 +141,7 @@ describe("safeExtractProperty", () => {
     const extractor = () => "extracted";
 
     expect(() => safeExtractProperty(mockNotionPage, "NonExistent", extractor, true)).toThrow(
-      NotionPropertyMissingError,
+      NotionPropertyMissingError
     );
   });
 
@@ -160,7 +160,7 @@ describe("safeExtractProperty", () => {
     };
 
     expect(() => safeExtractProperty(mockNotionPage, "Name", failingExtractor, true)).toThrow(
-      "Extractor failed",
+      "Extractor failed"
     );
   });
 });

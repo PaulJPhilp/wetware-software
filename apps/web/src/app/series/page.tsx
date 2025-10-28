@@ -13,11 +13,11 @@ export default async function SeriesPage() {
     const series = await getSeries();
 
     return (
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main className="mx-auto max-w-6xl px-4 py-8">
         <div className="space-y-8">
           <div className="space-y-2">
-            <h1 className="text-xl font-sans font-bold text-charcoal leading-tight">Series</h1>
-            <p className="text-xs text-charcoal/80 max-w-2xl leading-snug">
+            <h1 className="font-bold font-sans text-charcoal text-xl leading-tight">Series</h1>
+            <p className="max-w-2xl text-charcoal/80 text-xs leading-snug">
               Deep explorations into complex topics through structured, multi-part series. Each
               series builds understanding progressively, from foundational concepts to advanced
               applications.
@@ -25,21 +25,21 @@ export default async function SeriesPage() {
           </div>
 
           {series.length === 0 ? (
-            <div className="text-center py-12">
+            <div className="py-12 text-center">
               <p className="text-charcoal/60">No series available yet. Check back soon!</p>
             </div>
           ) : (
-            <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
               {series.map((s) => (
                 <SeriesCard
                   key={s.slug}
-                  series={s}
-                  variant="grid"
-                  size="md"
-                  showDescription={true}
-                  showArticleCount={true}
                   priority={false}
+                  series={s}
+                  showArticleCount={true}
+                  showDescription={true}
+                  size="md"
                   testId={`grid-series-${s.slug}`}
+                  variant="grid"
                 />
               ))}
             </div>
@@ -51,15 +51,15 @@ export default async function SeriesPage() {
     console.error("Error fetching series:", error);
 
     return (
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="mx-auto max-w-4xl px-4 py-8">
         <div className="space-y-8">
           <div className="space-y-2">
-            <h1 className="text-xl font-sans font-bold text-charcoal leading-tight">Series</h1>
-            <p className="text-xs text-charcoal/80 max-w-2xl leading-snug">
+            <h1 className="font-bold font-sans text-charcoal text-xl leading-tight">Series</h1>
+            <p className="max-w-2xl text-charcoal/80 text-xs leading-snug">
               Deep explorations into complex topics through structured, multi-part series.
             </p>
           </div>
-          <div className="text-center py-12">
+          <div className="py-12 text-center">
             <p className="text-charcoal/60">Unable to load series. Please try again later.</p>
           </div>
         </div>

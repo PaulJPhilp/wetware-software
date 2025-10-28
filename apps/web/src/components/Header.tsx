@@ -86,7 +86,7 @@ export function Header() {
   useEscapeKey(() => setContentOpen(false), isContentOpen);
   const clickOutsideRef = useClickOutside<HTMLDivElement>(
     () => setContentOpen(false),
-    isContentOpen,
+    isContentOpen
   );
 
   // Keyboard handler for trigger button
@@ -136,90 +136,90 @@ export function Header() {
   // Compute a simple checksum of static DOM-relevant strings (debug only)
   useEffect(() => {
     const checksum = btoa(
-      [HEADER_CLASS, NAV_CLASS, NAV_LINK_CLASS, TITLE_CLASS, SUBTITLE_CLASS].join("|"),
+      [HEADER_CLASS, NAV_CLASS, NAV_LINK_CLASS, TITLE_CLASS, SUBTITLE_CLASS].join("|")
     );
     // eslint-disable-next-line no-console
     console.log("[Header checksum]", checksum);
   }, []);
 
   return (
-    <header ref={headerRef} className={HEADER_CLASS} suppressHydrationWarning>
+    <header className={HEADER_CLASS} ref={headerRef} suppressHydrationWarning>
       <nav className={NAV_CLASS}>
         <div className="flex items-center gap-1">
           <Image
-            src="/images/avatar.jpeg"
             alt="Paul J Philp Avatar"
-            width={24}
+            className="h-6 w-6 rounded-full border border-gray-200 shadow dark:border-gray-700"
             height={24}
-            className="w-6 h-6 rounded-full border border-gray-200 dark:border-gray-700 shadow"
             priority
+            src="/images/avatar.jpeg"
+            width={24}
           />
           <div className="flex flex-col leading-tight">
-            <Link href="/" className={TITLE_CLASS}>
+            <Link className={TITLE_CLASS} href="/">
               Wetware & Software
             </Link>
             <span className={SUBTITLE_CLASS}>The Practice of Human-AI Collaboration</span>
           </div>
         </div>
-        <div className="flex items-center gap-2 ml-2">
-          <Link href="/about" className={NAV_LINK_CLASS}>
+        <div className="ml-2 flex items-center gap-2">
+          <Link className={NAV_LINK_CLASS} href="/about">
             About
           </Link>
-          <Link href="/projects" className={NAV_LINK_CLASS}>
+          <Link className={NAV_LINK_CLASS} href="/projects">
             Projects
           </Link>
           <div className="relative">
             <button
-              ref={triggerRef}
-              type="button"
+              aria-controls={menuId}
+              aria-expanded={isContentOpen}
+              aria-haspopup="true"
+              className={`${NAV_LINK_CLASS} inline border-0 bg-transparent p-0`}
+              id={triggerId}
               onClick={() => setContentOpen(!isContentOpen)}
               onKeyDown={handleTriggerKeyDown}
-              className={`${NAV_LINK_CLASS} inline border-0 bg-transparent p-0`}
-              aria-haspopup="true"
-              aria-expanded={isContentOpen}
-              aria-controls={menuId}
-              id={triggerId}
+              ref={triggerRef}
+              type="button"
             >
               Content
             </button>
             {isContentOpen && (
               <div
+                aria-labelledby={triggerId}
+                className="-translate-x-1/2 fade-in-0 zoom-in-95 absolute top-full left-1/2 z-dropdown mt-4 min-w-[100px] transform animate-in rounded-lg border border-border bg-popover py-0.5 shadow-lg backdrop-blur-md duration-200"
+                id={menuId}
                 ref={(node) => {
                   dropdownRef.current = node;
                   if (clickOutsideRef) {
                     clickOutsideRef.current = node;
                   }
                 }}
-                id={menuId}
                 role="menu"
-                aria-labelledby={triggerId}
-                className="absolute top-full left-1/2 transform -translate-x-1/2 mt-4 bg-popover backdrop-blur-md border border-border rounded-lg shadow-lg py-0.5 min-w-[100px] z-dropdown animate-in fade-in-0 zoom-in-95 duration-200"
               >
                 <Link
+                  className="block px-1.5 py-1 text-popover-foreground text-xs transition-colors hover:bg-orange/10 hover:text-orange focus:bg-orange/10 focus:text-orange focus:outline-none"
                   href="/essays"
+                  onClick={() => setContentOpen(false)}
                   role="menuitem"
                   tabIndex={-1}
-                  className="block px-1.5 py-1 text-xs text-popover-foreground hover:text-orange hover:bg-orange/10 focus:text-orange focus:bg-orange/10 transition-colors focus:outline-none"
-                  onClick={() => setContentOpen(false)}
                 >
                   Essays
                 </Link>
                 <Link
+                  className="block px-1.5 py-1 text-popover-foreground text-xs transition-colors hover:bg-orange/10 hover:text-orange focus:bg-orange/10 focus:text-orange focus:outline-none"
                   href="/articles"
+                  onClick={() => setContentOpen(false)}
                   role="menuitem"
                   tabIndex={-1}
-                  className="block px-1.5 py-1 text-xs text-popover-foreground hover:text-orange hover:bg-orange/10 focus:text-orange focus:bg-orange/10 transition-colors focus:outline-none"
-                  onClick={() => setContentOpen(false)}
                 >
                   Articles
                 </Link>
               </div>
             )}
           </div>
-          <Link href="/resources" className={NAV_LINK_CLASS}>
+          <Link className={NAV_LINK_CLASS} href="/resources">
             Resources
           </Link>
-          <Link href="/connect" className={NAV_LINK_CLASS}>
+          <Link className={NAV_LINK_CLASS} href="/connect">
             Connect
           </Link>
           <ThemeToggle className="ml-2" />

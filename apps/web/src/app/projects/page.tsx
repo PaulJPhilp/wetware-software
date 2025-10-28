@@ -23,14 +23,14 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-12 px-4 space-y-12 relative">
+    <div className="relative mx-auto max-w-7xl space-y-12 px-4 py-12">
       {/* Header Section */}
-      <section className="text-center space-y-6">
+      <section className="space-y-6 text-center">
         <div className="space-y-4">
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground">
+          <h1 className="font-bold text-4xl text-foreground tracking-tight sm:text-5xl">
             Projects
           </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="mx-auto max-w-3xl text-lg text-muted-foreground leading-relaxed">
             Welcome to my workshop. Here, you'll find a collection of practical AI applications and
             robust software systems. These projects demonstrate how I use modern technologies like
             TypeScript, Effect-TS, and Next.js, along with advanced AI orchestration frameworks, to
@@ -40,21 +40,21 @@ export default function ProjectsPage() {
 
         {/* Project Stats */}
         <div className="flex flex-wrap justify-center gap-4">
-          <div className="flex items-center gap-2 bg-muted rounded-lg px-4 py-2">
-            <Code className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm font-medium">{stats.total} Total Projects</span>
+          <div className="flex items-center gap-2 rounded-lg bg-muted px-4 py-2">
+            <Code className="h-4 w-4 text-muted-foreground" />
+            <span className="font-medium text-sm">{stats.total} Total Projects</span>
           </div>
-          <div className="flex items-center gap-2 bg-muted rounded-lg px-4 py-2">
-            <Star className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm font-medium">{stats.active} Active</span>
+          <div className="flex items-center gap-2 rounded-lg bg-muted px-4 py-2">
+            <Star className="h-4 w-4 text-muted-foreground" />
+            <span className="font-medium text-sm">{stats.active} Active</span>
           </div>
-          <div className="flex items-center gap-2 bg-muted rounded-lg px-4 py-2">
-            <Wrench className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm font-medium">{stats.maintenance} Maintenance</span>
+          <div className="flex items-center gap-2 rounded-lg bg-muted px-4 py-2">
+            <Wrench className="h-4 w-4 text-muted-foreground" />
+            <span className="font-medium text-sm">{stats.maintenance} Maintenance</span>
           </div>
-          <div className="flex items-center gap-2 bg-muted rounded-lg px-4 py-2">
-            <Archive className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm font-medium">{stats.archived} Archived</span>
+          <div className="flex items-center gap-2 rounded-lg bg-muted px-4 py-2">
+            <Archive className="h-4 w-4 text-muted-foreground" />
+            <span className="font-medium text-sm">{stats.archived} Archived</span>
           </div>
         </div>
       </section>
@@ -63,11 +63,11 @@ export default function ProjectsPage() {
       {featuredProject && (
         <section className="space-y-6">
           <div className="flex items-center gap-3">
-            <Star className="w-6 h-6 text-foreground" />
-            <h2 className="text-2xl font-bold text-foreground">Featured Project</h2>
+            <Star className="h-6 w-6 text-foreground" />
+            <h2 className="font-bold text-2xl text-foreground">Featured Project</h2>
           </div>
 
-          <div className="max-w-4xl mx-auto">
+          <div className="mx-auto max-w-4xl">
             <ProjectCard
               project={featuredProject}
               {...(projectStars[featuredProject.id] && {
@@ -81,8 +81,8 @@ export default function ProjectsPage() {
       {/* All Projects */}
       <section className="space-y-6">
         <div className="flex items-center gap-3">
-          <Code className="w-5 h-5 text-foreground" />
-          <h2 className="text-2xl font-bold text-foreground">All Projects</h2>
+          <Code className="h-5 w-5 text-foreground" />
+          <h2 className="font-bold text-2xl text-foreground">All Projects</h2>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -99,17 +99,17 @@ export default function ProjectsPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="bg-card text-foreground rounded-xl p-8 text-center space-y-6">
+      <section className="space-y-6 rounded-xl bg-card p-8 text-center text-foreground">
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold">More Coming Soon</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <h2 className="font-bold text-2xl">More Coming Soon</h2>
+          <p className="mx-auto max-w-2xl text-muted-foreground">
             I'm constantly working on new projects and experiments. Follow my GitHub to stay updated
             on the latest developments in software engineering and robotics.
           </p>
         </div>
-        <Button variant="secondary" asChild>
-          <a href="https://github.com/PaulJPhilp" target="_blank" rel="noopener noreferrer">
-            <Github className="w-4 h-4 mr-2" />
+        <Button asChild variant="secondary">
+          <a href="https://github.com/PaulJPhilp" rel="noopener noreferrer" target="_blank">
+            <Github className="mr-2 h-4 w-4" />
             View on GitHub
           </a>
         </Button>

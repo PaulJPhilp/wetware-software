@@ -75,7 +75,7 @@ describe("Type Guards", () => {
       expect(isValidMultiSelectProperty({ type: "select" })).toBe(false);
       expect(isValidMultiSelectProperty({ type: "multi_select" })).toBe(false);
       expect(isValidMultiSelectProperty({ type: "multi_select", multi_select: "not-array" })).toBe(
-        false,
+        false
       );
     });
   });
@@ -389,7 +389,7 @@ describe("validateRequiredProperties", () => {
     ];
 
     expect(() => validateRequiredProperties(properties, requiredProps)).toThrow(
-      "Missing required property: MissingProperty",
+      "Missing required property: MissingProperty"
     );
   });
 
@@ -400,7 +400,7 @@ describe("validateRequiredProperties", () => {
     ];
 
     expect(() => validateRequiredProperties(properties, requiredProps)).toThrow(
-      "Invalid property type for Name. Expected: rich_text, Got: title",
+      "Invalid property type for Name. Expected: rich_text, Got: title"
     );
   });
 });

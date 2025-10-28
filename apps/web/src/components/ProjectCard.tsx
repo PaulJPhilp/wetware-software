@@ -49,46 +49,46 @@ export function ProjectCard({
 }: ProjectCardProps) {
   return (
     <Card
-      className={`group relative flex flex-col h-full border-border transition-all duration-200 z-0 ${
+      className={`group relative z-0 flex h-full flex-col border-border transition-all duration-200 ${
         hoverable ? "hover:shadow-lg" : ""
       } ${className || ""}`}
       data-testid={testId}
     >
       {/* Clickable overlay for the entire card */}
       <Link
-        href={`/projects/${project.id}`}
         aria-label={`Open ${project.name} details`}
         className="absolute inset-0 z-10"
+        href={`/projects/${project.id}`}
       >
         <span className="sr-only">Open project</span>
       </Link>
       {/* Project image */}
       {project.imageUrl && (
-        <div className="relative aspect-[16/9] w-full overflow-hidden bg-muted/20 rounded-t-xl">
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-xl bg-muted/20">
           <Image
-            src={project.imageUrl}
             alt={project.name}
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+            src={project.imageUrl}
           />
         </div>
       )}
 
       <CardHeader className="space-y-3">
         <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg font-bold transition-colors line-clamp-2">
+          <CardTitle className="line-clamp-2 font-bold text-lg transition-colors">
             {project.name}
           </CardTitle>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex shrink-0 items-center gap-2">
             {stars !== undefined && stars >= 10 && (
-              <span className="text-xs text-muted-foreground whitespace-nowrap">
+              <span className="whitespace-nowrap text-muted-foreground text-xs">
                 • {stars.toLocaleString()}★
               </span>
             )}
             <Badge
+              className={`px-2 py-1 text-xs ${statusColors[project.status]}`}
               variant="outline"
-              className={`text-xs px-2 py-1 ${statusColors[project.status]}`}
             >
               {project.status}
             </Badge>
@@ -96,7 +96,7 @@ export function ProjectCard({
         </div>
 
         {showDescription && (
-          <p className="text-sm text-muted-foreground line-clamp-3 leading-snug">
+          <p className="line-clamp-3 text-muted-foreground text-sm leading-snug">
             {project.description}
           </p>
         )}
@@ -108,9 +108,9 @@ export function ProjectCard({
           <div className="flex flex-wrap gap-1">
             {project.technologies.slice(0, 4).map((tech) => (
               <Badge
+                className="bg-secondary px-2 py-1 text-secondary-foreground text-xs"
                 key={tech}
                 variant="outline"
-                className="text-xs px-2 py-1 bg-secondary text-secondary-foreground"
               >
                 {tech}
               </Badge>
@@ -119,28 +119,28 @@ export function ProjectCard({
         )}
       </CardContent>
 
-      <CardFooter className="flex items-center pt-4 border-t border-border relative z-20">
+      <CardFooter className="relative z-20 flex items-center border-border border-t pt-4">
         <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm" asChild>
+          <Button asChild size="sm" variant="outline">
             <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
               aria-label={`View ${project.name} on GitHub`}
+              href={project.githubUrl}
+              rel="noopener noreferrer"
+              target="_blank"
             >
-              <Github className="w-4 h-4 mr-2" />
+              <Github className="mr-2 h-4 w-4" />
               Code
             </a>
           </Button>
           {project.demoUrl && (
-            <Button variant="outline" size="sm" asChild>
+            <Button asChild size="sm" variant="outline">
               <a
-                href={project.demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
                 aria-label={`Open ${project.name} live demo`}
+                href={project.demoUrl}
+                rel="noopener noreferrer"
+                target="_blank"
               >
-                <ExternalLink className="w-4 h-4 mr-2" />
+                <ExternalLink className="mr-2 h-4 w-4" />
                 Demo
               </a>
             </Button>

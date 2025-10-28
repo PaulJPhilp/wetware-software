@@ -95,7 +95,7 @@ export function PostCard({
     if (post.focusArea) parts.push(`Focus area: ${post.focusArea}`);
     if (showDescription && post.description) {
       parts.push(
-        `Description: ${post.description.slice(0, 100)}${post.description.length > 100 ? "..." : ""}`,
+        `Description: ${post.description.slice(0, 100)}${post.description.length > 100 ? "..." : ""}`
       );
     }
     if (post.publishDate) parts.push(`Published: ${post.publishDate}`);
@@ -123,7 +123,7 @@ export function PostCard({
       "cursor-pointer",
     ],
     // Custom classes
-    className,
+    className
   );
 
   // Generate dynamic classes for line clamping
@@ -159,66 +159,66 @@ export function PostCard({
 
   return (
     <Card
+      aria-label={getCardAriaLabel()}
       className={cardClasses}
-      style={cardStyles}
       data-testid={testId}
       role={interactive ? "button" : "article"}
-      aria-label={getCardAriaLabel()}
+      style={cardStyles}
       tabIndex={interactive ? 0 : undefined}
     >
       {/* Cover image */}
       {post.coverImage && (
         <div
-          className="relative aspect-[16/9] w-full overflow-hidden bg-charcoal/5 rounded-t-lg -mx-3 -mt-3 mb-3"
+          aria-label={`Cover image for ${post.name}`}
           // Fallback: ensure the parent has a non-zero height even if Tailwind's aspect utility
           // isn't picked up by the runtime for some reason (prevents Image fill height=0 warning)
-          style={{ minHeight: 1 }}
+          className="-mx-3 -mt-3 relative mb-3 aspect-[16/9] w-full overflow-hidden rounded-t-lg bg-charcoal/5"
           role="img"
-          aria-label={`Cover image for ${post.name}`}
+          style={{ minHeight: 1 }}
         >
           {isNextImageAllowed(post.coverImage) ? (
             <Image
-              src={post.coverImage}
               alt={post.name}
-              fill
-              sizes={getResponsiveImageSizes()}
               className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-              priority={imagePriority}
-              onLoad={() => setImageLoading(false)}
+              fill
               onError={() => setImageError(true)}
+              onLoad={() => setImageLoading(false)}
+              priority={imagePriority}
+              sizes={getResponsiveImageSizes()}
+              src={post.coverImage}
             />
           ) : (
             <>
               {imageLoading && (
                 <div
-                  className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse flex items-center justify-center"
                   aria-live="polite"
+                  className="absolute inset-0 flex animate-pulse items-center justify-center bg-gray-200 dark:bg-gray-700"
                 >
-                  <span className="text-xs text-gray-500" aria-hidden="true">
+                  <span aria-hidden="true" className="text-gray-500 text-xs">
                     Loading...
                   </span>
                 </div>
               )}
               {imageError ? (
                 <div
-                  className="absolute inset-0 bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
+                  className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800"
                   role="alert"
                 >
-                  <span className="text-xs text-gray-500" aria-hidden="true">
+                  <span aria-hidden="true" className="text-gray-500 text-xs">
                     Failed to load image
                   </span>
                 </div>
               ) : (
                 <Image
-                  src={post.coverImage}
                   alt={post.name}
-                  fill
-                  sizes={getResponsiveImageSizes()}
                   className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                  priority={imagePriority}
-                  unoptimized
-                  onLoad={() => setImageLoading(false)}
+                  fill
                   onError={handleImageError(() => setImageError(true))}
+                  onLoad={() => setImageLoading(false)}
+                  priority={imagePriority}
+                  sizes={getResponsiveImageSizes()}
+                  src={post.coverImage}
+                  unoptimized
                 />
               )}
             </>
@@ -227,21 +227,21 @@ export function PostCard({
       )}
 
       {/* Content container with proper spacing */}
-      <div className="flex flex-col flex-1 justify-center space-y-1">
+      <div className="flex flex-1 flex-col justify-center space-y-1">
         {/* Header section */}
         <div className="flex items-center gap-1.5">
           <span
+            aria-label={`Focus area: ${post.focusArea}`}
             className="flex-shrink-0"
             role="img"
-            aria-label={`Focus area: ${post.focusArea}`}
             title={post.focusArea}
           >
-            <FocusIcon className="w-5 h-5 text-orange" aria-hidden="true" />
+            <FocusIcon aria-hidden="true" className="h-5 w-5 text-orange" />
           </span>
           <h2
             className={cn(
-              "text-base font-sans font-bold group-hover:text-orange transition-colors flex-1",
-              getTitleClampClass(),
+              "flex-1 font-bold font-sans text-base transition-colors group-hover:text-orange",
+              getTitleClampClass()
             )}
             id={`post-title-${post.id}`}
           >
@@ -253,18 +253,18 @@ export function PostCard({
         {showDescription && (
           <div>
             <p
+              aria-describedby={`post-title-${post.id}`}
               className={cn(
-                "text-sm text-muted-foreground leading-snug",
-                getDescriptionClampClass(),
+                "text-muted-foreground text-sm leading-snug",
+                getDescriptionClampClass()
               )}
+              id={`post-description-${post.id}`}
               style={{
                 display: "-webkit-box",
                 WebkitLineClamp: descriptionLineClamp,
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
               }}
-              id={`post-description-${post.id}`}
-              aria-describedby={`post-title-${post.id}`}
             >
               {post.description}
             </p>
@@ -275,8 +275,8 @@ export function PostCard({
       {/* Footer section with controlled spacing */}
       <div
         className={cn(
-          "flex items-center justify-between text-xs text-muted-foreground",
-          spacing.descriptionToFooter,
+          "flex items-center justify-between text-muted-foreground text-xs",
+          spacing.descriptionToFooter
         )}
       >
         {showTags && post.tags && post.tags.length > 0 && (
@@ -285,17 +285,17 @@ export function PostCard({
             <div className="space-x-0.5">
               {post.tags.slice(0, maxTags).map((tag, _index) => (
                 <CustomTag
-                  key={tag.name}
-                  className="font-sans text-xs px-0.5 py-0.5"
-                  role="listitem"
                   aria-label={`Tag: ${tag.name}`}
+                  className="px-0.5 py-0.5 font-sans text-xs"
+                  key={tag.name}
+                  role="listitem"
                 >
                   {tag.name}
                 </CustomTag>
               ))}
               {post.tags.length > maxTags && (
                 <span
-                  className="text-xs text-muted-foreground ml-1"
+                  className="ml-1 text-muted-foreground text-xs"
                   title={`${post.tags.length - maxTags} additional tags not shown`}
                 >
                   +{post.tags.length - maxTags} more
@@ -304,7 +304,7 @@ export function PostCard({
             </div>
           </fieldset>
         )}
-        <time className="text-xs text-muted-foreground italic" dateTime={post.publishDate}>
+        <time className="text-muted-foreground text-xs italic" dateTime={post.publishDate}>
           {post.publishDate}
         </time>
       </div>

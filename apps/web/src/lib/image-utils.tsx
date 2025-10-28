@@ -137,8 +137,9 @@ export const getResponsiveImageSizes = (sizes?: {
 /**
  * Handle image error states
  */
-export const handleImageError = (onError?: (error: string) => void, fallbackSrc?: string) => {
-  return (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+export const handleImageError =
+  (onError?: (error: string) => void, fallbackSrc?: string) =>
+  (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
     const img = event.currentTarget;
     if (fallbackSrc && img.src !== fallbackSrc) {
       img.src = fallbackSrc;
@@ -147,7 +148,6 @@ export const handleImageError = (onError?: (error: string) => void, fallbackSrc?
       onError?.("Failed to load image");
     }
   };
-};
 
 /**
  * Render an image that gracefully falls back when sources are missing.
@@ -171,31 +171,31 @@ export function ImageWithFallback({
   const finalSrc = normalizeImageSrc(src) || normalizeImageSrc(fallbackSrc) || fallbackSrc;
 
   if (!finalSrc && showPlaceholder) {
-    return <div className={placeholderClassName} style={{ width, height }} aria-hidden="true" />;
+    return <div aria-hidden="true" className={placeholderClassName} style={{ width, height }} />;
   }
 
   return (
     <div className="relative" style={{ width, height }}>
       {showPlaceholder && (
         <div
-          className={`absolute inset-0 ${placeholderClassName}`}
           aria-hidden="true"
+          className={`absolute inset-0 ${placeholderClassName}`}
           style={{ zIndex: 0 }}
         />
       )}
       <Image
+        alt={alt}
+        className={className}
+        height={height}
+        onError={onError}
+        onLoad={onLoad}
+        priority={priority}
         src={
           finalSrc ||
           "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA4MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjYwIiBmaWxsPSIjZGRkIi8+Cjx0ZXh0IHg9IjQwIiB5PSIzMCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iMC4zZW0iPk5vIENvdmVyPC90ZXh0Pgo8L3N2Zz4K"
         }
-        alt={alt}
-        width={width}
-        height={height}
-        className={className}
-        priority={priority}
         style={{ zIndex: 1 }}
-        onLoad={onLoad}
-        onError={onError}
+        width={width}
       />
     </div>
   );

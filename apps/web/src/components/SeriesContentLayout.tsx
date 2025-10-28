@@ -61,7 +61,7 @@ export const SeriesContentLayout: React.FC<SeriesContentLayoutProps> = ({
           showArticleLists={showArticleLists}
           className="w-60 flex-shrink-0"
         /> */}
-        <main className="flex-1 min-w-0">{children}</main>
+        <main className="min-w-0 flex-1">{children}</main>
       </div>
     </div>
   );

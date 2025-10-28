@@ -115,7 +115,7 @@ describe("NotionPropertyTypeError", () => {
     const error = new NotionPropertyTypeError("Published", "checkbox", "rich_text");
 
     expect(error.message).toBe(
-      "Invalid property type for Published. Expected: checkbox, Got: rich_text",
+      "Invalid property type for Published. Expected: checkbox, Got: rich_text"
     );
     expect(error.context).toEqual({
       property: "Published",

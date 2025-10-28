@@ -78,7 +78,7 @@ export function SearchModal({ isOpen, onCloseAction }: SearchModalProps) {
   useEffect(() => {
     if (isOpen && resultsRef.current) {
       const elements = Array.from(
-        resultsRef.current.querySelectorAll("[data-search-result]"),
+        resultsRef.current.querySelectorAll("[data-search-result]")
       ) as HTMLElement[];
       setResultElements(elements);
     }
@@ -174,19 +174,19 @@ export function SearchModal({ isOpen, onCloseAction }: SearchModalProps) {
   const getResultIcon = (type: SearchResult["type"]) => {
     switch (type) {
       case "post":
-        return <FileText className="w-4 h-4" />;
+        return <FileText className="h-4 w-4" />;
       case "project":
-        return <User className="w-4 h-4" />;
+        return <User className="h-4 w-4" />;
       case "series":
-        return <Calendar className="w-4 h-4" />;
+        return <Calendar className="h-4 w-4" />;
       default:
-        return <FileText className="w-4 h-4" />;
+        return <FileText className="h-4 w-4" />;
     }
   };
 
   return (
-    <Modal open={isOpen} onOpenChange={(open) => !open && onCloseAction()}>
-      <ModalContent size="lg" showCloseButton={true} closeOnOverlayClick={true}>
+    <Modal onOpenChange={(open) => !open && onCloseAction()} open={isOpen}>
+      <ModalContent closeOnOverlayClick={true} showCloseButton={true} size="lg">
         <ModalHeader>
           <ModalTitle>Search</ModalTitle>
         </ModalHeader>
@@ -195,49 +195,47 @@ export function SearchModal({ isOpen, onCloseAction }: SearchModalProps) {
           <div className="space-y-4">
             {/* Search Input */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Search className="-translate-y-1/2 absolute top-1/2 left-3 h-4 w-4 transform text-muted-foreground" />
               <input
-                ref={inputRef}
-                type="text"
-                placeholder="Search posts, projects, and series..."
-                value={query}
+                aria-describedby="search-instructions"
+                aria-label="Search query"
+                className="w-full rounded-lg border border-border bg-background py-2 pr-4 pl-10 text-foreground transition-colors placeholder:text-muted-foreground focus:border-orange focus:outline-none focus:ring-2 focus:ring-orange"
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleInputKeyDown}
-                className="w-full pl-10 pr-4 py-2 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange focus:border-orange transition-colors"
-                aria-label="Search query"
-                aria-describedby="search-instructions"
+                placeholder="Search posts, projects, and series..."
+                ref={inputRef}
+                type="text"
+                value={query}
               />
             </div>
 
             {/* Instructions */}
-            <div id={instructionsId} className="text-xs text-muted-foreground">
+            <div className="text-muted-foreground text-xs" id={instructionsId}>
               Use arrow keys to navigate results, Enter to select, Escape to close
             </div>
 
             {/* Loading State */}
             {isLoading && (
               <div className="flex items-center justify-center py-8">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange"></div>
-                <span className="ml-2 text-sm text-muted-foreground">Searching...</span>
+                <div className="h-6 w-6 animate-spin rounded-full border-orange border-b-2" />
+                <span className="ml-2 text-muted-foreground text-sm">Searching...</span>
               </div>
             )}
 
             {/* Results */}
             {!isLoading && results.length > 0 && (
               <div
-                ref={resultsRef}
-                className="space-y-2 max-h-96 overflow-y-auto"
-                role="listbox"
                 aria-label="Search results"
+                className="max-h-96 space-y-2 overflow-y-auto"
+                ref={resultsRef}
+                role="listbox"
               >
                 {results.map((result, index) => (
                   <div
-                    key={result.id}
-                    data-search-result
-                    role="option"
                     aria-selected={selectedIndex === index}
-                    tabIndex={-1}
-                    className="flex items-start gap-3 p-3 rounded-lg border border-border hover:bg-muted/50 focus:bg-muted focus:outline-none cursor-pointer transition-colors"
+                    className="flex cursor-pointer items-start gap-3 rounded-lg border border-border p-3 transition-colors hover:bg-muted/50 focus:bg-muted focus:outline-none"
+                    data-search-result
+                    key={result.id}
                     onClick={() => {
                       window.location.href = result.url;
                       onCloseAction();
@@ -248,18 +246,20 @@ export function SearchModal({ isOpen, onCloseAction }: SearchModalProps) {
                         onCloseAction();
                       }
                     }}
+                    role="option"
+                    tabIndex={-1}
                   >
-                    <div className="flex-shrink-0 mt-0.5 text-muted-foreground">
+                    <div className="mt-0.5 flex-shrink-0 text-muted-foreground">
                       {getResultIcon(result.type)}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-foreground line-clamp-1">{result.title}</h3>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="line-clamp-1 font-medium text-foreground">{result.title}</h3>
                       {result.excerpt && (
-                        <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                        <p className="mt-1 line-clamp-2 text-muted-foreground text-sm">
                           {result.excerpt}
                         </p>
                       )}
-                      <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                      <div className="mt-2 flex items-center gap-2 text-muted-foreground text-xs">
                         <span className="capitalize">{result.type}</span>
                         {result.date && (
                           <>
@@ -276,21 +276,21 @@ export function SearchModal({ isOpen, onCloseAction }: SearchModalProps) {
 
             {/* No Results */}
             {!isLoading && query.trim() && results.length === 0 && (
-              <div className="text-center py-8">
-                <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="font-medium text-foreground mb-2">No results found</h3>
-                <p className="text-sm text-muted-foreground">
+              <div className="py-8 text-center">
+                <Search className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+                <h3 className="mb-2 font-medium text-foreground">No results found</h3>
+                <p className="text-muted-foreground text-sm">
                   Try adjusting your search terms or browse our content directly.
                 </p>
               </div>
             )}
 
             {/* Empty State */}
-            {!isLoading && !query.trim() && (
-              <div className="text-center py-8">
-                <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="font-medium text-foreground mb-2">Start typing to search</h3>
-                <p className="text-sm text-muted-foreground">
+            {!(isLoading || query.trim()) && (
+              <div className="py-8 text-center">
+                <Search className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+                <h3 className="mb-2 font-medium text-foreground">Start typing to search</h3>
+                <p className="text-muted-foreground text-sm">
                   Search through posts, projects, series, and pages.
                 </p>
               </div>

@@ -9,7 +9,7 @@ interface SeriesNavigationProps {
 }
 
 export function SeriesNavigation({ currentPost, seriesPosts }: SeriesNavigationProps) {
-  if (!currentPost.seriesId || !currentPost.seriesName || seriesPosts.length <= 1) {
+  if (!(currentPost.seriesId && currentPost.seriesName) || seriesPosts.length <= 1) {
     return null;
   }
 
@@ -21,25 +21,25 @@ export function SeriesNavigation({ currentPost, seriesPosts }: SeriesNavigationP
   const nextPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 
   return (
-    <div className="border border-charcoal/20 rounded-lg p-6 bg-charcoal/5">
+    <div className="rounded-lg border border-charcoal/20 bg-charcoal/5 p-6">
       <div className="space-y-4">
         {/* Series Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <List className="w-5 h-5 text-orange" />
+            <List className="h-5 w-5 text-orange" />
             <div>
               <Link
+                className="font-semibold text-lg transition-colors hover:text-orange"
                 href={`/series/${currentPost.seriesName?.toLowerCase().replace(/\s+/g, "-")}`}
-                className="text-lg font-semibold hover:text-orange transition-colors"
               >
                 {currentPost.seriesName}
               </Link>
-              <p className="text-sm text-charcoal/60">
+              <p className="text-charcoal/60 text-sm">
                 Part {currentPost.partNumber} of {seriesPosts.length}
               </p>
             </div>
           </div>
-          <Badge variant="secondary" className="text-xs">
+          <Badge className="text-xs" variant="secondary">
             Series
           </Badge>
         </div>
@@ -48,13 +48,13 @@ export function SeriesNavigation({ currentPost, seriesPosts }: SeriesNavigationP
         <div className="flex items-center justify-between">
           {previousPost ? (
             <Link
+              className="flex max-w-[45%] items-center gap-2 rounded-lg border border-charcoal/20 p-3 transition-colors hover:bg-charcoal/5"
               href={`/posts/${previousPost.slug}`}
-              className="flex items-center gap-2 p-3 rounded-lg border border-charcoal/20 hover:bg-charcoal/5 transition-colors max-w-[45%]"
             >
-              <ChevronLeft className="w-4 h-4 text-orange" />
+              <ChevronLeft className="h-4 w-4 text-orange" />
               <div className="text-left">
-                <p className="text-xs text-charcoal/60">Previous</p>
-                <p className="text-sm font-medium truncate">{previousPost.name}</p>
+                <p className="text-charcoal/60 text-xs">Previous</p>
+                <p className="truncate font-medium text-sm">{previousPost.name}</p>
               </div>
             </Link>
           ) : (
@@ -63,14 +63,14 @@ export function SeriesNavigation({ currentPost, seriesPosts }: SeriesNavigationP
 
           {nextPost ? (
             <Link
+              className="flex max-w-[45%] items-center gap-2 rounded-lg border border-charcoal/20 p-3 transition-colors hover:bg-charcoal/5"
               href={`/posts/${nextPost.slug}`}
-              className="flex items-center gap-2 p-3 rounded-lg border border-charcoal/20 hover:bg-charcoal/5 transition-colors max-w-[45%]"
             >
               <div className="text-right">
-                <p className="text-xs text-charcoal/60">Next</p>
-                <p className="text-sm font-medium truncate">{nextPost.name}</p>
+                <p className="text-charcoal/60 text-xs">Next</p>
+                <p className="truncate font-medium text-sm">{nextPost.name}</p>
               </div>
-              <ChevronRight className="w-4 h-4 text-orange" />
+              <ChevronRight className="h-4 w-4 text-orange" />
             </Link>
           ) : (
             <div className="w-[45%]" />
@@ -78,20 +78,20 @@ export function SeriesNavigation({ currentPost, seriesPosts }: SeriesNavigationP
         </div>
 
         {/* All Parts List */}
-        <div className="pt-4 border-t border-charcoal/20">
-          <p className="text-sm font-medium text-charcoal mb-3">All Parts in Series</p>
+        <div className="border-charcoal/20 border-t pt-4">
+          <p className="mb-3 font-medium text-charcoal text-sm">All Parts in Series</p>
           <div className="grid gap-2">
             {sortedPosts.map((post) => (
               <Link
-                key={post.id}
-                href={`/posts/${post.slug}`}
-                className={`flex items-center gap-3 p-2 rounded text-sm transition-colors ${
+                className={`flex items-center gap-3 rounded p-2 text-sm transition-colors ${
                   post.id === currentPost.id
-                    ? "bg-orange/10 text-orange font-medium"
-                    : "hover:bg-charcoal/5 text-charcoal/80"
+                    ? "bg-orange/10 font-medium text-orange"
+                    : "text-charcoal/80 hover:bg-charcoal/5"
                 }`}
+                href={`/posts/${post.slug}`}
+                key={post.id}
               >
-                <span className="flex-shrink-0 w-6 h-6 bg-charcoal/10 rounded-full flex items-center justify-center text-xs">
+                <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-charcoal/10 text-xs">
                   {post.partNumber}
                 </span>
                 <span className="truncate">{post.name}</span>

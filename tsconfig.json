@@ -4,9 +4,14 @@
     "baseUrl": ".",
     "noEmit": true,
     "paths": {
-      "@/*": ["./apps/web/src/*"],
-      "@wetware/*": ["packages/*/src"]
-    }
+      "@/*": [
+        "./apps/web/src/*"
+      ],
+      "@wetware/*": [
+        "packages/*/src"
+      ]
+    },
+    "strictNullChecks": true
   },
   "include": [
     "apps/**/*",

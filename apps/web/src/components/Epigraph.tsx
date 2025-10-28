@@ -5,9 +5,9 @@ interface EpigraphProps {
 
 export function Epigraph({ author, children }: EpigraphProps) {
   return (
-    <blockquote className="my-8 border-l-4 border-orange/60 bg-orange/5 px-4 py-3 text-lg font-serif leading-relaxed text-brand">
+    <blockquote className="my-8 border-orange/60 border-l-4 bg-orange/5 px-4 py-3 font-serif text-brand text-lg leading-relaxed">
       <p>"{children}"</p>
-      {author ? <footer className="mt-2 text-sm text-muted">— {author}</footer> : null}
+      {author ? <footer className="mt-2 text-muted text-sm">— {author}</footer> : null}
     </blockquote>
   );
 }

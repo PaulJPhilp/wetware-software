@@ -17,13 +17,13 @@ export async function NotionSeries({ limit = 3 }: NotionSeriesProps) {
     const seriesData = allSeries.slice(0, limit);
 
     if (seriesData.length === 0) {
-      return <SeriesSection series={[]} className="mx-auto max-w-md" />;
+      return <SeriesSection className="mx-auto max-w-md" series={[]} />;
     }
 
-    return <SeriesSection series={seriesData} className="mx-auto max-w-md" />;
+    return <SeriesSection className="mx-auto max-w-md" series={seriesData} />;
   } catch (error) {
     console.error("Error fetching series from Notion:", error);
 
-    return <SeriesSection series={[]} className="mx-auto max-w-md" />;
+    return <SeriesSection className="mx-auto max-w-md" series={[]} />;
   }
 }

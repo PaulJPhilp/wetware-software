@@ -13,18 +13,18 @@ import { buildSourceEntitySchema } from "../lib/sourceEntitySchema";
 
 const verboseOption = Options.boolean("verbose").pipe(
   Options.withAlias("v"),
-  Options.withDescription("Enable verbose output"),
+  Options.withDescription("Enable verbose output")
 );
 const urlOption = Options.text("url").pipe(
   Options.withAlias("u"),
   Options.optional,
-  Options.withDescription("Optional URL for the source entity"),
+  Options.withDescription("Optional URL for the source entity")
 );
 
 export const sourceCommand = pipe(
   Command.make("source", {
     args: Args.text().pipe(
-      Args.withDescription("Source name (e.g., YouTube channel, author, company)"),
+      Args.withDescription("Source name (e.g., YouTube channel, author, company)")
     ),
     options: Options.all({ verbose: verboseOption, url: urlOption }),
   }),
@@ -33,9 +33,9 @@ export const sourceCommand = pipe(
     handler(
       args,
       Option.match(options.url, { onNone: () => null, onSome: (v) => v }),
-      Boolean(options.verbose),
-    ),
-  ),
+      Boolean(options.verbose)
+    )
+  )
 );
 
 export interface RunAddSourceOptions {
@@ -46,7 +46,7 @@ export function handler(
   sourceName: string,
   sourceUrl: string | null,
   isVerbose: boolean,
-  options?: RunAddSourceOptions,
+  options?: RunAddSourceOptions
 ) {
   return Effect.gen(function* () {
     const ai = yield* OpenAI;
@@ -57,7 +57,7 @@ export function handler(
       "packages",
       "cli",
       "prompts",
-      "addSourceEntity.txt",
+      "addSourceEntity.txt"
     );
 
     let prompt: string;
@@ -72,7 +72,7 @@ export function handler(
     }
 
     const sourceBlock = [`Source Name: "${sourceName}"`, `Source URL: "${sourceUrl ?? ""}"`].join(
-      "\n",
+      "\n"
     );
 
     const aiJson = yield* ai.generateSourceEntityJson({
@@ -91,7 +91,7 @@ export function handler(
       verbose: isVerbose,
     });
     yield* Console.log(
-      `Success: Created Source Entity page ${res.pageId}${res.url ? ` at ${res.url}` : ""}`,
+      `Success: Created Source Entity page ${res.pageId}${res.url ? ` at ${res.url}` : ""}`
     );
   });
 }

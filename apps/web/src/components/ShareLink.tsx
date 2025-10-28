@@ -18,10 +18,10 @@ export function ShareLink({ id }: ShareLinkProps) {
 
   return (
     <button
-      type="button"
-      onClick={handleCopy}
-      className="focus-ring ml-auto inline-flex items-center gap-2 rounded bg-orange px-2 py-1 text-xs font-medium text-primary-foreground hover:bg-orange/90 transition-colors"
       aria-label="Copy link to this section"
+      className="focus-ring ml-auto inline-flex items-center gap-2 rounded bg-orange px-2 py-1 font-medium text-primary-foreground text-xs transition-colors hover:bg-orange/90"
+      onClick={handleCopy}
+      type="button"
     >
       {copied ? "Copied" : "Copy link"}
     </button>

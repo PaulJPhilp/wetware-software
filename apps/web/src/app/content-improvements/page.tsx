@@ -6,9 +6,9 @@ export default function ContentImprovementsPage() {
   const exampleHeadingId = useId();
   return (
     <main className="min-h-screen bg-brand">
-      <div className="container mx-auto py-12 max-w-4xl">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-sans font-bold text-brand mb-4">Content Improvements</h1>
+      <div className="container mx-auto max-w-4xl py-12">
+        <div className="mb-12 text-center">
+          <h1 className="mb-4 font-bold font-sans text-4xl text-brand">Content Improvements</h1>
           <p className="text-muted">
             Demonstrating the final polish improvements for better accessibility and user
             experience.
@@ -17,16 +17,16 @@ export default function ContentImprovementsPage() {
 
         {/* Last Updated Date */}
         <section className="mb-12">
-          <h2 className="text-3xl font-sans font-bold text-brand mb-6">Last Updated Date</h2>
-          <div className="bg-elevated rounded-lg p-6 border border-brand">
-            <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted mb-4">
+          <h2 className="mb-6 font-bold font-sans text-3xl text-brand">Last Updated Date</h2>
+          <div className="rounded-lg border border-brand bg-elevated p-6">
+            <div className="mb-4 flex flex-wrap items-center justify-center gap-4 text-muted text-sm">
               <time>December 15, 2024</time>
               <span>•</span>
               <span>8 min read</span>
               <span>•</span>
               <span>Last updated: December 15, 2024</span>
             </div>
-            <p className="text-muted text-center">
+            <p className="text-center text-muted">
               Essays now include a "Last updated" date to help readers understand content freshness,
               especially important for time-sensitive topics like AI developments.
             </p>
@@ -35,53 +35,53 @@ export default function ContentImprovementsPage() {
 
         {/* Linkable Callouts */}
         <section className="mb-12">
-          <h2 className="text-3xl font-sans font-bold text-brand mb-6">Linkable Callouts</h2>
+          <h2 className="mb-6 font-bold font-sans text-3xl text-brand">Linkable Callouts</h2>
 
           <div className="space-y-6">
-            <Callout variant="info" title="What to Watch">
+            <Callout title="What to Watch" variant="info">
               <p>
                 Falling GPU lead times and queue lengths, sustained $/token and $/train declines,
                 and the emergence of new AI infrastructure patterns.
               </p>
               <p className="mt-2">
-                <a href="#what-to-watch" className="link-brand-subtle">
+                <a className="link-brand-subtle" href="#what-to-watch">
                   Link to this callout: #what-to-watch
                 </a>
               </p>
             </Callout>
 
-            <Callout variant="warning" title="AI Factory Risk">
+            <Callout title="AI Factory Risk" variant="warning">
               <p>
                 The risk of over-optimization for specific AI workloads without considering broader
                 system resilience and human oversight requirements.
               </p>
               <p className="mt-2">
-                <a href="#ai-factory-risk" className="link-brand-subtle">
+                <a className="link-brand-subtle" href="#ai-factory-risk">
                   Link to this callout: #ai-factory-risk
                 </a>
               </p>
             </Callout>
 
-            <div className="bg-elevated rounded-lg p-6 border border-brand">
-              <h3 className="text-lg font-sans font-bold text-brand mb-3">How It Works</h3>
-              <p className="text-muted mb-3">
+            <div className="rounded-lg border border-brand bg-elevated p-6">
+              <h3 className="mb-3 font-bold font-sans text-brand text-lg">How It Works</h3>
+              <p className="mb-3 text-muted">
                 Callouts automatically generate IDs based on their content:
               </p>
-              <ul className="text-muted space-y-1 list-disc pl-5">
+              <ul className="list-disc space-y-1 pl-5 text-muted">
                 <li>
                   "What to watch" →{" "}
-                  <code className="bg-orange/10 px-1 rounded">#what-to-watch</code>
+                  <code className="rounded bg-orange/10 px-1">#what-to-watch</code>
                 </li>
                 <li>
                   "AI Factory risk" →{" "}
-                  <code className="bg-orange/10 px-1 rounded">#ai-factory-risk</code>
+                  <code className="rounded bg-orange/10 px-1">#ai-factory-risk</code>
                 </li>
                 <li>
-                  "Key takeaway" → <code className="bg-orange/10 px-1 rounded">#key-takeaway</code>
+                  "Key takeaway" → <code className="rounded bg-orange/10 px-1">#key-takeaway</code>
                 </li>
                 <li>
                   Fallback: First 3 words →{" "}
-                  <code className="bg-orange/10 px-1 rounded">#first-three-words</code>
+                  <code className="rounded bg-orange/10 px-1">#first-three-words</code>
                 </li>
               </ul>
             </div>
@@ -90,28 +90,28 @@ export default function ContentImprovementsPage() {
 
         {/* Improved Alt Text */}
         <section className="mb-12">
-          <h2 className="text-3xl font-sans font-bold text-brand mb-6">Descriptive Alt Text</h2>
+          <h2 className="mb-6 font-bold font-sans text-3xl text-brand">Descriptive Alt Text</h2>
 
           <div className="space-y-6">
             <Figure caption="Diagram of Perez's installation → turning point → deployment with notes on investment/speculation and diffusion">
-              <div className="bg-silver dark:bg-charcoal rounded-lg p-8 text-center">
+              <div className="rounded-lg bg-silver p-8 text-center dark:bg-charcoal">
                 <p className="text-muted">Example diagram content</p>
               </div>
             </Figure>
 
-            <div className="bg-elevated rounded-lg p-6 border border-brand">
-              <h3 className="text-lg font-sans font-bold text-brand mb-3">Alt Text Improvements</h3>
-              <p className="text-muted mb-3">
+            <div className="rounded-lg border border-brand bg-elevated p-6">
+              <h3 className="mb-3 font-bold font-sans text-brand text-lg">Alt Text Improvements</h3>
+              <p className="mb-3 text-muted">
                 Images now have more descriptive alt text instead of generic "Content illustration":
               </p>
-              <ul className="text-muted space-y-1 list-disc pl-5">
+              <ul className="list-disc space-y-1 pl-5 text-muted">
                 <li>Captions with "diagram", "chart", "graph" → Use caption as alt text</li>
                 <li>No caption → Extract meaningful info from filename</li>
                 <li>Fallback → "Content illustration" with filename context</li>
               </ul>
-              <p className="text-muted mt-3">
+              <p className="mt-3 text-muted">
                 Example:{" "}
-                <code className="bg-orange/10 px-1 rounded">
+                <code className="rounded bg-orange/10 px-1">
                   "Diagram of Perez's installation → turning point → deployment with notes on
                   investment/speculation and diffusion"
                 </code>
@@ -122,19 +122,19 @@ export default function ContentImprovementsPage() {
 
         {/* Linkable Headings */}
         <section className="mb-12">
-          <h2 className="text-3xl font-sans font-bold text-brand mb-6">Linkable Headings</h2>
+          <h2 className="mb-6 font-bold font-sans text-3xl text-brand">Linkable Headings</h2>
 
           <div className="space-y-4">
             <h3
+              className="group scroll-mt-24 font-bold font-sans text-2xl text-brand"
               id={exampleHeadingId}
-              className="text-2xl font-sans font-bold text-brand group scroll-mt-24"
             >
               <a
+                className="inline-flex items-center gap-2 no-underline transition-colors hover:text-orange"
                 href={`#${exampleHeadingId}`}
-                className="inline-flex items-center gap-2 no-underline hover:text-orange transition-colors"
               >
                 Example Heading
-                <span className="invisible ml-2 inline-flex h-4 w-4 items-center justify-center rounded text-orange opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                <span className="invisible ml-2 inline-flex h-4 w-4 items-center justify-center rounded text-orange opacity-0 transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
                   #
                 </span>
               </a>
@@ -144,17 +144,17 @@ export default function ContentImprovementsPage() {
               anchor icons on hover.
             </p>
 
-            <div className="bg-elevated rounded-lg p-6 border border-brand">
-              <h4 className="text-lg font-sans font-bold text-brand mb-3">How It Works</h4>
-              <p className="text-muted mb-3">Heading IDs are generated by:</p>
-              <ul className="text-muted space-y-1 list-disc pl-5">
+            <div className="rounded-lg border border-brand bg-elevated p-6">
+              <h4 className="mb-3 font-bold font-sans text-brand text-lg">How It Works</h4>
+              <p className="mb-3 text-muted">Heading IDs are generated by:</p>
+              <ul className="list-disc space-y-1 pl-5 text-muted">
                 <li>Converting to lowercase</li>
                 <li>Removing special characters</li>
                 <li>Replacing spaces with hyphens</li>
               </ul>
-              <p className="text-muted mt-3">
+              <p className="mt-3 text-muted">
                 Example: "What to Watch" →{" "}
-                <code className="bg-orange/10 px-1 rounded">#what-to-watch</code>
+                <code className="rounded bg-orange/10 px-1">#what-to-watch</code>
               </p>
             </div>
           </div>
@@ -162,25 +162,25 @@ export default function ContentImprovementsPage() {
 
         {/* New Features Demo */}
         <section className="mb-12">
-          <h2 className="text-3xl font-sans font-bold text-brand mb-6">New Interactive Features</h2>
+          <h2 className="mb-6 font-bold font-sans text-3xl text-brand">New Interactive Features</h2>
 
           <div className="space-y-6">
-            <div className="bg-elevated rounded-lg p-6 border border-brand">
-              <h3 className="text-lg font-sans font-bold text-brand mb-3">
+            <div className="rounded-lg border border-brand bg-elevated p-6">
+              <h3 className="mb-3 font-bold font-sans text-brand text-lg">
                 Anchor Icons on Headings
               </h3>
-              <p className="text-muted mb-4">
+              <p className="mb-4 text-muted">
                 Hover over any heading to see a subtle # anchor icon that allows direct linking to
                 that section.
               </p>
-              <div className="bg-silver dark:bg-charcoal rounded p-4">
-                <h4 className="text-base font-sans font-bold text-brand group scroll-mt-24">
+              <div className="rounded bg-silver p-4 dark:bg-charcoal">
+                <h4 className="group scroll-mt-24 font-bold font-sans text-base text-brand">
                   <a
+                    className="inline-flex items-center gap-2 no-underline transition-colors hover:text-orange"
                     href="#demo-heading"
-                    className="inline-flex items-center gap-2 no-underline hover:text-orange transition-colors"
                   >
                     Demo Heading (hover to see anchor)
-                    <span className="invisible ml-2 inline-flex h-4 w-4 items-center justify-center rounded text-orange opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                    <span className="invisible ml-2 inline-flex h-4 w-4 items-center justify-center rounded text-orange opacity-0 transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
                       #
                     </span>
                   </a>
@@ -188,22 +188,22 @@ export default function ContentImprovementsPage() {
               </div>
             </div>
 
-            <div className="bg-elevated rounded-lg p-6 border border-brand">
-              <h3 className="text-lg font-sans font-bold text-brand mb-3">
+            <div className="rounded-lg border border-brand bg-elevated p-6">
+              <h3 className="mb-3 font-bold font-sans text-brand text-lg">
                 Share Links on Callouts
               </h3>
-              <p className="text-muted mb-4">
+              <p className="mb-4 text-muted">
                 Callouts now include "Copy link" buttons to easily share specific sections.
               </p>
-              <div className="bg-orange/5 border-l-4 border-orange/60 p-4 rounded-r-lg">
+              <div className="rounded-r-lg border-orange/60 border-l-4 bg-orange/5 p-4">
                 <div className="flex items-start space-x-3">
                   <span className="text-xl">💡</span>
-                  <div className="text-brand flex-1">
+                  <div className="flex-1 text-brand">
                     <p>This is a demo callout with a share link button on the right.</p>
                   </div>
                   <button
+                    className="focus-ring ml-auto inline-flex items-center gap-2 rounded bg-orange px-2 py-1 font-medium text-white text-xs transition-colors hover:bg-orange/90"
                     type="button"
-                    className="focus-ring ml-auto inline-flex items-center gap-2 rounded bg-orange px-2 py-1 text-xs font-medium text-white hover:bg-orange/90 transition-colors"
                   >
                     Copy link
                   </button>
@@ -215,24 +215,24 @@ export default function ContentImprovementsPage() {
 
         {/* Usage Examples */}
         <section className="mb-12">
-          <h2 className="text-3xl font-sans font-bold text-brand mb-6">Usage Examples</h2>
+          <h2 className="mb-6 font-bold font-sans text-3xl text-brand">Usage Examples</h2>
 
           <div className="space-y-6">
-            <div className="bg-elevated rounded-lg p-6 border border-brand">
-              <h3 className="text-lg font-sans font-bold text-brand mb-3">Linking to Callouts</h3>
-              <p className="text-muted mb-3">
+            <div className="rounded-lg border border-brand bg-elevated p-6">
+              <h3 className="mb-3 font-bold font-sans text-brand text-lg">Linking to Callouts</h3>
+              <p className="mb-3 text-muted">
                 You can now link directly to specific callouts in your essays:
               </p>
-              <code className="block bg-charcoal text-silver p-3 rounded text-sm">
+              <code className="block rounded bg-charcoal p-3 text-silver text-sm">
                 {`<a href="#what-to-watch">See what to watch</a>
 <a href="#ai-factory-risk">Learn about AI factory risks</a>`}
               </code>
             </div>
 
-            <div className="bg-elevated rounded-lg p-6 border border-brand">
-              <h3 className="text-lg font-sans font-bold text-brand mb-3">Linking to Headings</h3>
-              <p className="text-muted mb-3">Link to specific sections within your content:</p>
-              <code className="block bg-charcoal text-silver p-3 rounded text-sm">
+            <div className="rounded-lg border border-brand bg-elevated p-6">
+              <h3 className="mb-3 font-bold font-sans text-brand text-lg">Linking to Headings</h3>
+              <p className="mb-3 text-muted">Link to specific sections within your content:</p>
+              <code className="block rounded bg-charcoal p-3 text-silver text-sm">
                 {`<a href="#example-heading">Jump to example section</a>
 <a href="#conclusion">Go to conclusion</a>`}
               </code>
@@ -242,9 +242,9 @@ export default function ContentImprovementsPage() {
 
         {/* Implementation Notes */}
         <section className="mb-12">
-          <h2 className="text-3xl font-sans font-bold text-brand mb-6">Implementation Notes</h2>
+          <h2 className="mb-6 font-bold font-sans text-3xl text-brand">Implementation Notes</h2>
 
-          <div className="bg-charcoal text-silver rounded-lg p-8">
+          <div className="rounded-lg bg-charcoal p-8 text-silver">
             <div className="prose prose-invert max-w-none">
               <p>These improvements enhance the accessibility and usability of your content:</p>
 

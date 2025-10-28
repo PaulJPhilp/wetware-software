@@ -12,55 +12,55 @@ const idArgument = Args.text().pipe(Args.withDescription("ID of the entity to up
 
 const nameOption = Options.text("name").pipe(
   Options.optional,
-  Options.withDescription("New name for the entity"),
+  Options.withDescription("New name for the entity")
 );
 const urlOption = Options.text("url").pipe(
   Options.optional,
-  Options.withDescription("New URL for the entity"),
+  Options.withDescription("New URL for the entity")
 );
 const typeOption = Options.text("type").pipe(
   Options.optional,
-  Options.withDescription("New type for the entity"),
+  Options.withDescription("New type for the entity")
 );
 const descriptionOption = Options.text("description").pipe(
   Options.optional,
-  Options.withDescription("New description for the entity"),
+  Options.withDescription("New description for the entity")
 );
 const endorsementOption = Options.text("endorsement").pipe(
   Options.optional,
-  Options.withDescription("New endorsement for the source entity"),
+  Options.withDescription("New endorsement for the source entity")
 );
 const focusAreaOption = Options.text("focus-area").pipe(
   Options.optional,
-  Options.withDescription("Comma-separated list of new focus areas"),
+  Options.withDescription("Comma-separated list of new focus areas")
 );
 const iconOption = Options.text("icon").pipe(
   Options.optional,
-  Options.withDescription("New icon name for the resource"),
+  Options.withDescription("New icon name for the resource")
 );
 const curatorNoteOption = Options.text("curator-note").pipe(
   Options.optional,
-  Options.withDescription("New curator's note for the resource"),
+  Options.withDescription("New curator's note for the resource")
 );
 const tagsOption = Options.text("tags").pipe(
   Options.optional,
-  Options.withDescription("Comma-separated list of new tags for the resource"),
+  Options.withDescription("Comma-separated list of new tags for the resource")
 );
 const readTimeMinutesOption = Options.integer("read-time-minutes").pipe(
   Options.optional,
-  Options.withDescription("New read time in minutes for the resource"),
+  Options.withDescription("New read time in minutes for the resource")
 );
 const seriesNameOption = Options.text("series-name").pipe(
   Options.optional,
-  Options.withDescription("New series name for the resource"),
+  Options.withDescription("New series name for the resource")
 );
 const sourceEntityNameOption = Options.text("source-entity-name").pipe(
   Options.optional,
-  Options.withDescription("New source entity name for the resource"),
+  Options.withDescription("New source entity name for the resource")
 );
 const goalOption = Options.text("goal").pipe(
   Options.optional,
-  Options.withDescription("New goal for the series"),
+  Options.withDescription("New goal for the series")
 );
 
 export const updateResourceCommand = pipe(
@@ -85,61 +85,61 @@ export const updateResourceCommand = pipe(
       const notion = yield* Notion;
       const updates: Partial<ResourceDetails> = {};
       Option.match(options.name, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (n: string) => {
           updates.name = n;
         },
       });
       Option.match(options.url, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (u: string) => {
           updates.url = u;
         },
       });
       Option.match(options.type, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (t: string) => {
           updates.type = t;
         },
       });
       Option.match(options.icon, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (i: string) => {
           updates.icon = i;
         },
       });
       Option.match(options.curatorNote, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (cn: string) => {
           updates.curatorNote = cn;
         },
       });
       Option.match(options.focusArea, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (fa: string) => {
           updates.focusArea = fa.split(",").map((s) => s.trim());
         },
       });
       Option.match(options.tags, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (t: string) => {
           updates.tags = t.split(",").map((s) => s.trim());
         },
       });
       Option.match(options.readTimeMinutes, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (rtm: number) => {
           updates.readTimeMinutes = rtm;
         },
       });
       Option.match(options.seriesName, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (sn: string) => {
           updates.seriesName = sn;
         },
       });
       Option.match(options.sourceEntityName, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (sen: string) => {
           updates.sourceEntityName = sen;
         },
@@ -152,8 +152,8 @@ export const updateResourceCommand = pipe(
 
       yield* notion.updateResource(args, updates);
       yield* Console.log(`Successfully updated resource with ID: ${args}`);
-    }).pipe(Effect.catchAll((e) => Console.error(String(e)))),
-  ),
+    }).pipe(Effect.catchAll((e) => Console.error(String(e))))
+  )
 );
 
 export const updateSourceCommand = pipe(
@@ -174,37 +174,37 @@ export const updateSourceCommand = pipe(
       const notion = yield* Notion;
       const updates: Partial<SourceEntityDetails> = {};
       Option.match(options.name, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (n: string) => {
           updates.name = n;
         },
       });
       Option.match(options.url, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (u: string) => {
           updates.url = u;
         },
       });
       Option.match(options.type, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (t: string) => {
           updates.type = t;
         },
       });
       Option.match(options.description, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (d: string) => {
           updates.description = d;
         },
       });
       Option.match(options.endorsement, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (e: string) => {
           updates.endorsement = e;
         },
       });
       Option.match(options.focusArea, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (fa: string) => {
           updates.focusArea = fa.split(",").map((s) => s.trim());
         },
@@ -217,8 +217,8 @@ export const updateSourceCommand = pipe(
 
       yield* notion.updateSourceEntity(args, updates);
       yield* Console.log(`Successfully updated source entity with ID: ${args}`);
-    }).pipe(Effect.catchAll((e) => Console.error(String(e)))),
-  ),
+    }).pipe(Effect.catchAll((e) => Console.error(String(e))))
+  )
 );
 
 export const updateSeriesCommand = pipe(
@@ -236,19 +236,19 @@ export const updateSeriesCommand = pipe(
       const notion = yield* Notion;
       const updates: Partial<SeriesDetails> = {};
       Option.match(options.name, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (n: string) => {
           updates.name = n;
         },
       });
       Option.match(options.description, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (d: string) => {
           updates.description = d;
         },
       });
       Option.match(options.goal, {
-        onNone: () => undefined,
+        onNone: () => {},
         onSome: (g: string) => {
           updates.goal = g;
         },
@@ -261,12 +261,12 @@ export const updateSeriesCommand = pipe(
 
       yield* notion.updateSeries(args, updates);
       yield* Console.log(`Successfully updated series with ID: ${args}`);
-    }).pipe(Effect.catchAll((e) => Console.error(String(e)))),
-  ),
+    }).pipe(Effect.catchAll((e) => Console.error(String(e))))
+  )
 );
 
 export const updateCommand = pipe(
   Command.make("update"),
   Command.withDescription("Update data in Notion tables"),
-  Command.withSubcommands([updateResourceCommand, updateSourceCommand, updateSeriesCommand]),
+  Command.withSubcommands([updateResourceCommand, updateSourceCommand, updateSeriesCommand])
 );

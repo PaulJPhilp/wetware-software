@@ -48,27 +48,27 @@ export default function RootLayout({
 }>) {
   return (
     <html
+      className={`${montserrat.variable} ${merriweather.variable} ${firaCode.variable}`}
+      data-scroll-behavior="smooth"
       lang="en"
       suppressHydrationWarning
-      data-scroll-behavior="smooth"
-      className={`${montserrat.variable} ${merriweather.variable} ${firaCode.variable}`}
     >
-      <body className="font-serif min-h-screen grid grid-rows-[auto_1fr_auto]">
+      <body className="grid min-h-screen grid-rows-[auto_1fr_auto] font-serif">
         <Suspense fallback={<div className="min-h-screen" />}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
-            enableSystem
             disableTransitionOnChange
+            enableSystem
           >
             <HeaderProvider>
               <ServiceWorker />
               <Header />
               {/* Main site column layout offset by fixed header height and footer */}
-              <div className="pt-14 md:pt-16 pb-5 w-full min-h-0">
+              <div className="min-h-0 w-full pt-14 pb-5 md:pt-16">
                 {/* Main content container - sidebar is now handled per-page */}
-                <main className="min-w-0 flex flex-col">
-                  <div className="py-2 flex-1">
+                <main className="flex min-w-0 flex-col">
+                  <div className="flex-1 py-2">
                     <div className="w-full min-w-0">{children}</div>
                   </div>
                 </main>

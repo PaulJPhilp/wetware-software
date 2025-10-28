@@ -116,7 +116,7 @@ export function createTimer() {
  */
 export function withLogging<T extends (...args: unknown[]) => unknown>(
   fn: T,
-  operationName: string,
+  operationName: string
 ): T {
   return ((...args: Parameters<T>) => {
     const timer = createTimer();

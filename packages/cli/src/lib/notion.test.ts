@@ -35,7 +35,7 @@ describe("Notion service", () => {
         icon_name: null,
         resource_series_name: null,
         resource_series_part_number: null,
-      }),
+      })
     );
     expect(res.pageId).toBe("p1");
     expect(res.url).toBe("u1");

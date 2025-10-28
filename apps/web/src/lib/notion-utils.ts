@@ -150,14 +150,14 @@ export const getSeries = unstable_cache(
     }
   },
   ["published-series"],
-  { revalidate: 600 }, // Cache for 10 minutes (series change less frequently)
+  { revalidate: 600 } // Cache for 10 minutes (series change less frequently)
 );
 
 /**
  * Internal function to fetch a single series with its posts
  */
 async function _getSeriesWithPosts(
-  seriesSlug: string,
+  seriesSlug: string
 ): Promise<{ series: Series; posts: Post[] } | null> {
   const timer = createTimer();
   try {
@@ -229,7 +229,7 @@ async function _getSeriesWithPosts(
     return { series, posts };
   } catch (error) {
     logger.error("Error fetching series with posts", error, {
-      seriesSlug: seriesSlug,
+      seriesSlug,
       elapsed: timer.elapsed(),
     });
 
@@ -255,7 +255,7 @@ export function getSeriesWithPosts(seriesSlug: string) {
   return unstable_cache(
     () => _getSeriesWithPosts(seriesSlug),
     [`series-with-posts-${seriesSlug}`],
-    { revalidate: 600 },
+    { revalidate: 600 }
   )();
 }
 
@@ -327,7 +327,7 @@ export const getPublishedPosts = unstable_cache(
     }
   },
   ["published-posts-excluding-about"],
-  { revalidate: 300 }, // Cache for 5 minutes
+  { revalidate: 300 } // Cache for 5 minutes
 );
 
 /**
@@ -470,7 +470,7 @@ async function enrichPostsWithSeriesNames(posts: Post[]): Promise<Post[]> {
 /**
  * Internal function to fetch recent posts with a limit for performance
  */
-async function _getRecentPosts(limit: number = 10): Promise<Post[]> {
+async function _getRecentPosts(limit = 10): Promise<Post[]> {
   const timer = createTimer();
   try {
     logger.info("Fetching recent posts", {
@@ -546,7 +546,7 @@ async function _getRecentPosts(limit: number = 10): Promise<Post[]> {
 /**
  * Fetches recent posts with a limit for performance
  */
-export function getRecentPosts(limit: number = 10) {
+export function getRecentPosts(limit = 10) {
   return unstable_cache(() => _getRecentPosts(limit), [`recent-posts-${limit}`], {
     revalidate: 300,
   })();
@@ -555,7 +555,7 @@ export function getRecentPosts(limit: number = 10) {
 /**
  * Internal function to fetch featured posts for the home page
  */
-async function _getFeaturedPosts(limit: number = 3): Promise<Post[]> {
+async function _getFeaturedPosts(limit = 3): Promise<Post[]> {
   const timer = createTimer();
   try {
     logger.info("Fetching featured posts", {
@@ -657,8 +657,8 @@ export async function getPostContent(pageId: string) {
 
     results.push(
       ...page.results.filter(
-        (block): block is BlockObjectResponse => (block as BlockObjectResponse).object === "block",
-      ),
+        (block): block is BlockObjectResponse => (block as BlockObjectResponse).object === "block"
+      )
     );
 
     if (page.has_more && page.next_cursor) {
@@ -870,7 +870,7 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
           focusArea,
           tags,
           coverLight,
-          coverDark: coverDark,
+          coverDark,
           imageUrl: coverLight || coverDark || "",
           postCount,
           publishedDate,
@@ -939,7 +939,7 @@ function parsePostsFromResponse(pages: PageObjectResponse[]): Post[] {
     if (missingProps.length > 0) {
       throw new NotionPropertyMissingError(
         missingProps.join(", "), // All missing properties
-        page.id,
+        page.id
       );
     }
 
@@ -1178,14 +1178,93 @@ export const getAboutPage = unstable_cache(
     }
   },
   ["about-page"],
-  { revalidate: 600 }, // Cache for 10 minutes
+  { revalidate: 600 } // Cache for 10 minutes
 );
 
 /**
  * Fetches featured posts for the home page
  */
-export function getFeaturedPosts(limit: number = 3) {
+export function getFeaturedPosts(limit = 3) {
   return unstable_cache(() => _getFeaturedPosts(limit), [`featured-posts-${limit}`], {
     revalidate: 300,
   })();
 }
+
+/**
+ * Fetches all published series slugs for static generation
+ */
+export const getAllSeriesSlugs = unstable_cache(
+  async (): Promise<string[]> => {
+    const timer = createTimer();
+    try {
+      logger.info("Fetching all series slugs", {
+        databaseId: seriesDatabaseId,
+      });
+
+      const response = await notion.databases.query({
+        database_id: seriesDatabaseId,
+        filter: {
+          and: [
+            {
+              property: "Status",
+              status: {
+                does_not_equal: "Draft",
+              },
+            },
+            {
+              property: "Published Date",
+              date: {
+                is_not_empty: true,
+              },
+            },
+          ],
+        },
+        sorts: [
+          {
+            property: "Published Date",
+            direction: "descending",
+          },
+        ],
+      });
+
+      const slugs = response.results
+        .map((page) => {
+          if (!("properties" in page)) return null;
+          const slugProp = page.properties.Slug;
+          if (
+            slugProp &&
+            slugProp.type === "rich_text" &&
+            Array.isArray(slugProp.rich_text) &&
+            slugProp.rich_text.length > 0 &&
+            (slugProp.rich_text as any)[0]?.plain_text
+          ) {
+            return (slugProp.rich_text as any)[0].plain_text;
+          }
+          return null;
+        })
+        .filter(Boolean) as string[];
+
+      logger.info("Successfully fetched series slugs", {
+        count: slugs.length,
+        elapsed: timer.elapsed(),
+      });
+
+      return slugs;
+    } catch (error) {
+      logger.error("Error fetching series slugs", error, {
+        databaseId: seriesDatabaseId,
+        elapsed: timer.elapsed(),
+      });
+
+      if (error instanceof Error) {
+        throw new NotionQueryError("Failed to fetch series slugs", {
+          databaseId: seriesDatabaseId,
+          cause: error,
+        });
+      }
+      throw error;
+    }
+  },
+  ["all-series-slugs"],
+  { revalidate: 600 } // Cache for 10 minutes
+);

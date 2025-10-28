@@ -8,15 +8,15 @@ export interface IconProps extends React.SVGProps<SVGSVGElement> {
 export function Icon({ size = 24, className, ...props }: IconProps) {
   return (
     <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
+      className={cn("icon", className)}
       fill="none"
+      height={size}
       stroke="currentColor"
-      strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={cn("icon", className)}
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+      width={size}
       {...props}
     >
       <title>Circle icon</title>

@@ -18,9 +18,9 @@ import { notion } from "./notion";
  */
 export function resolveNotionCoverImages(
   page: PageObjectResponse,
-  lightPropName: string = "CoverImage-LightMode",
-  darkPropName: string = "CoverImage-DarkMode",
-  fallbackPropName: string = "Cover Image",
+  lightPropName = "CoverImage-LightMode",
+  darkPropName = "CoverImage-DarkMode",
+  fallbackPropName = "Cover Image"
 ): { coverLight?: string; coverDark?: string } {
   if (!("properties" in page)) {
     return {};
@@ -122,10 +122,10 @@ export async function getImageUrl(imagePath: string): Promise<string> {
  */
 export function resolveNotionCoverImage(
   page: PageObjectResponse,
-  propName: string = "Cover Image",
+  propName = "Cover Image"
 ): string | undefined {
   if (!("properties" in page)) {
-    return undefined;
+    return;
   }
 
   const props = page.properties;
@@ -134,7 +134,7 @@ export function resolveNotionCoverImage(
   if (coverProp?.type === "files" && coverProp.files.length > 0) {
     const media = coverProp.files[0];
     if (!media) {
-      return undefined;
+      return;
     }
     if (media.type === "file" && "file" in media && media.file?.url) {
       return media.file.url;
@@ -153,5 +153,5 @@ export function resolveNotionCoverImage(
     }
   }
 
-  return undefined;
+  return;
 }

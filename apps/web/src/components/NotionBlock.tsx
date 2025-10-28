@@ -10,22 +10,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type FC, type ReactNode } from "react";
 
-import dynamic from "next/dynamic";
-
-// Lazy-loaded syntax highlighter component
-const LazySyntaxHighlighter = dynamic(() =>
-  Promise.all([
-    import("react-syntax-highlighter"),
-    import("react-syntax-highlighter/dist/esm/styles/prism"),
-  ]).then(([{ Prism }, { atomDark }]) => {
-    return ({ language, children }: { language: string; children: string }) => (
-      <Prism language={language} style={atomDark} className="rounded-lg">
-        {children}
-      </Prism>
-    );
-  }),
-);
-
 import { AnchorHeading } from "./AnchorHeading";
 import { ShareLink } from "./ShareLink";
 
@@ -83,21 +67,21 @@ const _renderTextWithInlineImages = (fullText: string): ReactNode[] => {
     if (src) {
       nodes.push(
         <span
+          className="relative inline-block h-auto max-w-full align-middle"
           key={`mdimg-${start}-${src}`}
-          className="inline-block align-middle max-w-full h-auto relative"
           style={{ verticalAlign: "middle", maxWidth: "100%", height: "auto" }}
         >
           <Image
-            src={src}
             alt={alt || title || "Content illustration"}
-            width={400}
+            className="inline-block h-auto max-w-full align-middle"
             height={200}
-            className="inline-block align-middle max-w-full h-auto"
-            style={{ objectFit: "contain" }}
-            onLoadingComplete={() => console.log("img loaded:", src)}
             onError={() => console.error("img failed to load:", src)}
+            onLoadingComplete={() => console.log("img loaded:", src)}
+            src={src}
+            style={{ objectFit: "contain" }}
+            width={400}
           />
-        </span>,
+        </span>
       );
     }
 
@@ -117,7 +101,7 @@ const _renderTextWithInlineImages = (fullText: string): ReactNode[] => {
 // "Caption text | w=480, h=200" (commas or spaces between entries)
 // Returns both cleaned caption and style hints.
 const parseImageTitleMeta = (
-  rawTitle?: string,
+  rawTitle?: string
 ): {
   caption?: string;
   width?: number | string;
@@ -149,7 +133,7 @@ const parseImageTitleMeta = (
 
     for (const entry of entries) {
       const [keyRaw, valueRaw] = entry.split("=");
-      if (!keyRaw || !valueRaw) {
+      if (!(keyRaw && valueRaw)) {
         continue;
       }
 
@@ -173,7 +157,7 @@ const parseImageTitleMeta = (
 // preserving annotations and link for rendering with <RichText />.
 const cloneTextWithContent = (
   text: RichTextItemResponse,
-  content: string,
+  content: string
 ): RichTextItemResponse => {
   const t: RichTextItemResponse = { ...text };
   if ("text" in t && t.text) {
@@ -187,7 +171,7 @@ const cloneTextWithContent = (
 // while preserving the segment's annotations on surrounding text.
 const renderSegmentWithInlineImages = (
   text: RichTextItemResponse,
-  keyBase: string,
+  keyBase: string
 ): ReactNode[] => {
   const content = text.plain_text || "";
   const nodes: ReactNode[] = [];
@@ -204,7 +188,7 @@ const renderSegmentWithInlineImages = (
       const pre = content.slice(lastIndex, start);
       if (pre)
         nodes.push(
-          <RichText key={`${keyBase}-pre-${start}`} text={cloneTextWithContent(text, pre)} />,
+          <RichText key={`${keyBase}-pre-${start}`} text={cloneTextWithContent(text, pre)} />
         );
     }
 
@@ -217,18 +201,18 @@ const renderSegmentWithInlineImages = (
 
     if (src) {
       nodes.push(
-        <span key={`${keyBase}-img-${start}`} className={cls} style={style}>
+        <span className={cls} key={`${keyBase}-img-${start}`} style={style}>
           <Image
-            src={normalizeImageSrc(src) || src}
             alt={alt}
-            width={meta.width ? Number(meta.width) || 400 : 400}
-            height={meta.height ? Number(meta.height) || 200 : 200}
-            style={{ objectFit: "contain", ...style }}
             className={cls}
-            onLoadingComplete={() => console.log("img loaded:", src)}
+            height={meta.height ? Number(meta.height) || 200 : 200}
             onError={() => console.error("img failed to load:", src)}
+            onLoadingComplete={() => console.log("img loaded:", src)}
+            src={normalizeImageSrc(src) || src}
+            style={{ objectFit: "contain", ...style }}
+            width={meta.width ? Number(meta.width) || 400 : 400}
           />
-        </span>,
+        </span>
       );
     }
 
@@ -240,7 +224,7 @@ const renderSegmentWithInlineImages = (
     const tail = content.slice(lastIndex);
     if (tail)
       nodes.push(
-        <RichText key={`${keyBase}-tail-${lastIndex}`} text={cloneTextWithContent(text, tail)} />,
+        <RichText key={`${keyBase}-tail-${lastIndex}`} text={cloneTextWithContent(text, tail)} />
       );
   }
 
@@ -252,7 +236,7 @@ const renderSegmentWithInlineImages = (
 // Render an array of RichText segments with inline images preserved
 const renderAnnotatedWithInlineImages = (
   blockId: string,
-  segments: RichTextItemResponse[],
+  segments: RichTextItemResponse[]
 ): ReactNode[] => {
   const anyHas = segments.some((t) => hasMdImageToken(t.plain_text || ""));
   if (!anyHas) {
@@ -263,7 +247,7 @@ const renderAnnotatedWithInlineImages = (
   const out: ReactNode[] = [];
   segments.forEach((t, idx) => {
     out.push(
-      ...renderSegmentWithInlineImages(t, `${blockId}-${idx}-${(t.plain_text || "").slice(0, 8)}`),
+      ...renderSegmentWithInlineImages(t, `${blockId}-${idx}-${(t.plain_text || "").slice(0, 8)}`)
     );
   });
   return out;
@@ -280,7 +264,7 @@ const RichText: FC<{ text: RichTextItemResponse }> = ({ text }) => {
 
     // Apply text formatting
     if (annotations.code) {
-      element = <code className="bg-charcoal/5 px-1.5 py-0.5 rounded">{element}</code>;
+      element = <code className="rounded bg-charcoal/5 px-1.5 py-0.5">{element}</code>;
     }
     if (annotations.bold) {
       element = <strong>{element}</strong>;
@@ -298,10 +282,10 @@ const RichText: FC<{ text: RichTextItemResponse }> = ({ text }) => {
       const isExternal = text.text.link.url.startsWith("http");
       element = (
         <Link
+          className="text-orange underline underline-offset-4 transition-colors hover:text-orange/80"
           href={text.text.link.url}
-          className="text-orange hover:text-orange/80 transition-colors underline underline-offset-4"
-          target={isExternal ? "_blank" : undefined}
           rel={isExternal ? "noopener noreferrer" : undefined}
+          target={isExternal ? "_blank" : undefined}
         >
           {element}
         </Link>
@@ -337,16 +321,18 @@ const CodeBlock: FC<{ block: BlockObjectResponse }> = ({ block }) => {
   }, [isCopied]);
 
   return (
-    <div className="relative isolation-isolate">
+    <div className="isolation-isolate relative">
       <button
-        type="button"
-        onClick={handleCopy}
-        className="absolute top-2 right-2 p-1.5 rounded-lg bg-muted text-muted-foreground hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-opacity-50 transition-colors"
         aria-label="Copy code to clipboard"
+        className="absolute top-2 right-2 z-10 rounded-lg bg-muted p-1.5 text-muted-foreground transition-colors hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-opacity-50"
+        onClick={handleCopy}
+        type="button"
       >
-        {isCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+        {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
       </button>
-      <LazySyntaxHighlighter language={language}>{code}</LazySyntaxHighlighter>
+      <pre className="overflow-x-auto rounded-lg bg-gray-900 p-4 text-gray-100 text-sm">
+        <code className={`language-${language}`}>{code}</code>
+      </pre>
     </div>
   );
 };
@@ -374,18 +360,18 @@ export function NotionBlock({ block }: NotionBlockProps) {
             <div className="w-full overflow-hidden rounded-lg shadow-md">
               {/* Use a plain img to support public/ paths without layout reqs */}
               <Image
-                src={normalizeImageSrc(src) || src}
                 alt={alt || title || "Content illustration"}
-                width={800}
+                className="block h-auto w-full"
                 height={400}
-                className="block w-full h-auto"
-                style={{ objectFit: "contain" }}
-                onLoadingComplete={() => console.log("img loaded:", src)}
                 onError={() => console.error("img failed to load:", src)}
+                onLoadingComplete={() => console.log("img loaded:", src)}
+                src={normalizeImageSrc(src) || src}
+                style={{ objectFit: "contain" }}
+                width={800}
               />
             </div>
             {(title || alt) && (
-              <figcaption className="text-sm text-muted text-center mt-2 italic">
+              <figcaption className="mt-2 text-center text-muted text-sm italic">
                 {title || alt}
               </figcaption>
             )}
@@ -408,9 +394,9 @@ export function NotionBlock({ block }: NotionBlockProps) {
         .replace(/\s+/g, "-");
       return (
         <AnchorHeading
+          className="fluid-h1 mt-6 mb-2 text-gray-900 dark:text-white"
           id={h1Id}
           level={1}
-          className="fluid-h1 mt-6 mb-2 text-gray-900 dark:text-white"
         >
           {block.heading_1.rich_text.map((text, idx) => (
             <RichText key={`${block.id}-${idx}-${text.plain_text}`} text={text} />
@@ -426,9 +412,9 @@ export function NotionBlock({ block }: NotionBlockProps) {
         .replace(/\s+/g, "-");
       return (
         <AnchorHeading
+          className="fluid-h2 mt-6 mb-2 text-gray-900 dark:text-white"
           id={h2Id}
           level={2}
-          className="fluid-h2 mt-6 mb-2 text-gray-900 dark:text-white"
         >
           {block.heading_2.rich_text.map((text, idx) => (
             <RichText key={`${block.id}-${idx}-${text.plain_text}`} text={text} />
@@ -444,9 +430,9 @@ export function NotionBlock({ block }: NotionBlockProps) {
         .replace(/\s+/g, "-");
       return (
         <AnchorHeading
+          className="fluid-h3 mt-4 mb-1 text-gray-900 dark:text-white"
           id={h3Id}
           level={3}
-          className="fluid-h3 mt-4 mb-1 text-gray-900 dark:text-white"
         >
           {block.heading_3.rich_text.map((text, idx) => (
             <RichText key={`${block.id}-${idx}-${text.plain_text}`} text={text} />
@@ -471,7 +457,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
     case "quote": {
       const _fullText = block.quote.rich_text.map((t) => t.plain_text).join("");
       return (
-        <blockquote className="border-l-4 border-orange/60 pl-4 italic bg-orange/5 p-4 rounded-r-lg">
+        <blockquote className="rounded-r-lg border-orange/60 border-l-4 bg-orange/5 p-4 pl-4 italic">
           {renderAnnotatedWithInlineImages(block.id, block.quote.rich_text)}
         </blockquote>
       );
@@ -520,35 +506,35 @@ export function NotionBlock({ block }: NotionBlockProps) {
               <div className="w-full overflow-hidden rounded-lg shadow-md">
                 {isSvg || !allowed ? (
                   <Image
-                    src={normalizeImageSrc(url) || url}
                     alt={generateAltText(caption, url)}
-                    width={800}
+                    className="block h-auto w-full"
                     height={400}
-                    className="block w-full h-auto"
-                    style={{ objectFit: "contain" }}
-                    onLoadingComplete={() => console.log("img loaded:", url)}
                     onError={() => console.error("Image failed to load:", url)}
+                    onLoadingComplete={() => console.log("img loaded:", url)}
+                    src={normalizeImageSrc(url) || url}
+                    style={{ objectFit: "contain" }}
+                    width={800}
                   />
                 ) : (
                   <div
-                    className="relative w-full aspect-video overflow-hidden"
+                    className="relative aspect-video w-full overflow-hidden"
                     style={{ minHeight: 1 }}
                   >
                     <Image
-                      src={normalizeImageSrc(url) || url}
                       alt={generateAltText(caption, url)}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
                       className="object-cover"
-                      priority={false}
-                      onLoad={() => console.log("next/image loaded:", url)}
+                      fill
                       onError={() => console.error("next/image failed to load:", url)}
+                      onLoad={() => console.log("next/image loaded:", url)}
+                      priority={false}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+                      src={normalizeImageSrc(url) || url}
                     />
                   </div>
                 )}
               </div>
               {caption && (
-                <figcaption className="text-sm text-muted text-center mt-2 italic">
+                <figcaption className="mt-2 text-center text-muted text-sm italic">
                   {block.image.caption.map((text, idx) => (
                     <RichText key={`${block.id}-caption-${idx}-${text.plain_text}`} text={text} />
                   ))}
@@ -598,35 +584,35 @@ export function NotionBlock({ block }: NotionBlockProps) {
               <div className="w-full overflow-hidden rounded-lg shadow-md">
                 {isSvg || !allowed ? (
                   <Image
-                    src={normalizeImageSrc(url) || url}
                     alt={generateAltText(caption, url)}
-                    width={800}
+                    className="block h-auto w-full"
                     height={400}
-                    className="block w-full h-auto"
-                    style={{ objectFit: "contain" }}
-                    onLoadingComplete={() => console.log("img loaded:", url)}
                     onError={() => console.error("Image failed to load:", url)}
+                    onLoadingComplete={() => console.log("img loaded:", url)}
+                    src={normalizeImageSrc(url) || url}
+                    style={{ objectFit: "contain" }}
+                    width={800}
                   />
                 ) : (
                   <div
-                    className="relative w-full aspect-video overflow-hidden"
+                    className="relative aspect-video w-full overflow-hidden"
                     style={{ minHeight: 1 }}
                   >
                     <Image
-                      src={normalizeImageSrc(url) || url}
                       alt={generateAltText(caption, url)}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
                       className="object-cover"
-                      priority={false}
-                      onLoad={() => console.log("next/image loaded:", url)}
+                      fill
                       onError={() => console.error("next/image failed to load:", url)}
+                      onLoad={() => console.log("next/image loaded:", url)}
+                      priority={false}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+                      src={normalizeImageSrc(url) || url}
                     />
                   </div>
                 )}
               </div>
               {caption && (
-                <figcaption className="text-sm text-muted text-center mt-2 italic">
+                <figcaption className="mt-2 text-center text-muted text-sm italic">
                   {block.image.caption.map((text, idx) => (
                     <RichText key={`${block.id}-caption-${idx}-${text.plain_text}`} text={text} />
                   ))}
@@ -676,14 +662,14 @@ export function NotionBlock({ block }: NotionBlockProps) {
 
       return (
         <div
+          className="my-6 rounded-r-lg border-orange/60 border-l-4 bg-orange/5 p-4"
           id={calloutId}
-          className="bg-orange/5 border-l-4 border-orange/60 p-4 rounded-r-lg my-6"
         >
           <div className="flex items-start space-x-3">
             {block.callout.icon && "emoji" in block.callout.icon && (
               <span>{block.callout.icon.emoji}</span>
             )}
-            <div className="text-brand flex-1">
+            <div className="flex-1 text-brand">
               {renderAnnotatedWithInlineImages(block.id, block.callout.rich_text)}
             </div>
             <ShareLink id={calloutId} />

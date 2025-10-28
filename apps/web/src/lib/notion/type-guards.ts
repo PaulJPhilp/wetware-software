@@ -229,14 +229,14 @@ export function extractRichText(prop: unknown): string {
 
 export function extractSelectName(prop: unknown): string | undefined {
   if (!isValidSelectProperty(prop)) {
-    return undefined;
+    return;
   }
   return prop.select?.name;
 }
 
 export function extractStatusName(prop: unknown): string | undefined {
   if (!isValidStatusProperty(prop)) {
-    return undefined;
+    return;
   }
   return prop.status?.name;
 }
@@ -253,14 +253,14 @@ export function extractMultiSelectNames(prop: unknown): Array<{ name: string; co
 
 export function extractDate(prop: unknown): string | undefined {
   if (!isValidDateProperty(prop)) {
-    return undefined;
+    return;
   }
   return prop.date?.start;
 }
 
 export function extractNumber(prop: unknown): number | undefined {
   if (!isValidNumberProperty(prop)) {
-    return undefined;
+    return;
   }
   return prop.number ?? undefined;
 }
@@ -281,12 +281,12 @@ export function extractRelationIds(prop: unknown): string[] {
 
 export function extractFileUrl(prop: unknown): string | undefined {
   if (!isValidFilesProperty(prop) || prop.files.length === 0) {
-    return undefined;
+    return;
   }
 
   const file = prop.files[0];
   if (!file) {
-    return undefined;
+    return;
   }
   if (file.type === "file" && file.file?.url) {
     return file.file.url;
@@ -295,12 +295,12 @@ export function extractFileUrl(prop: unknown): string | undefined {
     return file.external.url;
   }
 
-  return undefined;
+  return;
 }
 
 export function extractUrl(prop: unknown): string | undefined {
   if (!isValidUrlProperty(prop)) {
-    return undefined;
+    return;
   }
   return prop.url ?? undefined;
 }
@@ -316,7 +316,7 @@ export function extractRollupArrayLength(prop: unknown): number {
 // Validation helpers
 export function validateRequiredProperties(
   properties: PropertyValueMap,
-  requiredProps: Array<{ name: string; type: string }>,
+  requiredProps: Array<{ name: string; type: string }>
 ): void {
   for (const { name, type } of requiredProps) {
     const prop = properties[name];

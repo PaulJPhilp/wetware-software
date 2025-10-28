@@ -145,7 +145,11 @@
 
   body {
     color: var(--foreground);
-    background: radial-gradient(ellipse at top, var(--gradient-start) 0%, var(--gradient-end) 100%);
+    background: radial-gradient(
+      ellipse at top,
+      var(--gradient-start) 0%,
+      var(--gradient-end) 100%
+    );
     background-attachment: fixed;
     @apply font-sans;
     -webkit-font-smoothing: antialiased;

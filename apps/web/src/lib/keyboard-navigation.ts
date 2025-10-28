@@ -46,7 +46,7 @@ export function useFocusTrap(isActive: boolean) {
   const lastFocusedElement = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    if (!isActive || !containerRef.current) return;
+    if (!(isActive && containerRef.current)) return;
 
     // Store the currently focused element
     lastFocusedElement.current = document.activeElement as HTMLElement;
@@ -108,7 +108,7 @@ export function useArrowNavigation<T extends HTMLElement>(
     loop?: boolean;
     orientation?: "vertical" | "horizontal" | "both";
     onSelect?: (index: number) => void;
-  } = {},
+  } = {}
 ) {
   const { loop = true, orientation = "vertical", onSelect } = options;
   const currentIndex = useRef(-1);
@@ -193,7 +193,7 @@ export function useArrowNavigation<T extends HTMLElement>(
         }
       }
     },
-    [items, isActive, loop, orientation, onSelect],
+    [items, isActive, loop, orientation, onSelect]
   );
 
   useEffect(() => {
@@ -214,7 +214,7 @@ export function useArrowNavigation<T extends HTMLElement>(
 /**
  * Handle escape key to close overlays
  */
-export function useEscapeKey(callback: () => void, isActive: boolean = true) {
+export function useEscapeKey(callback: () => void, isActive = true) {
   useEffect(() => {
     if (!isActive) return;
 
@@ -233,10 +233,7 @@ export function useEscapeKey(callback: () => void, isActive: boolean = true) {
 /**
  * Handle click outside to close overlays
  */
-export function useClickOutside<T extends HTMLElement>(
-  callback: () => void,
-  isActive: boolean = true,
-) {
+export function useClickOutside<T extends HTMLElement>(callback: () => void, isActive = true) {
   const ref = useRef<T>(null);
 
   useEffect(() => {
@@ -277,7 +274,7 @@ export function useRovingTabIndex<T extends HTMLElement>(items: T[], activeIndex
  */
 export function announceToScreenReader(
   message: string,
-  priority: "polite" | "assertive" = "polite",
+  priority: "polite" | "assertive" = "polite"
 ) {
   const announcement = document.createElement("div");
   announcement.setAttribute("aria-live", priority);
@@ -320,7 +317,7 @@ export function focusElement(
   options?: {
     preventScroll?: boolean;
     scrollIntoView?: boolean;
-  },
+  }
 ) {
   const { preventScroll = false, scrollIntoView = true } = options || {};
 
@@ -341,7 +338,7 @@ export function focusElement(
  */
 export function debounce<Args extends unknown[]>(
   func: (...args: Args) => unknown,
-  wait: number,
+  wait: number
 ): (...args: Args) => void {
   let timeout: ReturnType<typeof setTimeout> | undefined;
 

@@ -17,7 +17,9 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@notionhq/client": "^4.0.2"
+    "@notionhq/client": "^4.0.2",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
     "typescript": "^5.9.2"

@@ -106,12 +106,12 @@ export default function CareerMapDemo() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-6xl mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">Career Timeline Map</h1>
+      <div className="mx-auto max-w-6xl px-4">
+        <h1 className="mb-8 text-center font-bold text-3xl text-gray-900">Career Timeline Map</h1>
 
-        <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="rounded-lg bg-white p-6 shadow-lg">
           <div className="mb-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+            <h2 className="mb-2 font-semibold text-gray-800 text-xl">
               Interactive Career Visualization
             </h2>
             <p className="text-gray-600">
@@ -121,7 +121,7 @@ export default function CareerMapDemo() {
             </p>
           </div>
 
-          <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+          <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
             <TransitMapSvg
               data={mapData}
               onMount={(svg: SVGSVGElement) => {
@@ -130,10 +130,10 @@ export default function CareerMapDemo() {
             />
           </div>
 
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">Features</h3>
-              <ul className="space-y-2 text-sm text-gray-600">
+              <h3 className="mb-3 font-semibold text-gray-800 text-lg">Features</h3>
+              <ul className="space-y-2 text-gray-600 text-sm">
                 <li>• Keyboard accessible (Tab navigation)</li>
                 <li>• Screen reader friendly</li>
                 <li>• SVG export capability</li>
@@ -143,17 +143,17 @@ export default function CareerMapDemo() {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-3">Controls</h3>
+              <h3 className="mb-3 font-semibold text-gray-800 text-lg">Controls</h3>
               <div className="space-y-2">
                 <button
-                  type="button"
-                  onClick={handleExport}
+                  className="w-full rounded bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
                   disabled={!svgElement}
-                  className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                  onClick={handleExport}
+                  type="button"
                 >
                   {svgElement ? "Export as SVG" : "Loading..."}
                 </button>
-                <p className="text-xs text-gray-500">
+                <p className="text-gray-500 text-xs">
                   Use Tab to navigate stations, Space/Enter to interact
                 </p>
               </div>

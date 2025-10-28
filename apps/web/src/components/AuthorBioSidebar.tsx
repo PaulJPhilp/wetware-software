@@ -13,34 +13,26 @@ export function AuthorBioSidebar({ className = "", testId }: BaseComponentProps)
 
   return (
     <aside
-      className={`p-6 bg-card shadow-lg rounded-xl mb-6 
-        lg:sticky lg:top-20 lg:mb-0 ${className}`}
+      className={`mb-6 rounded-xl bg-card p-6 shadow-lg lg:sticky lg:top-20 lg:mb-0 ${className}`}
       data-testid={testId}
     >
       {/* Avatar */}
-      <div className="flex justify-center mb-4">
+      <div className="mb-4 flex justify-center">
         <Image
-          src={avatarSrc}
           alt={avatarAlt}
-          width={128}
+          className="rounded-full border-4 border-orange/20 object-cover shadow-md"
           height={128}
-          className="rounded-full border-4 border-orange/20 
-            shadow-md object-cover"
           priority
+          src={avatarSrc}
+          width={128}
         />
       </div>
 
-      <h3
-        className="text-xl font-sans font-bold mb-3 text-center 
-        text-foreground"
-      >
+      <h3 className="mb-3 text-center font-bold font-sans text-foreground text-xl">
         About Paul Philp
       </h3>
 
-      <div
-        className="text-muted-foreground text-sm leading-relaxed 
-        space-y-3"
-      >
+      <div className="space-y-3 text-muted-foreground text-sm leading-relaxed">
         <p>
           <strong className="font-semibold text-foreground">Paul Philp</strong> is an experienced
           software and AI engineer and former founder/CEO with a track record of leading teams,

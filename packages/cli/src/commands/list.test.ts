@@ -45,7 +45,7 @@ describe("CLI list sources", () => {
 
     const effect = listSources(undefined).pipe(
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
@@ -68,13 +68,13 @@ describe("CLI list sources", () => {
 
     const effect = listSources(undefined).pipe(
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Error: Notion API Error: Failed to fetch source entities",
+      "Error: Notion API Error: Failed to fetch source entities"
     );
   });
 
@@ -97,7 +97,7 @@ describe("CLI list sources", () => {
       listSourceEntities: (args) => {
         const limit = typeof args?.limit === "number" ? args.limit : undefined;
         return Effect.succeed(
-          typeof limit === "number" ? mockSourceEntities.slice(0, limit) : mockSourceEntities,
+          typeof limit === "number" ? mockSourceEntities.slice(0, limit) : mockSourceEntities
         );
       },
       listResourceSeries: () => Effect.succeed([]),
@@ -106,7 +106,7 @@ describe("CLI list sources", () => {
 
     const effect = listSources(2).pipe(
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
@@ -133,7 +133,7 @@ describe("CLI list sources", () => {
 
     const effect = listSeries(undefined).pipe(
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
@@ -155,7 +155,7 @@ describe("CLI list sources", () => {
 
     const effect = listSeries(undefined).pipe(
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
@@ -182,7 +182,7 @@ describe("CLI list sources", () => {
 
     const effect = listSeries(2).pipe(
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
@@ -220,14 +220,14 @@ describe("CLI list sources", () => {
 
     const effect = listResources(undefined).pipe(
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
 
     expect(consoleSpy).toHaveBeenCalledTimes(2);
     expect(consoleSpy).toHaveBeenCalledWith(
-      "r1 | Resource One [Article] <https://resourceone.com>",
+      "r1 | Resource One [Article] <https://resourceone.com>"
     );
     expect(consoleSpy).toHaveBeenCalledWith("r2 | Resource Two [Video]");
   });
@@ -244,13 +244,13 @@ describe("CLI list sources", () => {
 
     const effect = listResources(undefined).pipe(
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Error: Notion API Error: Failed to fetch resources",
+      "Error: Notion API Error: Failed to fetch resources"
     );
   });
 
@@ -289,14 +289,14 @@ describe("CLI list sources", () => {
 
     const effect = listResources(2).pipe(
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
 
     expect(consoleSpy).toHaveBeenCalledTimes(2);
     expect(consoleSpy).toHaveBeenCalledWith(
-      "r1 | Resource One [Article] <https://resourceone.com>",
+      "r1 | Resource One [Article] <https://resourceone.com>"
     );
     expect(consoleSpy).toHaveBeenCalledWith("r2 | Resource Two [Video]");
   });

@@ -33,7 +33,7 @@ export function testFocusIndicators(element: HTMLElement): AccessibilityTestResu
 
   // Check if element is focusable
   const focusable = element.matches(
-    'button, input, select, textarea, a[href], [tabindex]:not([tabindex="-1"])',
+    'button, input, select, textarea, a[href], [tabindex]:not([tabindex="-1"])'
   );
 
   if (focusable) {
@@ -213,7 +213,7 @@ export function testModalAccessibility(modal: HTMLElement): AccessibilityTestRes
  */
 export function testDropdownAccessibility(
   trigger: HTMLElement,
-  dropdown: HTMLElement,
+  dropdown: HTMLElement
 ): AccessibilityTestResult[] {
   const results: AccessibilityTestResult[] = [];
 
@@ -284,7 +284,7 @@ export function runAccessibilityTests(
     testAria?: boolean;
     testModals?: boolean;
     testDropdowns?: boolean;
-  } = {},
+  } = {}
 ): AccessibilityTestSuite {
   const {
     testFocus = true,
@@ -479,7 +479,7 @@ export function testScreenReaderCompatibility(element: HTMLElement): Accessibili
   let lastLevel = 0;
 
   headings.forEach((heading) => {
-    const level = parseInt(heading.tagName.charAt(1), 10);
+    const level = Number.parseInt(heading.tagName.charAt(1), 10);
     if (level > lastLevel + 1) {
       headingIssues++;
     }

@@ -2,19 +2,19 @@
 
 export default function ErrorPage({ error }: { error: Error }) {
   return (
-    <main className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-      <h1 className="text-5xl font-bold text-orange mb-4" aria-label="500 Internal Server Error">
+    <main className="flex min-h-[60vh] flex-col items-center justify-center text-center">
+      <h1 aria-label="500 Internal Server Error" className="mb-4 font-bold text-5xl text-orange">
         500
       </h1>
-      <p className="text-lg text-charcoal/80 mb-6">Something went wrong. Please try again later.</p>
+      <p className="mb-6 text-charcoal/80 text-lg">Something went wrong. Please try again later.</p>
       <a
-        href="/"
-        className="px-4 py-2 rounded-lg bg-orange text-white font-semibold shadow hover:bg-orange/80 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange"
         aria-label="Go to homepage"
+        className="rounded-lg bg-orange px-4 py-2 font-semibold text-white shadow transition-colors duration-200 hover:bg-orange/80 focus:outline-none focus:ring-2 focus:ring-orange"
+        href="/"
       >
         Go to Homepage
       </a>
-      <pre className="mt-6 text-xs text-charcoal/60 bg-silver p-4 rounded-lg max-w-xl overflow-auto">
+      <pre className="mt-6 max-w-xl overflow-auto rounded-lg bg-silver p-4 text-charcoal/60 text-xs">
         {error?.message}
       </pre>
     </main>

@@ -30,15 +30,15 @@ const SimpleArticleList: React.FC<{ articles: Series["articles"] }> = ({ article
   const resolvedArticles = articles ?? [];
 
   return (
-    <ul className="space-y-2 mb-6 text-sm">
+    <ul className="mb-6 space-y-2 text-sm">
       {resolvedArticles.length === 0 ? (
         <li className="text-muted-foreground">No posts available yet.</li>
       ) : (
         resolvedArticles.map((article) => (
           <li key={article.id}>
             <Link
+              className="text-muted-foreground transition-colors hover:text-orange hover:underline"
               href={article.href ?? `/posts/${article.slug}`}
-              className="text-muted-foreground hover:text-orange transition-colors hover:underline"
             >
               {article.title}
             </Link>
@@ -69,20 +69,20 @@ export const SeriesSection: React.FC<SeriesSectionProps> = ({
       data-testid={testId}
     >
       <div className="sticky top-4">
-        <h2 className="text-lg font-bold text-foreground mb-4 sm:mb-6">Series</h2>
+        <h2 className="mb-4 font-bold text-foreground text-lg sm:mb-6">Series</h2>
         {displaySeries.length === 0 ? (
-          <div className="text-sm text-muted-foreground">No series available at the moment.</div>
+          <div className="text-muted-foreground text-sm">No series available at the moment.</div>
         ) : (
           <div className="space-y-4">
             {displaySeries.map((seriesItem) => (
-              <div key={seriesItem.id} className="space-y-3">
+              <div className="space-y-3" key={seriesItem.id}>
                 <SeriesCard
                   series={seriesItem}
-                  variant={variant}
-                  size={size}
-                  showDescription={false}
                   showArticleCount={true}
+                  showDescription={false}
+                  size={size}
                   testId={`series-card-${seriesItem.slug}`}
+                  variant={variant}
                 />
                 {showArticleLists && <SimpleArticleList articles={seriesItem.articles} />}
               </div>

@@ -51,7 +51,7 @@ describe("CLI add source", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     await Effect.runPromise(effect);
@@ -93,7 +93,7 @@ describe("CLI add source", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     const result = await Effect.runPromiseExit(effect);
@@ -134,7 +134,7 @@ describe("CLI add source", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     const result = await Effect.runPromiseExit(effect);
@@ -155,16 +155,16 @@ describe("CLI add source", () => {
     const fakeAI: OpenAIService = {
       generateResourceJson: () => Effect.succeed("{}"),
       generateSourceEntityJson: () =>
-        Effect.sync(() => {
-          return JSON.stringify({
+        Effect.sync(() =>
+          JSON.stringify({
             name: "Test Source",
             type: "Individual",
             url: "https://example.com/notion-error",
             description: "Test description.",
             endorsement: "Test endorsement.",
             focus_area: ["Tech-Centric"],
-          });
-        }),
+          })
+        ),
       generateSeriesJson: () => Effect.succeed("{}"),
     };
 
@@ -182,7 +182,7 @@ describe("CLI add source", () => {
     }).pipe(
       Effect.provideService(OpenAI, fakeAI),
       Effect.provideService(Notion, fakeNotion),
-      Effect.provide(NodeContext.layer),
+      Effect.provide(NodeContext.layer)
     );
 
     const result = await Effect.runPromiseExit(effect);

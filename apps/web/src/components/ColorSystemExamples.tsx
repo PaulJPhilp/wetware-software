@@ -8,41 +8,41 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
  */
 export function ColorSystemExamples() {
   return (
-    <div className="max-w-4xl mx-auto p-8 space-y-12">
+    <div className="mx-auto max-w-4xl space-y-12 p-8">
       {/* Color Palette Display */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-sans font-bold text-brand">Brand Color Palette</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <h2 className="font-bold font-sans text-2xl text-brand">Brand Color Palette</h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div className="space-y-2">
-            <div className="h-20 bg-silver rounded-lg border border-brand"></div>
-            <p className="text-sm text-muted">Silver</p>
-            <code className="text-xs text-subtle">rgb(var(--color-silver))</code>
+            <div className="h-20 rounded-lg border border-brand bg-silver" />
+            <p className="text-muted text-sm">Silver</p>
+            <code className="text-subtle text-xs">rgb(var(--color-silver))</code>
           </div>
           <div className="space-y-2">
-            <div className="h-20 bg-charcoal rounded-lg border border-brand"></div>
-            <p className="text-sm text-muted">Charcoal</p>
-            <code className="text-xs text-subtle">rgb(var(--color-charcoal))</code>
+            <div className="h-20 rounded-lg border border-brand bg-charcoal" />
+            <p className="text-muted text-sm">Charcoal</p>
+            <code className="text-subtle text-xs">rgb(var(--color-charcoal))</code>
           </div>
           <div className="space-y-2">
-            <div className="h-20 bg-orange rounded-lg border border-brand"></div>
-            <p className="text-sm text-muted">Orange</p>
-            <code className="text-xs text-subtle">rgb(var(--color-orange))</code>
+            <div className="h-20 rounded-lg border border-brand bg-orange" />
+            <p className="text-muted text-sm">Orange</p>
+            <code className="text-subtle text-xs">rgb(var(--color-orange))</code>
           </div>
         </div>
       </section>
 
       {/* Button Examples */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-sans font-bold text-brand">Button Styles</h2>
+        <h2 className="font-bold font-sans text-2xl text-brand">Button Styles</h2>
         <div className="flex flex-wrap gap-4">
           <Button className="bg-orange text-white hover:bg-orange/90">Primary Button</Button>
           <Button
+            className="border border-charcoal/10 bg-silver text-charcoal hover:border-charcoal/20 dark:bg-[#181818] dark:text-silver"
             variant="outline"
-            className="bg-silver text-charcoal border border-charcoal/10 hover:border-charcoal/20 dark:bg-[#181818] dark:text-silver"
           >
             Secondary Button
           </Button>
-          <Button variant="ghost" className="text-orange hover:bg-orange/10">
+          <Button className="text-orange hover:bg-orange/10" variant="ghost">
             Ghost Button
           </Button>
         </div>
@@ -50,9 +50,9 @@ export function ColorSystemExamples() {
 
       {/* Card Examples */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-sans font-bold text-brand">Card Components</h2>
+        <h2 className="font-bold font-sans text-2xl text-brand">Card Components</h2>
         <div className="grid gap-6 md:grid-cols-2">
-          <Card className="bg-silver text-charcoal dark:bg-[#181818] dark:text-silver border border-brand">
+          <Card className="border border-brand bg-silver text-charcoal dark:bg-[#181818] dark:text-silver">
             <CardHeader>
               <CardTitle className="text-brand">Standard Card</CardTitle>
               <CardDescription className="text-brand-muted">
@@ -67,7 +67,7 @@ export function ColorSystemExamples() {
             </CardContent>
           </Card>
 
-          <Card className="bg-orange/5 border-l-4 border-orange/70 text-charcoal dark:text-silver">
+          <Card className="border-orange/70 border-l-4 bg-orange/5 text-charcoal dark:text-silver">
             <CardHeader>
               <CardTitle className="text-brand">Info Callout</CardTitle>
               <CardDescription className="text-muted">
@@ -85,8 +85,8 @@ export function ColorSystemExamples() {
 
       {/* Typography Examples */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-sans font-bold text-brand">Typography</h2>
-        <div className="prose max-w-none dark:prose-invert prose-headings:font-sans prose-p:font-serif">
+        <h2 className="font-bold font-sans text-2xl text-brand">Typography</h2>
+        <div className="prose dark:prose-invert max-w-none prose-headings:font-sans prose-p:font-serif">
           <h1>Heading with Montserrat</h1>
           <p>
             Body text using Merriweather for readability. This demonstrates the
@@ -95,7 +95,7 @@ export function ColorSystemExamples() {
           <h2>Links and Interactive Elements</h2>
           <p>
             Here's a{" "}
-            <a href="https://example.com" className="link-brand">
+            <a className="link-brand" href="https://example.com">
               branded link
             </a>{" "}
             that uses the orange accent color with hover effects. The link styling includes
@@ -106,18 +106,18 @@ export function ColorSystemExamples() {
 
       {/* Badge Examples */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-sans font-bold text-brand">Badges and Tags</h2>
+        <h2 className="font-bold font-sans text-2xl text-brand">Badges and Tags</h2>
         <div className="flex flex-wrap gap-2">
           <Badge className="bg-orange text-white">Primary</Badge>
           <Badge
-            variant="outline"
             className="border-charcoal/20 text-charcoal dark:border-white/20 dark:text-silver"
+            variant="outline"
           >
             Secondary
           </Badge>
           <Badge
-            variant="secondary"
             className="bg-silver text-charcoal dark:bg-charcoal dark:text-silver"
+            variant="secondary"
           >
             Neutral
           </Badge>
@@ -126,22 +126,22 @@ export function ColorSystemExamples() {
 
       {/* Diagram Color Examples */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-sans font-bold text-brand">Diagram Colors</h2>
+        <h2 className="font-bold font-sans text-2xl text-brand">Diagram Colors</h2>
         <div className="space-y-4">
           <div className="flex items-center gap-4">
-            <div className="w-8 h-8 bg-diagram-line rounded"></div>
+            <div className="h-8 w-8 rounded bg-diagram-line" />
             <span className="text-muted">diagram-line (charcoal)</span>
           </div>
           <div className="flex items-center gap-4">
-            <div className="w-8 h-8 bg-diagram-subtle rounded"></div>
+            <div className="h-8 w-8 rounded bg-diagram-subtle" />
             <span className="text-muted">diagram-subtle (charcoal/60)</span>
           </div>
           <div className="flex items-center gap-4">
-            <div className="w-8 h-8 bg-diagram-accent rounded"></div>
+            <div className="h-8 w-8 rounded bg-diagram-accent" />
             <span className="text-muted">diagram-accent (orange)</span>
           </div>
           <div className="flex items-center gap-4">
-            <div className="w-8 h-8 bg-diagram-bg rounded border border-brand"></div>
+            <div className="h-8 w-8 rounded border border-brand bg-diagram-bg" />
             <span className="text-muted">diagram-bg (silver)</span>
           </div>
         </div>
@@ -149,12 +149,12 @@ export function ColorSystemExamples() {
 
       {/* Usage Guidelines */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-sans font-bold text-brand">Usage Guidelines</h2>
-        <div className="bg-orange/5 border border-orange/20 rounded-lg p-6">
-          <h3 className="text-lg font-sans font-semibold text-brand mb-3">
+        <h2 className="font-bold font-sans text-2xl text-brand">Usage Guidelines</h2>
+        <div className="rounded-lg border border-orange/20 bg-orange/5 p-6">
+          <h3 className="mb-3 font-sans font-semibold text-brand text-lg">
             Accessibility & Contrast
           </h3>
-          <ul className="list-disc pl-5 space-y-2 text-muted">
+          <ul className="list-disc space-y-2 pl-5 text-muted">
             <li>Charcoal on Silver easily passes WCAG AA contrast requirements</li>
             <li>Use Orange for strokes, icons, or buttons with Charcoal/White text</li>
             <li>Avoid Orange as body text - use it for accents only</li>
@@ -176,57 +176,57 @@ export function ExampleSVG() {
       <figure className="mx-auto w-full max-w-3xl">
         <svg
           className="h-auto w-full text-charcoal dark:text-silver"
-          viewBox="0 0 400 200"
           fill="none"
+          viewBox="0 0 400 200"
           xmlns="http://www.w3.org/2000/svg"
         >
           <title>Example theme-aware diagram</title>
           {/* Background */}
-          <rect width="400" height="200" fill="currentColor" fillOpacity="0.08" />
+          <rect fill="currentColor" fillOpacity="0.08" height="200" width="400" />
 
           {/* Main flow lines */}
           <path
             d="M50 100 L150 100 L200 50 L350 50"
+            fill="none"
             stroke="currentColor"
             strokeWidth="2"
-            fill="none"
           />
 
           {/* Accent arrow */}
           <path
+            className="accent"
             d="M200 50 L200 100 L250 100"
+            fill="none"
             stroke="currentColor"
             strokeWidth="3"
-            fill="none"
-            className="accent"
           />
 
           {/* Nodes */}
-          <circle cx="50" cy="100" r="8" fill="currentColor" />
-          <circle cx="150" cy="100" r="8" fill="currentColor" />
-          <circle cx="200" cy="50" r="8" fill="currentColor" className="accent" />
-          <circle cx="350" cy="50" r="8" fill="currentColor" />
+          <circle cx="50" cy="100" fill="currentColor" r="8" />
+          <circle cx="150" cy="100" fill="currentColor" r="8" />
+          <circle className="accent" cx="200" cy="50" fill="currentColor" r="8" />
+          <circle cx="350" cy="50" fill="currentColor" r="8" />
 
           {/* Labels */}
-          <text x="50" y="120" textAnchor="middle" className="text-xs fill-current opacity-60">
+          <text className="fill-current text-xs opacity-60" textAnchor="middle" x="50" y="120">
             Start
           </text>
-          <text x="150" y="120" textAnchor="middle" className="text-xs fill-current opacity-60">
+          <text className="fill-current text-xs opacity-60" textAnchor="middle" x="150" y="120">
             Process
           </text>
           <text
+            className="accent fill-current text-xs opacity-60"
+            textAnchor="middle"
             x="200"
             y="35"
-            textAnchor="middle"
-            className="text-xs fill-current opacity-60 accent"
           >
             Decision
           </text>
-          <text x="350" y="35" textAnchor="middle" className="text-xs fill-current opacity-60">
+          <text className="fill-current text-xs opacity-60" textAnchor="middle" x="350" y="35">
             End
           </text>
         </svg>
-        <figcaption className="mt-2 text-sm text-muted text-center">
+        <figcaption className="mt-2 text-center text-muted text-sm">
           Example theme-aware SVG with CSS accent handling: Installation period → turning point →
           deployment period.
         </figcaption>

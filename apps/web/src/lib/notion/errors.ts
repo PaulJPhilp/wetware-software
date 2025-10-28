@@ -51,7 +51,7 @@ export class NotionPropertyTypeError extends NotionError {
   constructor(propertyName: string, expectedType: string, actualType: string) {
     super(
       `Invalid property type for ${propertyName}. Expected: ${expectedType}, Got: ${actualType}`,
-      { property: propertyName, expectedType, actualType },
+      { property: propertyName, expectedType, actualType }
     );
     this.name = "NotionPropertyTypeError";
   }

@@ -55,32 +55,30 @@ export function Footer({ links = defaultLinks }: { links?: LinkDef[] }) {
         year: "numeric",
         month: "short",
         day: "numeric",
-      }),
+      })
     );
   }, []);
 
   return (
     <footer
-      className="z-footer fixed bottom-0 inset-x-0 w-full border-t border-border bg-brand text-foreground overflow-hidden"
-      style={{ zIndex: 99998, isolation: "isolate", maxHeight: "4em" }}
+      className="fixed inset-x-0 bottom-0 z-footer w-full overflow-hidden border-border border-t bg-brand text-foreground"
+      style={{ zIndex: 99_998, isolation: "isolate", maxHeight: "4em" }}
     >
-      <div className="w-full px-2 xs:px-2 py-0 xs:py-0 flex flex-col xs:flex-col sm:flex-row justify-between items-center gap-0.5 xs:gap-0.5 font-sans">
-        <div className="flex flex-col items-start text-muted-foreground text-left transition-colors hover:text-foreground">
+      <div className="flex w-full flex-col xs:flex-col items-center justify-between gap-0.5 xs:gap-0.5 px-2 xs:px-2 py-0 xs:py-0 font-sans sm:flex-row">
+        <div className="flex flex-col items-start text-left text-muted-foreground transition-colors hover:text-foreground">
           <div style={{ fontSize: "0.5em" }}>
             {currentYear || ""} Paul J Philp. All rights reserved.
           </div>
         </div>
-        <div className="flex flex-col items-center text-muted-foreground text-center transition-colors hover:text-foreground flex-1">
-          <div style={{ fontSize: "0.5em" }}>
-            Last updated: {lastUpdated || ""}
-          </div>
+        <div className="flex flex-1 flex-col items-center text-center text-muted-foreground transition-colors hover:text-foreground">
+          <div style={{ fontSize: "0.5em" }}>Last updated: {lastUpdated || ""}</div>
         </div>
-        <div className="flex items-center gap-1.5 xs:gap-1 ml-auto">
+        <div className="ml-auto flex items-center gap-1.5 xs:gap-1">
           {links.map(({ href, label, Icon, target, rel }) => (
             <a
-              key={label}
+              className="rounded-md p-0.5 xs:p-0 text-muted-foreground transition-colors hover:text-orange"
               href={href}
-              className="text-muted-foreground hover:text-orange transition-colors p-0.5 xs:p-0 rounded-md"
+              key={label}
               {...(target ? { target } : {})}
               {...(rel ? { rel } : {})}
               aria-label={label}
@@ -91,9 +89,9 @@ export function Footer({ links = defaultLinks }: { links?: LinkDef[] }) {
           ))}
           {/* RSS Feed Link */}
           <a
-            href="/feed.xml"
-            className="text-muted-foreground hover:text-orange transition-colors p-0.5 xs:p-0 rounded-md"
             aria-label="RSS Feed"
+            className="rounded-md p-0.5 xs:p-0 text-muted-foreground transition-colors hover:text-orange"
+            href="/feed.xml"
             title="RSS Feed"
           >
             <RssIcon style={{ width: "0.5em", height: "0.5em" }} />

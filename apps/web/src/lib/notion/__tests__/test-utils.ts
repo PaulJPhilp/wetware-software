@@ -150,7 +150,7 @@ export function mockConsole() {
 
 // Simple spy function for testing
 export function createSpy<T extends (...args: unknown[]) => unknown>(
-  implementation?: T,
+  implementation?: T
 ): T & { calls: Parameters<T>[] } {
   const calls: Parameters<T>[] = [];
   const spy = ((...args: Parameters<T>) => {

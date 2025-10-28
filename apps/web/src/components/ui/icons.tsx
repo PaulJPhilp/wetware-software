@@ -6,7 +6,7 @@ export const PanelLeftIcon = dynamic(
   {
     ssr: false,
     loading: () => <div className="h-4 w-4" />,
-  },
+  }
 );
 
 export const XIcon = dynamic(() => import("lucide-react").then((mod) => ({ default: mod.X })), {
@@ -19,7 +19,7 @@ export const ChevronsLeftIcon = dynamic(
   {
     ssr: false,
     loading: () => <div className="h-4 w-4" />,
-  },
+  }
 );
 
 export const ChevronsRightIcon = dynamic(
@@ -27,5 +27,5 @@ export const ChevronsRightIcon = dynamic(
   {
     ssr: false,
     loading: () => <div className="h-4 w-4" />,
-  },
+  }
 );
