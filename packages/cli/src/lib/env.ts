@@ -1,12 +1,12 @@
+import { EnvTag, fromDotenv, fromProcess } from "effect-env";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
-import { fromDotenv, fromProcess, EnvTag } from "effect-env";
 import {
+  convertRawToTyped,
+  getEnvWithDefaults,
   rawEnvSchema,
   type CliEnv,
   type RawCliEnv,
-  convertRawToTyped,
-  getEnvWithDefaults,
 } from "../env";
 
 /**
@@ -94,11 +94,14 @@ export const EnvService = Effect.Service<EnvService>()("EnvService", {
 /**
  * Environment layer that loads from .env.local in development
  */
-export const EnvLayer = fromDotenv(rawEnvSchema, {
-  path: ".env.local",
-}).pipe(Layer.provide(EnvService.Default));
+export const EnvLayer = fromDotenv(
+  rawEnvSchema as any,
+  { path: ".env.local" }
+).pipe(Layer.provide(EnvService.Default));
 
 /**
  * Production environment layer (loads from process.env)
  */
-export const ProdEnvLayer = fromProcess(rawEnvSchema).pipe(Layer.provide(EnvService.Default));
+export const ProdEnvLayer = fromProcess(
+  rawEnvSchema as any
+).pipe(Layer.provide(EnvService.Default));

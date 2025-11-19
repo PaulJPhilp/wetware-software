@@ -22,18 +22,16 @@ export default function Home() {
             </p>
           </header>
 
-          <div className="relative max-w-xl">
-            <div className="max-w-[160px] md:max-w-[200px]">
-              <Image
-                alt="Stack of coloured bricks labeled TS, Effect, React, Next.js, Tailwind CSS, and AI SDK, representing Paul Philp's modern tech stack."
-                className="h-auto w-full"
-                height={80}
-                loading="lazy"
-                sizes="(min-width: 768px) 200px, 160px"
-                src="/images/tech_stack.png"
-                width={256}
-              />
-            </div>
+          <div className="relative mt-4">
+            <Image
+              alt="Stack of coloured bricks labeled TS, Effect, React, Next.js, Tailwind CSS, and AI SDK, representing Paul Philp's modern tech stack."
+              className="h-auto w-full max-w-[200px] md:max-w-[260px] opacity-90"
+              height={80}
+              loading="lazy"
+              sizes="(min-width: 768px) 260px, 200px"
+              src="/images/tech_stack.png"
+              width={256}
+            />
           </div>
         </div>
 
@@ -202,8 +200,8 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <EmailContactDialog />
-            <Button asChild size="lg" variant="outline">
+            <EmailContactDialog triggerClassName="bg-gray-100 dark:bg-gray-800 px-6 py-3 border border-transparent transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-700 hover:border-orange-500 active:scale-95" />
+            <Button asChild size="lg" variant="ghost" className="bg-gray-100 dark:bg-gray-800 px-6 py-3 border border-transparent transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-700 hover:border-orange-500 active:scale-95">
               <Link href="/blog">Read the blog</Link>
             </Button>
           </div>

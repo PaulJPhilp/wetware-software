@@ -170,6 +170,9 @@ export function Header() {
           <Link className={NAV_LINK_CLASS} href="/about">
             About
           </Link>
+          <Link className={NAV_LINK_CLASS} href="/services">
+            Services
+          </Link>
           <Link className={NAV_LINK_CLASS} href="/projects">
             Projects
           </Link>
