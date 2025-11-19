@@ -2,6 +2,10 @@ import withBundleAnalyzer from "@next/bundle-analyzer";
 import type { NextConfig } from "next";
 import path from "node:path";
 
+const IMAGE_DEVICE_SIZES: number[] = [640, 750, 828, 1080, 1200, 1920, 2048, 3840];
+
+const IMAGE_SIZES: number[] = [16, 32, 48, 64, 96, 128, 256, 384];
+
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
@@ -56,8 +60,8 @@ const nextConfig: NextConfig = {
 
   images: {
     formats: ["image/webp", "image/avif"],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    deviceSizes: IMAGE_DEVICE_SIZES,
+    imageSizes: IMAGE_SIZES,
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     minimumCacheTTL: 31_536_000, // 1 year

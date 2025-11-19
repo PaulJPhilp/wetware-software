@@ -2,8 +2,10 @@
 
 import type { LucideProps } from "lucide-react";
 import { Github, Mail, Rss, Twitter } from "lucide-react";
-import type { ComponentType } from "react";
+import type { ComponentType, ReactNode } from "react";
 import { useEffect, useState } from "react";
+
+import { EmailContactDialog } from "@/components/EmailContactDialog";
 
 type IconProps = Omit<LucideProps, "ref">;
 type IconComponent = ComponentType<IconProps>;
@@ -14,11 +16,12 @@ const TwitterIcon: IconComponent = (props) => <Twitter {...props} />;
 const RssIcon: IconComponent = (props) => <Rss {...props} />;
 
 type LinkDef = {
-  href: string;
+  href?: string;
   label: string; // Used for aria-label
   Icon: IconComponent;
   target?: string;
   rel?: string;
+  render?: () => ReactNode;
 };
 
 const defaultLinks: LinkDef[] = [
@@ -30,9 +33,32 @@ const defaultLinks: LinkDef[] = [
     rel: "noopener noreferrer",
   },
   {
-    href: "mailto:paul@paulphilp.com",
     label: "Email",
-    Icon: MailIcon,
+    Icon: () => null,
+    render: () => (
+      <EmailContactDialog
+        renderTriggerAction={({ open, status }) => (
+          <button
+            aria-label="Email"
+            className="rounded-md p-0.5 text-muted-foreground transition-colors hover:text-orange"
+            onClick={open}
+            type="button"
+          >
+            <MailIcon style={{ width: "0.5em", height: "0.5em" }} />
+            <span className="sr-only">
+              {status === "sending"
+                ? "Sending"
+                : status === "success"
+                ? "Sent"
+                : "Email"}
+            </span>
+          </button>
+        )}
+        triggerLabel="Email"
+        triggerSize="sm"
+        triggerVariant="ghost"
+      />
+    ),
   },
   {
     href: "https://x.com/PaulPhilp624972",
@@ -74,18 +100,26 @@ export function Footer({ links = defaultLinks }: { links?: LinkDef[] }) {
           <div style={{ fontSize: "0.5em" }}>Last updated: {lastUpdated || ""}</div>
         </div>
         <div className="ml-auto flex items-center gap-1.5 xs:gap-1">
-          {links.map(({ href, label, Icon, target, rel }) => (
-            <a
-              className="rounded-md p-0.5 xs:p-0 text-muted-foreground transition-colors hover:text-orange"
-              href={href}
-              key={label}
-              {...(target ? { target } : {})}
-              {...(rel ? { rel } : {})}
-              aria-label={label}
-              title={label}
-            >
-              <Icon style={{ width: "0.5em", height: "0.5em" }} />
-            </a>
+          {links.map(({ href, label, Icon, target, rel, render }) => (
+            <div key={label} className="flex items-center">
+              {render ? (
+                <div className="flex items-center gap-1">
+                  <Icon style={{ width: "0.5em", height: "0.5em" }} />
+                  {render()}
+                </div>
+              ) : (
+                <a
+                  className="rounded-md p-0.5 xs:p-0 text-muted-foreground transition-colors hover:text-orange"
+                  href={href}
+                  {...(target ? { target } : {})}
+                  {...(rel ? { rel } : {})}
+                  aria-label={label}
+                  title={label}
+                >
+                  <Icon style={{ width: "0.5em", height: "0.5em" }} />
+                </a>
+              )}
+            </div>
           ))}
           {/* RSS Feed Link */}
           <a

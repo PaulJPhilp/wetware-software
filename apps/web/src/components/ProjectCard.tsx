@@ -6,7 +6,7 @@ import { ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export interface Project {
+export type Project = {
   id: string;
   name: string;
   description: string;
@@ -19,7 +19,7 @@ export interface Project {
   featured: boolean;
   createdAt: string;
   updatedAt: string;
-}
+};
 
 interface ProjectCardProps extends CardComponentProps {
   /** Project data to display */

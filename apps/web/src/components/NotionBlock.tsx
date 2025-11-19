@@ -13,16 +13,18 @@ import { useEffect, useState, type FC, type ReactNode } from "react";
 import { AnchorHeading } from "./AnchorHeading";
 import { ShareLink } from "./ShareLink";
 
-interface NotionBlockProps {
+type NotionBlockProps = {
   block: BlockObjectResponse;
-}
+};
 
 // Only use next/image for hosts allowed in next.config.ts to avoid 400s.
 // Keep this list in sync with apps/web/next.config.ts images.remotePatterns
 const isNextImageAllowed = (url: string): boolean => {
   try {
     const u = new URL(url);
-    if (u.protocol !== "https:") return false;
+    if (u.protocol !== "https:") {
+      return false;
+    }
     const host = u.hostname.toLowerCase();
     return (
       host === "prod-files-secure.s3.us-west-2.amazonaws.com" ||
@@ -186,17 +188,22 @@ const renderSegmentWithInlineImages = (
 
     if (start > lastIndex) {
       const pre = content.slice(lastIndex, start);
-      if (pre)
+      if (pre) {
         nodes.push(
           <RichText key={`${keyBase}-pre-${start}`} text={cloneTextWithContent(text, pre)} />
         );
+      }
     }
 
     const meta = parseImageTitleMeta(titleRaw);
     const alt = (altRaw || meta.caption || "Content illustration").trim();
     const style: React.CSSProperties = {};
-    if (meta.width !== undefined) style.width = meta.width as string | number;
-    if (meta.height !== undefined) style.height = meta.height as string | number;
+    if (meta.width !== undefined) {
+      style.width = meta.width as string | number;
+    }
+    if (meta.height !== undefined) {
+      style.height = meta.height as string | number;
+    }
     const cls = `inline-block align-middle max-w-full h-auto ${meta.className || ""}`.trim();
 
     if (src) {
@@ -222,14 +229,17 @@ const renderSegmentWithInlineImages = (
 
   if (lastIndex < content.length) {
     const tail = content.slice(lastIndex);
-    if (tail)
+    if (tail) {
       nodes.push(
         <RichText key={`${keyBase}-tail-${lastIndex}`} text={cloneTextWithContent(text, tail)} />
       );
+    }
   }
 
   // If no matches, return original as-is
-  if (nodes.length === 0) return [<RichText key={keyBase} text={text} />];
+  if (nodes.length === 0) {
+    return [<RichText key={keyBase} text={text} />];
+  }
   return nodes;
 };
 
@@ -254,7 +264,9 @@ const renderAnnotatedWithInlineImages = (
 };
 
 const RichText: FC<{ text: RichTextItemResponse }> = ({ text }) => {
-  if (!text) return null;
+  if (!text) {
+    return null;
+  }
 
   const content = text.plain_text || "";
 
@@ -486,7 +498,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
 
           // Fallback: try to extract meaningful info from URL
           const urlParts = url.split("/");
-          const filename = urlParts[urlParts.length - 1];
+          const filename = urlParts.at(-1);
           if (filename && filename !== "") {
             return `Content illustration: ${filename.replace(/[-_]/g, " ").replace(/\.[^/.]+$/, "")}`;
           }
@@ -564,7 +576,7 @@ export function NotionBlock({ block }: NotionBlockProps) {
           }
 
           const urlParts = url.split("/");
-          const filename = urlParts[urlParts.length - 1];
+          const filename = urlParts.at(-1);
           if (filename && filename !== "") {
             return `Content illustration: ${filename.replace(/[-_]/g, " ").replace(/\.[^/.]+$/, "")}`;
           }

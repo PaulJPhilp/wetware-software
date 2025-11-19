@@ -31,12 +31,7 @@ const root = Command.withSubcommands(Command.make("wetware-cli"), [
   validateCommand,
 ]);
 
-const layer = Layer.mergeAll(
-  NodeContext.layer,
-  EnvLayer,
-  OpenAIProviderLayer,
-  NotionClientLayer
-);
+const layer = Layer.mergeAll(NodeContext.layer, EnvLayer, OpenAIProviderLayer, NotionClientLayer);
 
 const run = Command.run(root, { name: "wetware-cli", version: "0.1.0" });
 

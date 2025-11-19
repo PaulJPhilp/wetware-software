@@ -1,25 +1,34 @@
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import { fromDotenv, fromProcess, EnvTag } from "effect-env";
-import { rawEnvSchema, type CliEnv, type RawCliEnv, convertRawToTyped, getEnvWithDefaults } from "../env";
+import {
+  rawEnvSchema,
+  type CliEnv,
+  type RawCliEnv,
+  convertRawToTyped,
+  getEnvWithDefaults,
+} from "../env";
 
 /**
  * Environment service interface
  */
-export interface EnvService {
+export type EnvService = {
   readonly get: <K extends keyof CliEnv>(key: K) => Effect.Effect<CliEnv[K], Error>;
   readonly require: <K extends keyof CliEnv>(key: K) => Effect.Effect<CliEnv[K], Error>;
-  readonly getNotionConfig: () => Effect.Effect<{
-    apiKey: string;
-    resourcesDatabaseId: string;
-    sourceEntitiesDatabaseId: string;
-    resourceSeriesDatabaseId?: string;
-  }, Error>;
+  readonly getNotionConfig: () => Effect.Effect<
+    {
+      apiKey: string;
+      resourcesDatabaseId: string;
+      sourceEntitiesDatabaseId: string;
+      resourceSeriesDatabaseId?: string;
+    },
+    Error
+  >;
   readonly getAIConfig: () => Effect.Effect<{ apiKey: string }, Error>;
   readonly isDevelopment: Effect.Effect<boolean, never>;
   readonly isProduction: Effect.Effect<boolean, never>;
   readonly isTest: Effect.Effect<boolean, never>;
-}
+};
 
 /**
  * Environment service implementation
@@ -40,7 +49,7 @@ export const EnvService = Effect.Service<EnvService>()("EnvService", {
         }
         return Effect.succeed(value);
       },
-      
+
       getNotionConfig: () =>
         Effect.gen(function* () {
           const apiKey = typedEnv.NOTION_API_KEY;
@@ -92,6 +101,4 @@ export const EnvLayer = fromDotenv(rawEnvSchema, {
 /**
  * Production environment layer (loads from process.env)
  */
-export const ProdEnvLayer = fromProcess(rawEnvSchema).pipe(
-  Layer.provide(EnvService.Default)
-);
+export const ProdEnvLayer = fromProcess(rawEnvSchema).pipe(Layer.provide(EnvService.Default));

@@ -1,5 +1,4 @@
-import * as Command from "@effect/cli/Command";
-import * as Options from "@effect/cli/Options";
+import { Command, Options } from "@effect/cli";
 import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
 import { pipe } from "effect/Function";

@@ -17,7 +17,7 @@ import {
 } from "./type-guards";
 
 // Local types (these would normally come from @wetware/shared)
-interface PostMeta {
+type PostMeta = {
   id: string;
   title: string;
   slug: string;
@@ -31,9 +31,9 @@ interface PostMeta {
   url: string;
   createdTime: string;
   lastEditedTime: string;
-}
+};
 
-interface SeriesMeta {
+type SeriesMeta = {
   id: string;
   title: string;
   slug: string;
@@ -45,20 +45,20 @@ interface SeriesMeta {
   url: string;
   createdTime: string;
   lastEditedTime: string;
-}
+};
 
 // Types for Notion API responses (to avoid importing full @notionhq/client types)
-interface NotionPage {
+type NotionPage = {
   id: string;
   properties: Record<string, unknown>;
   url?: string;
   created_time?: string;
   last_edited_time?: string;
-}
+};
 
-interface NotionDatabase {
+type NotionDatabase = {
   results: NotionPage[];
-}
+};
 
 /**
  * Core parsing utilities

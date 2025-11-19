@@ -6,9 +6,9 @@
 
 export type LogLevel = "debug" | "info" | "warn" | "error";
 
-export interface LogContext {
+export type LogContext = {
   [key: string]: unknown;
-}
+};
 
 /**
  * Structured logger for Notion operations

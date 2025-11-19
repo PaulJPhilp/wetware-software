@@ -1,7 +1,4 @@
-import * as Command from "@effect/cli/Command";
-import * as Options from "@effect/cli/Options";
-import * as Effect from "effect/Effect";
-import * as Console from "effect/Console";
+import { Console, Effect } from "effect";
 import { validate } from "effect-env";
 import { rawEnvSchema } from "../env";
 

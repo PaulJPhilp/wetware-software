@@ -1,11 +1,9 @@
-import * as Args from "@effect/cli/Args";
-import * as Command from "@effect/cli/Command";
-import * as Options from "@effect/cli/Options";
+import { Args, Command, Options } from "@effect/cli";
 import { FileSystem } from "@effect/platform/FileSystem";
 import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
 import { pipe } from "effect/Function";
-import * as NodePath from "node:path";
+import { join } from "node:path";
 import { OpenAI } from "../lib/ai";
 import { Notion } from "../lib/notion";
 import { buildSchema } from "../lib/schema";
@@ -31,9 +29,9 @@ export const addResourceCommand = pipe(
   Command.withSubcommands([resourceCommand])
 );
 
-export interface RunAddResourceOptions {
+export type RunAddResourceOptions = {
   promptOverride?: string;
-}
+};
 
 export function runAddResource(
   resourceUrl: string,
@@ -44,8 +42,8 @@ export function runAddResource(
     const ai = yield* OpenAI;
     const notion = yield* Notion;
 
-    const promptsDir = NodePath.join(process.cwd(), "packages", "cli", "prompts");
-    const promptPath = NodePath.join(promptsDir, "addResources.txt");
+    const promptsDir = join(process.cwd(), "packages", "cli", "prompts");
+    const promptPath = join(promptsDir, "addResources.txt");
 
     let prompt: string;
     if (options?.promptOverride) {

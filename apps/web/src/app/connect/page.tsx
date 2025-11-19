@@ -1,40 +1,52 @@
+import type { ReactNode } from "react";
+
+import { EmailContactCTA } from "@/components/EmailContactCTA";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Linkedin, Mail, MessageCircle, Twitter, Users } from "lucide-react";
 
+type ContactMethod = {
+  title: string;
+  description: string;
+  icon: ReactNode;
+  display: string;
+  actionNode?: ReactNode;
+  href?: string;
+  actionLabel?: string;
+};
+
 export default function ConnectPage() {
-  const contactMethods = [
+  const contactMethods: ContactMethod[] = [
     {
       title: "Email",
       description: "For opportunities, collaboration, or detailed discussions",
       icon: <Mail className="h-6 w-6" />,
-      action: "Send Email",
-      href: "mailto:paul@paulphilp.com",
       display: "paul@paulphilp.com",
+      actionNode: <EmailContactCTA />, 
     },
     {
       title: "LinkedIn",
       description: "Professional networking and career opportunities",
       icon: <Linkedin className="h-6 w-6" />,
-      action: "Connect on LinkedIn",
       href: "https://www.linkedin.com/in/pauljphilp/",
       display: "linkedin.com/in/pauljphilp",
+      actionLabel: "Connect on LinkedIn",
     },
     {
       title: "X (Twitter)",
       description: "Quick questions and ongoing conversations",
       icon: <Twitter className="h-6 w-6" />,
-      action: "Follow on X",
       href: "https://twitter.com/PaulJPhilp",
       display: "@PaulJPhilp",
+      actionLabel: "Follow on X",
     },
     {
       title: "Bluesky",
       description: "Emerging social platform for tech discussions",
       icon: <MessageCircle className="h-6 w-6" />,
-      action: "Follow on Bluesky",
       href: "https://bsky.app/profile/pauljphilp.com",
       display: "pauljphilp.com",
+      actionLabel: "Follow on Bluesky",
     },
   ];
 
@@ -74,11 +86,13 @@ export default function ConnectPage() {
               <p className="rounded bg-muted p-3 font-mono text-muted-foreground text-sm">
                 {method.display}
               </p>
-              <Button asChild className="w-full" variant="default">
-                <a href={method.href} rel="noopener noreferrer" target="_blank">
-                  {method.action}
-                </a>
-              </Button>
+              {method.actionNode ?? (
+                <Button asChild className="w-full" variant="default">
+                  <a href={method.href} rel="noopener noreferrer" target="_blank">
+                    {method.actionLabel}
+                  </a>
+                </Button>
+              )}
             </CardContent>
           </Card>
         ))}

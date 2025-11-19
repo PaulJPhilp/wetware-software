@@ -2,7 +2,7 @@
  * Represents a complete series of related posts sourced from Notion.
  * Consolidates shared metadata so UI components remain DRY.
  */
-export interface Series {
+export type Series = {
   id: string;
   slug: string;
   title: string;
@@ -16,12 +16,12 @@ export interface Series {
   tags?: Array<{ name: string }>;
   postCount?: number;
   articles: SeriesArticle[];
-}
+};
 
 /**
  * Describes an individual article within a series.
  */
-export interface SeriesArticle {
+export type SeriesArticle = {
   id: string;
   slug: string;
   title: string;
@@ -29,27 +29,27 @@ export interface SeriesArticle {
   part: number;
   href?: string; // Alternative link format for sidebar components
   coverImage?: string; // For articles with individual covers
-}
+};
 
 /**
  * Shape for sidebar navigation when rendering a collection of series.
  */
-export interface SidebarSeries {
+export type SidebarSeries = {
   name: string; // Required for sidebar navigation
   slug?: string;
   coverLight?: string;
   coverDark?: string;
   articles: SidebarArticle[];
-}
+};
 
 /**
  * Represents a sidebar navigation entry pointing to a series article.
  */
-export interface SidebarArticle {
+export type SidebarArticle = {
   title: string;
   href: string; // Required for sidebar links
   partNumber?: number;
-}
+};
 
 // Legacy type aliases for backward compatibility
 /**

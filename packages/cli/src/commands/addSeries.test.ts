@@ -1,11 +1,10 @@
 import * as NodeContext from "@effect/platform-node/NodeContext";
-import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
+import { Effect, Layer } from "effect";
 import { describe, expect, it, vi } from "vitest";
-import { AIService, type AIService as OpenAIService, AIServiceTypeId, AIServiceError } from "../services/ai";
 import { OpenAI } from "../lib/ai";
 import { Notion } from "../lib/notion";
-import { createNotionMock, notImplementedEffect } from "../test/notionTestUtils";
+import { type AIService as OpenAIService, AIServiceError, AIServiceTypeId } from "../services/ai";
+import { createNotionMock } from "../test/notionTestUtils";
 import { runAddSeries } from "./addSeries";
 
 describe("addSeries", () => {
@@ -18,7 +17,7 @@ describe("addSeries", () => {
       generateSeriesJson: vi.fn(() =>
         Effect.succeed('{ "name": "test", "description": "test", "goal": "test" }')
       ),
-      generateResourceJson: vi.fn((_args) => 
+      generateResourceJson: vi.fn((_args) =>
         Effect.fail(new AIServiceError("Not implemented in test"))
       ),
       generateSourceEntityJson: vi.fn((_args) =>
@@ -32,9 +31,7 @@ describe("addSeries", () => {
 
     const program = runAddSeries("Test Series", undefined, false, {
       promptOverride: "PROMPT",
-    }).pipe(
-      Effect.provide(Layer.merge(testLayer, NodeContext.layer))
-    );
+    }).pipe(Effect.provide(Layer.merge(testLayer, NodeContext.layer)));
 
     const result = await Effect.runPromise(program);
 

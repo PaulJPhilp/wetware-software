@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  AIServiceError,
-  AICallError,
-  AIConfigError,
-  AIResponseError,
-} from "../errors";
+import { AIServiceError, AICallError, AIConfigError, AIResponseError } from "../errors";
 
 describe("AI service errors", () => {
   describe("AIServiceError", () => {
@@ -27,7 +22,7 @@ describe("AI service errors", () => {
     it("creates API call error", () => {
       const originalError = new Error("API failed");
       const error = new AICallError("API call failed", originalError);
-      
+
       expect(error.name).toBe("AICallError");
       expect(error._tag).toBe("AICallError");
       expect(error.message).toBe("AI call failed: API call failed");
@@ -38,7 +33,7 @@ describe("AI service errors", () => {
   describe("AIConfigError", () => {
     it("creates configuration error", () => {
       const error = new AIConfigError("Missing API key");
-      
+
       expect(error.name).toBe("AIConfigError");
       expect(error._tag).toBe("AIConfigError");
       expect(error.message).toBe("AI configuration error: Missing API key");
@@ -48,7 +43,7 @@ describe("AI service errors", () => {
   describe("AIResponseError", () => {
     it("creates response error without response", () => {
       const error = new AIResponseError("Invalid JSON");
-      
+
       expect(error.name).toBe("AIResponseError");
       expect(error._tag).toBe("AIResponseError");
       expect(error.message).toBe("AI response error: Invalid JSON");
@@ -58,7 +53,7 @@ describe("AI service errors", () => {
     it("includes response when provided", () => {
       const response = '{"invalid": json}';
       const error = new AIResponseError("Invalid JSON", response);
-      
+
       expect(error.response).toBe(response);
     });
   });

@@ -1,14 +1,14 @@
 /**
  * AI Service Module
- * 
+ *
  * Provides AI-powered text generation capabilities for processing
  * resources, sources, and series content using Google's Gemini model.
- * 
+ *
  * @example
  * ```typescript
  * import { AIService, AIServiceLive } from "./services/ai";
  * import { Effect } from "effect";
- * 
+ *
  * const program = Effect.gen(function* () {
  *   const ai = yield* AIService;
  *   const result = yield* ai.generateResourceJson({
@@ -18,7 +18,7 @@
  *   });
  *   return result;
  * });
- * 
+ *
  * // Run with live layer
  * Effect.runPromise(
  *   program.pipe(Effect.provide(AIServiceLive))
@@ -29,9 +29,9 @@
 // API and Types
 export type { AIService } from "./api";
 export { AIServiceTypeId } from "./api";
-export type { 
-  GenerationRequest, 
-  AIModelConfig 
+export type {
+  GenerationRequest,
+  AIModelConfig,
 } from "./types";
 
 // Errors

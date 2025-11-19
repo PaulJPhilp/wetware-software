@@ -5,11 +5,11 @@ import { defaultTheme } from "../theme";
 import { buildPolylinePoints } from "./helpers/geometry";
 import { calculateLabelPosition } from "./helpers/label";
 
-interface TransitMapSvgProps {
+type TransitMapSvgProps = {
   data: MapData;
   theme?: Partial<Theme>;
   onMount?: (el: SVGSVGElement) => void;
-}
+};
 
 export function TransitMapSvg({ data, theme = {}, onMount }: TransitMapSvgProps) {
   const mergedTheme = { ...defaultTheme, ...theme };
@@ -52,7 +52,9 @@ export function TransitMapSvg({ data, theme = {}, onMount }: TransitMapSvgProps)
         const stops = line.stops
           .map((id) => stopMap.get(id))
           .filter((s): s is (typeof data.stops)[number] => Boolean(s));
-        if (stops.length < 2) return null;
+        if (stops.length < 2) {
+          return null;
+        }
         const points = buildPolylinePoints(stops);
         return (
           <polyline

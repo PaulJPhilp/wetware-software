@@ -1,7 +1,7 @@
-interface EpigraphProps {
+type EpigraphProps = {
   author?: string;
   children: React.ReactNode;
-}
+};
 
 export function Epigraph({ author, children }: EpigraphProps) {
   return (

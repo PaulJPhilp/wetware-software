@@ -40,7 +40,7 @@ export default async function EssaysPage() {
                   (a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
                 )
                 .map((post) => (
-                  <Link className="group block" href={`/posts/${post.slug}`} key={post.id}>
+                  <Link className="group block" href={`/blog/posts/${post.slug}`} key={post.id}>
                     <PostCard post={post} />
                   </Link>
                 ))}

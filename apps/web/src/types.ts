@@ -1,4 +1,4 @@
-export interface Stop {
+export type Stop = {
   id: string;
   title: string;
   years: string;
@@ -8,20 +8,20 @@ export interface Stop {
   carryForward?: string[];
   artifact?: string;
   labelPos?: "top" | "right" | "bottom" | "left";
-}
-export interface Line {
+};
+export type Line = {
   id: string;
   name: string;
   color: string;
   stops: string[];
-}
+};
 
-export interface Interchange {
+export type Interchange = {
   stopIds: string[];
-}
+};
 
-export interface MapData {
+export type MapData = {
   stops: Stop[];
   lines: Line[];
   interchanges?: Interchange[];
-}
+};

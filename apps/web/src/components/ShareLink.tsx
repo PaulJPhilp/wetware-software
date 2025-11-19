@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 
-interface ShareLinkProps {
+type ShareLinkProps = {
   id: string;
-}
+};
 
 export function ShareLink({ id }: ShareLinkProps) {
   const [copied, setCopied] = useState(false);

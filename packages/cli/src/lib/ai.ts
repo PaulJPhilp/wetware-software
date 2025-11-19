@@ -7,7 +7,7 @@ import { pipe } from "effect/Function";
 import * as Layer from "effect/Layer";
 import { EnvService } from "./env";
 
-export interface OpenAIService {
+export type OpenAIService = {
   generateResourceJson: (args: {
     prompt: string;
     resourceBlock: string;
@@ -23,7 +23,7 @@ export interface OpenAIService {
     seriesBlock: string;
     verbose?: boolean;
   }) => Effect.Effect<string, Error, never>;
-}
+};
 
 export class OpenAI extends Effect.Service<OpenAIService>()("OpenAI", {
   succeed: {},

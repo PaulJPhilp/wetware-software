@@ -9,7 +9,7 @@ import { NotionError, NotionPropertyMissingError, NotionQueryError } from "./not
 import { createTimer, logger } from "./notion/logger";
 
 // Temporarily define Series interface here for debugging
-export interface Series {
+export type Series = {
   id: string;
   name: string;
   slug: string;
@@ -24,7 +24,7 @@ export interface Series {
   postCount: number;
   publishedDate?: string;
   articles: SeriesArticle[];
-}
+};
 
 // Re-export shared types for backward compatibility
 export type { ContentType, FocusArea, Post, SeriesArticle };
@@ -838,16 +838,22 @@ function parseSeriesFromResponse(pages: PageObjectResponse[]): Series[] {
         let normalizedStatus: Series["status"] = "Draft";
         if (statusProp.type === "select") {
           const name = statusProp.select?.name?.toLowerCase() || "";
-          if (name === "active" || name === "in progress" || name === "not started")
+          if (name === "active" || name === "in progress" || name === "not started") {
             normalizedStatus = "Active";
-          else if (name === "completed" || name === "done") normalizedStatus = "Completed";
-          else if (name === "draft") normalizedStatus = "Draft";
+          } else if (name === "completed" || name === "done") {
+            normalizedStatus = "Completed";
+          } else if (name === "draft") {
+            normalizedStatus = "Draft";
+          }
         } else if (statusProp.type === "status") {
           const name = statusProp.status?.name?.toLowerCase() || "";
-          if (name === "active" || name === "in progress" || name === "not started")
+          if (name === "active" || name === "in progress" || name === "not started") {
             normalizedStatus = "Active";
-          else if (name === "completed" || name === "done") normalizedStatus = "Completed";
-          else if (name === "draft") normalizedStatus = "Draft";
+          } else if (name === "completed" || name === "done") {
+            normalizedStatus = "Completed";
+          } else if (name === "draft") {
+            normalizedStatus = "Draft";
+          }
         }
 
         // Parse Published Date
@@ -903,7 +909,7 @@ function parseSeriesArticles(pages: PageObjectResponse[], seriesId: string): Ser
       };
 
       if (post.slug) {
-        article.href = `/posts/${post.slug}`;
+        article.href = `/blog/posts/${post.slug}`;
       }
 
       return article;
@@ -1229,7 +1235,9 @@ export const getAllSeriesSlugs = unstable_cache(
 
       const slugs = response.results
         .map((page) => {
-          if (!("properties" in page)) return null;
+          if (!("properties" in page)) {
+            return null;
+          }
           const slugProp = page.properties.Slug;
           if (
             slugProp &&

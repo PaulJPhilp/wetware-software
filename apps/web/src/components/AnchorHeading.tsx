@@ -1,12 +1,12 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-interface AnchorHeadingProps {
+type AnchorHeadingProps = {
   id: string;
   level?: 1 | 2 | 3 | 4 | 5 | 6;
   children: ReactNode;
   className?: string;
-}
+};
 
 export function AnchorHeading({ id, level = 2, children, className }: AnchorHeadingProps) {
   const Tag = `h${level}` as keyof React.JSX.IntrinsicElements;

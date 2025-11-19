@@ -6,7 +6,7 @@ import type { Post } from "@/lib/notion-utils";
 import { LayoutGrid, List } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // Lazy load PostListItem since it's only used in list view
 const PostListItem = dynamic(() =>
@@ -81,7 +81,7 @@ export function LatestPosts({
       {view === "card" ? (
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-2">
           {latestPosts.map((post) => (
-            <Link className="group block" href={`/posts/${post.slug}`} key={post.id}>
+            <Link className="group block" href={`/blog/posts/${post.slug}`} key={post.id}>
               <PostCard post={post} />
             </Link>
           ))}
@@ -115,7 +115,7 @@ export function LatestPosts({
           </div>
           <div className="min-w-[800px]">
             {latestPosts.map((post) => (
-              <Link className="group block" href={`/posts/${post.slug}`} key={post.id}>
+              <Link className="group block" href={`/blog/posts/${post.slug}`} key={post.id}>
                 <PostListItem post={post} />
               </Link>
             ))}

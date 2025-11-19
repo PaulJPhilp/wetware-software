@@ -13,7 +13,7 @@ import type { z } from "zod";
 import { buildSchema } from "./schema";
 import type { SeriesInput } from "./seriesSchema";
 import type { SourceEntityInput } from "./sourceEntitySchema";
-import { EnvService, type EnvService as EnvServiceType } from "./env";
+import { EnvService } from "./env";
 
 const schema = buildSchema();
 export type ResourceInput = z.infer<typeof schema>;
@@ -50,7 +50,7 @@ export type SeriesDetails = {
   goal?: string | null;
 };
 
-export interface NotionService {
+export type NotionService = {
   addResource: (
     data: ResourceInput,
     opts?: { verbose?: boolean }
@@ -105,7 +105,7 @@ export interface NotionService {
     properties: UpdatePageParameters["properties"]
   ) => Effect.Effect<void, Error>;
   getPage: (pageId: string) => Effect.Effect<GetPageResponse, Error>;
-}
+};
 
 export class Notion extends Effect.Service<NotionService>()("Notion", {
   succeed: {},
@@ -214,7 +214,9 @@ async function validateSelectOptions(notion: Client, databaseId: string, input: 
     values: readonly string[],
     propName: string
   ) => {
-    if (!prop || (prop.type !== "select" && prop.type !== "multi_select")) return;
+    if (!prop || (prop.type !== "select" && prop.type !== "multi_select")) {
+      return;
+    }
     const options = prop.type === "select" ? prop.select.options : prop.multi_select.options;
     const allowed = new Set(options.map((o) => o.name));
     for (const v of values) {
@@ -279,7 +281,9 @@ export const NotionClientLayer = Layer.effect(
                 values: readonly string[],
                 propName: string
               ) => {
-                if (!prop || (prop.type !== "select" && prop.type !== "multi_select")) return;
+                if (!prop || (prop.type !== "select" && prop.type !== "multi_select")) {
+                  return;
+                }
                 const options =
                   prop.type === "select" ? prop.select.options : prop.multi_select.options;
                 const allowed = new Set(options.map((o) => o.name));
@@ -292,8 +296,12 @@ export const NotionClientLayer = Layer.effect(
                 }
               };
 
-              if (typeProp) ensureAllowed(typeProp, [input.type], "Type");
-              if (focusProp) ensureAllowed(focusProp, input.focus_area, "Focus Area");
+              if (typeProp) {
+                ensureAllowed(typeProp, [input.type], "Type");
+              }
+              if (focusProp) {
+                ensureAllowed(focusProp, input.focus_area, "Focus Area");
+              }
 
               const properties = mapSourceEntityToProperties(input);
               const page = await notion.pages.create({
@@ -383,8 +391,9 @@ export const NotionClientLayer = Layer.effect(
       listResourceSeries: (opts) =>
         Effect.tryPromise({
           try: async () => {
-            if (!config.resourceSeriesDatabaseId)
+            if (!config.resourceSeriesDatabaseId) {
               throw new Error("Missing NOTION_RESOURCE_SERIES_DATABASE_ID");
+            }
             const res = await notion.databases.query({
               database_id: config.resourceSeriesDatabaseId,
               page_size: Math.min(Math.max(opts?.limit ?? 25, 1), 100),

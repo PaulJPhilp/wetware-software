@@ -8,7 +8,7 @@ if (typeof process.env.NODE_ENV === "undefined") {
 }
 
 import react from "@vitejs/plugin-react";
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 import { defineConfig } from "vitest/config";
 
 const require = createRequire(import.meta.url);
@@ -19,7 +19,7 @@ const reactJsxRuntime = require.resolve("react/jsx-runtime");
 // may try to import the dev runtime during transforms; forcing both imports to
 // the same file avoids ERR_MODULE_NOT_FOUND caused by conditional package
 // export resolution differences in some environments.
-const reactJsxDevRuntime = reactJsxRuntime;
+const _reactJsxDevRuntime = reactJsxRuntime;
 
 // Plugin to pre-resolve the React JSX runtime imports early in the pipeline.
 const resolveReactJsxRuntimePlugin = {
@@ -29,8 +29,12 @@ const resolveReactJsxRuntimePlugin = {
   // stable jsx-runtime. This avoids depending on package export resolution
   // differences and guarantees the module exists during transforms.
   resolveId(source: string) {
-    if (source === "react/jsx-dev-runtime") return "\0:react-jsx-dev-runtime";
-    if (source === "react/jsx-runtime") return reactJsxRuntime;
+    if (source === "react/jsx-dev-runtime") {
+      return "\0:react-jsx-dev-runtime";
+    }
+    if (source === "react/jsx-runtime") {
+      return reactJsxRuntime;
+    }
     return null;
   },
   load(id: string) {

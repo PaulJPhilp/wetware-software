@@ -1,7 +1,4 @@
-import * as Args from "@effect/cli/Args";
-import * as Command from "@effect/cli/Command";
-import * as Console from "effect/Console";
-import * as Effect from "effect/Effect";
+import { Console, Effect } from "effect";
 import { pipe } from "effect/Function";
 import { Notion } from "../lib/notion";
 

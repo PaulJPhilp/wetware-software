@@ -3,7 +3,6 @@ export async function register() {
   // This file is required by Next.js when instrumentation is enabled
 }
 
-export async function onRequestError(err: any, request: any, context: any) {
-  // Handle request errors
-  console.error("Request error:", err);
+export async function onRequestError(_err: any, _request: any, _context: any) {
+  // Handle request errors (e.g. log to an external service)
 }

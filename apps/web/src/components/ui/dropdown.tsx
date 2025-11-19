@@ -24,12 +24,12 @@ import {
   type ReactNode,
 } from "react";
 
-interface DropdownContextValue {
+type DropdownContextValue = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   triggerId: string;
   contentId: string;
-}
+};
 
 const DropdownContext = createContext<DropdownContextValue | null>(null);
 
@@ -41,11 +41,11 @@ function useDropdown() {
   return context;
 }
 
-interface DropdownProps {
+type DropdownProps = {
   children: ReactNode;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
-}
+};
 
 export function Dropdown({ children, defaultOpen = false, onOpenChange }: DropdownProps) {
   const [isOpen, setIsOpenState] = useState(defaultOpen);
@@ -67,11 +67,11 @@ export function Dropdown({ children, defaultOpen = false, onOpenChange }: Dropdo
   );
 }
 
-interface DropdownTriggerProps {
+type DropdownTriggerProps = {
   children: ReactNode;
   className?: string;
   asChild?: boolean;
-}
+};
 
 export function DropdownTrigger({ children, className, asChild = false }: DropdownTriggerProps) {
   const { isOpen, setIsOpen, triggerId, contentId } = useDropdown();
@@ -153,13 +153,13 @@ export function DropdownTrigger({ children, className, asChild = false }: Dropdo
   );
 }
 
-interface DropdownContentProps {
+type DropdownContentProps = {
   children: ReactNode;
   className?: string;
   align?: "start" | "center" | "end";
   side?: "top" | "bottom" | "left" | "right";
   sideOffset?: number;
-}
+};
 
 export function DropdownContent({
   children,
@@ -228,7 +228,9 @@ export function DropdownContent({
     end: side === "top" || side === "bottom" ? "right-0" : "bottom-0",
   };
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div
@@ -254,13 +256,13 @@ export function DropdownContent({
   );
 }
 
-interface DropdownItemProps {
+type DropdownItemProps = {
   children: ReactNode;
   className?: string;
   disabled?: boolean;
   onClick?: () => void;
   href?: string;
-}
+};
 
 export function DropdownItem({
   children,
@@ -272,7 +274,9 @@ export function DropdownItem({
   const { setIsOpen } = useDropdown();
 
   const handleClick = () => {
-    if (disabled) return;
+    if (disabled) {
+      return;
+    }
 
     onClick?.();
     setIsOpen(false);
@@ -302,18 +306,18 @@ export function DropdownItem({
   return <div {...commonProps}>{children}</div>;
 }
 
-interface DropdownSeparatorProps {
+type DropdownSeparatorProps = {
   className?: string;
-}
+};
 
 export function DropdownSeparator({ className }: DropdownSeparatorProps) {
   return <div aria-hidden="true" className={cn("my-1 h-px bg-border", className)} />;
 }
 
-interface DropdownLabelProps {
+type DropdownLabelProps = {
   children: ReactNode;
   className?: string;
-}
+};
 
 export function DropdownLabel({ children, className }: DropdownLabelProps) {
   return (

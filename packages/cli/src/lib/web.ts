@@ -1,23 +1,34 @@
-import * as Effect from "effect/Effect";
+import { Effect } from "effect";
+
+const META_TAG_REGEX =
+  /<meta[^>]+(?:name|property)=["']([^"']+)["'][^>]+content=["']([^"']+)["'][^>]*>/i;
+
+const TITLE_TAG_REGEX = /<title[^>]*>([^<]+)<\/title>/i;
 
 function extractMeta(html: string, name: string): string | null {
-  const re = new RegExp(
-    `<meta[^>]+(?:name|property)=["']${name}["'][^>]+content=["']([^"']+)["'][^>]*>`,
-    "i"
-  );
-  const m = html.match(re);
-  return m?.[1] ?? null;
+  const matches = html.match(new RegExp(META_TAG_REGEX, META_TAG_REGEX.flags));
+  if (!matches) {
+    return null;
+  }
+
+  const metaName = matches[1] ?? null;
+  const content = matches[2] ?? null;
+  if (metaName === name) {
+    return content;
+  }
+
+  return null;
 }
 
 function extractTitle(html: string): string | null {
-  const m = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+  const m = html.match(TITLE_TAG_REGEX);
   return m?.[1]?.trim() ?? null;
 }
 
-export interface PageMetadata {
+export type PageMetadata = {
   title: string | null;
   description: string | null;
-}
+};
 
 export function fetchPageMetadata(url: string) {
   return Effect.tryPromise({

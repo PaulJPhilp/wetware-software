@@ -1,5 +1,5 @@
-import * as Effect from "effect/Effect";
-import { AIServiceError } from "./errors";
+import type * as Effect from "effect/Effect";
+import type { AIServiceError } from "./errors";
 
 /**
  * Type identifier for the AI Service
@@ -9,7 +9,7 @@ export const AIServiceTypeId = Symbol.for("@wetware/AIService");
 /**
  * AI Service interface with type tag
  */
-export interface AIService {
+export type AIService = {
   readonly [AIServiceTypeId]: typeof AIServiceTypeId;
   generateResourceJson: (args: {
     prompt: string;
@@ -28,4 +28,4 @@ export interface AIService {
     seriesBlock: string;
     verbose?: boolean;
   }) => Effect.Effect<string, AIServiceError, never>;
-}
+};

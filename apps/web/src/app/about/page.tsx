@@ -1,58 +1,34 @@
-import { NotionContent } from "@/components/NotionContent";
-import { getAboutPage } from "@/lib/notion-utils";
-import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import { ExternalLink, Linkedin, Mail } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
 // Lazy load UI components that are not immediately visible
-const Avatar = dynamic(() =>
-  import("@/components/ui/avatar").then((mod) => ({ default: mod.Avatar }))
-);
-const AvatarFallback = dynamic(() =>
-  import("@/components/ui/avatar").then((mod) => ({ default: mod.AvatarFallback }))
-);
-const AvatarImage = dynamic(() =>
-  import("@/components/ui/avatar").then((mod) => ({ default: mod.AvatarImage }))
-);
 const Badge = dynamic(() =>
   import("@/components/ui/badge").then((mod) => ({ default: mod.Badge }))
 );
-const Button = dynamic(() =>
-  import("@/components/ui/button").then((mod) => ({ default: mod.Button }))
-);
 
-// Refresh the About page content from Notion regularly
+const skills: string[] = [
+  "TypeScript",
+  "Effect-TS",
+  "React/Next.js",
+  "Vercel AI SDK",
+  "LangGraph",
+  "AI agents & orchestration",
+  "Node.js",
+  "PostgreSQL",
+  "Observability & evals",
+  "Human–AI collaboration",
+];
+
+const blogTopics: string[] = [
+  "Building robust AI agents and conversational UIs",
+  "Architecting large language model (LLM) applications for scale",
+  "Effect-TS patterns and functional programming in TypeScript",
+  "Human–AI collaboration frameworks and methodologies",
+  "Complex systems thinking in software development",
+  "The trade-offs and failure modes of real AI systems in production",
+];
+
 export default async function AboutPage() {
-  // Load the About page from Notion. Fallback to local content.
-  const aboutData = await getAboutPage();
-  const _aboutPost = aboutData?.post ?? null;
-  const aboutBlocks = aboutData?.blocks ?? null;
-
-  const skills: string[] = [
-    "TypeScript",
-    "React/Next.js",
-    "Tailwind CSS",
-    "Effect-TS",
-    "AI Agents/Frameworks",
-    "LangChain",
-    "LangGraph",
-    "Vercel AI SDK",
-    "Node.js",
-    "PostgreSQL",
-    "Notion API",
-    "Human-AI Collaboration",
-  ];
-
-  const blogTopics: string[] = [
-    "Building robust AI agents and conversational UIs",
-    "Architecting large language model (LLM) applications for scale",
-    "Effect-TS patterns and functional programming in TypeScript",
-    "Human-AI collaboration frameworks and methodologies",
-    "Complex systems thinking in software development",
-    "The philosophical implications of AI integration",
-  ];
-
   return (
     <main className="mx-auto max-w-6xl space-y-12 px-4 py-12 lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-10 lg:space-y-0">
       {/* Page Title (desktop only) */}
@@ -64,45 +40,55 @@ export default async function AboutPage() {
       <aside className="hidden lg:block">
         <div className="sticky top-20 space-y-6">
           <div className="rounded-lg border border-border bg-card p-6 text-center">
-            <Avatar className="mx-auto h-28 w-28">
-              <AvatarImage alt="Paul Philp" src="/images/avatar.jpeg" />
-              <AvatarFallback>PP</AvatarFallback>
-            </Avatar>
+            <span
+              className="relative mx-auto flex size-8 shrink-0 overflow-hidden rounded-full h-28 w-28"
+              data-slot="avatar"
+            >
+              <img
+                alt="Paul Philp, greybeard software engineer, riding a robotic horse while working on a laptop."
+                className="h-full w-full object-cover"
+                src="/images/avatar.jpeg"
+              />
+            </span>
             <div className="mt-4 space-y-1">
-              <h2 className="font-bold text-foreground text-lg leading-tight">Paul Philp</h2>
+              <h2 className="font-bold text-foreground text-lg leading-tight">
+                Paul Philp
+              </h2>
               <p className="text-muted-foreground text-sm leading-snug">
-                Software/AI Engineer, Founder, Executive
+                Senior Software Engineer & AI Systems Architect
               </p>
             </div>
           </div>
           <div className="space-y-3 rounded-lg border border-border bg-card p-4">
             <h3 className="font-semibold text-foreground text-sm">Connect</h3>
             <div className="flex flex-col gap-2">
-              <Button asChild variant="outline">
-                <a
-                  href="https://www.linkedin.com/in/pauljphilp/"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <Linkedin className="mr-2 h-4 w-4" />
-                  LinkedIn Profile
-                </a>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/connect">
-                  <Mail className="mr-2 h-4 w-4" />
-                  Get in Touch
-                </Link>
-              </Button>
+              <a
+                className="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md border bg-background px-4 py-2 font-medium text-sm text-foreground shadow-xs transition-all hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-[>svg]:px-3"
+                data-slot="button"
+                href="https://www.linkedin.com/in/pauljphilp/"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <span>LinkedIn Profile</span>
+              </a>
+              <Link
+                className="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md border bg-background px-4 py-2 font-medium text-sm text-foreground shadow-xs transition-all hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-[>svg]:px-3"
+                data-slot="button"
+                href="/connect"
+              >
+                <span>Get in touch</span>
+              </Link>
             </div>
           </div>
           <div className="space-y-2 rounded-lg border border-border bg-card p-4">
-            <h3 className="font-semibold text-foreground text-sm">Current Focus</h3>
+            <h3 className="font-semibold text-foreground text-sm">
+              Current focus
+            </h3>
             <ul className="space-y-1 text-muted-foreground text-sm">
-              <li>• Human-AI collaboration frameworks</li>
-              <li>• Large-scale LLM application architecture</li>
-              <li>• Effect-TS and functional programming patterns</li>
-              <li>• Conversational AI and agent development</li>
+              <li>• Sound AI systems for real products</li>
+              <li>• Effect-TS & modern TypeScript architecture</li>
+              <li>• LLM feature design & observability</li>
+              <li>• Team uplift in AI-assisted development</li>
             </ul>
           </div>
         </div>
@@ -111,19 +97,30 @@ export default async function AboutPage() {
       <div className="space-y-12">
         {/* Header Section (mobile/tablet) */}
         <section className="space-y-4 text-center lg:hidden">
-          <Avatar className="mx-auto h-32 w-32">
-            <AvatarImage alt="Paul Philp" src="/images/avatar.jpeg" />
-            <AvatarFallback>PP</AvatarFallback>
-          </Avatar>
+          <span
+            className="relative mx-auto flex size-8 shrink-0 overflow-hidden rounded-full h-32 w-32"
+            data-slot="avatar"
+          >
+            <img
+              alt="Paul Philp, greybeard software engineer, riding a robotic horse while working on a laptop."
+              className="h-full w-full object-cover"
+              src="/images/avatar.jpeg"
+            />
+          </span>
           <div className="space-y-2">
-            <h1 className="font-bold text-4xl text-foreground tracking-tight sm:text-5xl">About</h1>
-            <h2 className="font-bold text-foreground text-xl md:text-2xl">Paul Philp</h2>
+            <h1 className="font-bold text-4xl text-foreground tracking-tight sm:text-5xl">
+              About
+            </h1>
+            <h2 className="font-bold text-foreground text-xl md:text-2xl">
+              Paul Philp
+            </h2>
             <p className="text-muted-foreground text-sm leading-snug">
-              Software/AI Engineer, Founder, Executive
+              Senior Software Engineer & AI Systems Architect
             </p>
             <p className="mx-auto max-w-2xl text-base text-foreground leading-relaxed">
-              Engineering human-AI collaboration at the intersection of complex systems and emerging
-              technology
+              Greybeard engineer with a modern AI stack. I help teams ship
+              sound AI systems — real features you can observe, debug, and
+              trust in production.
             </p>
           </div>
         </section>
@@ -131,61 +128,173 @@ export default async function AboutPage() {
         {/* Main Bio Section */}
         <section className="prose max-w-none">
           <div className="space-y-6 rounded-lg border border-border bg-card p-8">
-            <h2 className="m-0 font-bold text-2xl text-foreground">About Paul</h2>
-            {aboutBlocks ? (
-              <div className="space-y-4 text-foreground">
-                <NotionContent blocks={aboutBlocks.results as BlockObjectResponse[]} />
-              </div>
-            ) : (
-              <div className="space-y-4 text-foreground">
-                <p>
-                  Welcome to Wetware & Software! I'm Paul Philp, a software engineer, AI researcher,
-                  and founder exploring the profound intersection of human systems (wetware) and
-                  artificial intelligence (software). This blog serves as both a platform for
-                  sharing insights and a living portfolio of my work in human-AI collaboration.
-                </p>
-                <p>
-                  My journey spans building scalable AI applications, developing conversational UIs,
-                  and architecting large language model systems for production. I'm particularly
-                  passionate about Effect-TS patterns, functional programming paradigms, and the
-                  philosophical implications of AI integration in human workflows.
-                </p>
-                <p>
-                  Through this platform, I share structured explorations of complex topics via
-                  series content, practical articles on technical implementation, and reflective
-                  essays on the transformative potential of human-AI collaboration. My approach
-                  combines deep technical insight with accessible explanations and a seriously
-                  whimsical tone.
-                </p>
-              </div>
-            )}
+            <h2 className="m-0 font-bold text-2xl text-foreground">
+              About Paul
+            </h2>
+            <div className="space-y-4 text-foreground">
+              <p>
+                I’m Paul Philp — a greybeard software engineer and AI systems
+                architect. I’ve spent decades building and scaling software,
+                and in the last few years I’ve gone deep on modern TypeScript,
+                Effect, Next.js, and AI tooling.
+              </p>
+
+              <p>
+                Today I help product teams ship sound AI systems: real features
+                built on LLMs and modern web stacks that you can observe, debug,
+                and trust in production.
+              </p>
+
+              <h3 className="font-bold text-xl text-foreground mt-6">
+                From leadership back to building
+              </h3>
+
+              <p>
+                Earlier in my career I moved from hands-on engineering into
+                leadership roles — tech lead, executive, and eventually
+                co-founding CEO of a B2B SaaS startup. After that company
+                failed, I made a deliberate choice: step away from the
+                executive track and return to what I’ve always loved most:
+                building systems.
+              </p>
+
+              <p>
+                I retooled from the ground up: modern TypeScript, React/Next.js,
+                Tailwind, Effect-TS, LangGraph, Vercel AI SDK, and
+                production-grade AI patterns. I shipped small projects, CLIs,
+                and internal tools to rebuild the habits that matter: clear
+                invariants, strong typing, tests, observability, and honest
+                post-mortems.
+              </p>
+
+              <h3 className="font-bold text-xl text-foreground mt-6">
+                What that experience taught me
+              </h3>
+
+              <ul className="list-disc space-y-2 pl-6">
+                <li>
+                  <strong>Systems thinking.</strong> Whether it’s a codebase, a
+                  team, or a business, failures are almost never about a single
+                  line of code. They’re about the interactions and feedback
+                  loops.
+                </li>
+                <li>
+                  <strong>Humility in front of the code.</strong> Specs, decks,
+                  and roadmaps are useful, but the running system is the final
+                  truth.
+                </li>
+                <li>
+                  <strong>Clarity over heroics.</strong> Sound systems come from
+                  clear contracts, well-understood failure modes, and steady
+                  delivery — not 2 a.m. saves.
+                </li>
+                <li>
+                  <strong>Good boundaries make good systems.</strong> The same
+                  clarity that keeps human relationships healthy makes software
+                  easier to reason about: explicit interfaces, explicit
+                  ownership, explicit trade-offs.
+                </li>
+              </ul>
+
+              <h3 className="font-bold text-xl text-foreground mt-6">
+                How I work with teams
+              </h3>
+
+              <p>
+                I usually join as a senior IC or staff-level partner to your
+                existing tech lead or CTO. My job is to:
+              </p>
+
+              <ul className="list-disc space-y-2 pl-6">
+                <li>
+                  Design or refine the architecture for AI-powered features in
+                  your product.
+                </li>
+                <li>
+                  Take fragile prototypes and harden them for production with
+                  proper logging, tracing, evals, and guardrails.
+                </li>
+                <li>
+                  Raise the bar for the whole team’s engineering practice —
+                  especially around TypeScript, Effect, and AI-assisted
+                  workflows.
+                </li>
+                <li>
+                  Leave behind patterns, documentation, and observability so you
+                  can keep moving fast after I’m gone.
+                </li>
+              </ul>
+
+              <h3 className="font-bold text-xl text-foreground mt-6">
+                A note on failure and rebuilding
+              </h3>
+
+              <p>
+                I’ve been through a startup failure and a personal reset. It
+                forced me to examine not just how systems fail, but how people
+                and teams fail together. That history shapes how I show up now:
+                calm under pressure, direct about risk, and serious about
+                building teams and systems that don’t quietly drift into bad
+                states.
+              </p>
+
+              <p>
+                If you’re curious about the personal side and the parallels with
+                complex systems and AI, there are essays on the blog. If you’re
+                here because you need reliable AI features in production, we can
+                start there and stay there.
+              </p>
+
+              <h3 className="font-bold text-xl text-foreground mt-6">
+                Where to go next
+              </h3>
+
+              <ul className="list-disc space-y-2 pl-6">
+                <li>
+                  <strong>Homepage:</strong> overview of how I help teams ship
+                  sound AI systems.
+                </li>
+                <li>
+                  <strong>Blog:</strong> deep dives on Effect-TS, AI
+                  architecture, and building reliable LLM-powered features.
+                </li>
+                <li>
+                  <strong>Connect:</strong> if you’re shipping AI features and
+                  need them to behave in the real world, I’d be happy to hear
+                  what you’re building.
+                </li>
+              </ul>
+            </div>
           </div>
         </section>
 
         {/* Featured Essay Callout */}
         <section className="rounded-lg border border-border bg-muted p-8">
           <div className="space-y-4">
-            <h3 className="font-bold text-foreground text-lg">Featured Essay</h3>
+            <h3 className="font-bold text-foreground text-lg">Personal essay</h3>
             <p className="text-foreground">
-              "What My Marriage Falling Apart Taught Me About LLMs" - A deeply personal exploration
-              of complex systems, failure modes, and the surprising parallels between human
-              relationships and AI architectures.
+              “What My Marriage Falling Apart Taught Me About LLMs” — a deeply
+              personal exploration of complex systems, failure modes, and the
+              parallels between human relationships and AI architectures.
             </p>
-            <Button asChild variant="default">
-              <Link href="/posts/my-marriage-and-ai">
-                Read the Essay
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+            <Link
+              className="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 py-2 font-medium text-sm text-primary-foreground shadow-xs transition-all hover:bg-primary/90 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-[>svg]:px-3"
+              data-slot="button"
+              href="/blog/posts/my-marriage-and-ai"
+            >
+              <span>Read the essay</span>
+            </Link>
           </div>
         </section>
 
         {/* Skills & Expertise */}
         <section className="space-y-6">
-          <h2 className="font-bold text-2xl text-foreground">Technical Skills & Expertise</h2>
+          <h2 className="font-bold text-2xl text-foreground">
+            Technical skills & expertise
+          </h2>
           <div className="flex flex-wrap gap-2">
-            {skills.map((skill: string) => (
-              <Badge key={skill} variant="secondary">
+            {skills.map((skill) => (
+              <Badge data-slot="badge" key={skill} variant="secondary">
                 {skill}
               </Badge>
             ))}
@@ -194,9 +303,11 @@ export default async function AboutPage() {
 
         {/* Blog Topics */}
         <section className="space-y-6">
-          <h2 className="font-bold text-2xl text-foreground">What I Write About</h2>
+          <h2 className="font-bold text-2xl text-foreground">
+            What I write about
+          </h2>
           <div className="grid gap-4 md:grid-cols-2">
-            {blogTopics.map((topic: string) => (
+            {blogTopics.map((topic) => (
               <div className="flex items-start gap-3 rounded-lg bg-muted p-4" key={topic}>
                 <div className="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-foreground" />
                 <p className="text-foreground">{topic}</p>
@@ -208,33 +319,33 @@ export default async function AboutPage() {
         {/* At a Glance & Contact (mobile/tablet) */}
         <section className="space-y-6 lg:hidden">
           <div className="space-y-3">
-            <h3 className="font-bold text-foreground text-lg">Current Focus</h3>
+            <h3 className="font-bold text-foreground text-lg">Current focus</h3>
             <ul className="space-y-2 text-muted-foreground">
-              <li>• Human-AI collaboration frameworks</li>
-              <li>• Large-scale LLM application architecture</li>
-              <li>• Effect-TS and functional programming patterns</li>
-              <li>• Conversational AI and agent development</li>
+              <li>• Sound AI systems for real products</li>
+              <li>• Effect-TS & modern TypeScript architecture</li>
+              <li>• LLM feature design & observability</li>
+              <li>• Team uplift in AI-assisted development</li>
             </ul>
           </div>
           <div className="space-y-3">
             <h3 className="font-bold text-foreground text-lg">Connect</h3>
             <div className="flex flex-col gap-2">
-              <Button asChild variant="outline">
-                <a
-                  href="https://www.linkedin.com/in/pauljphilp/"
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <Linkedin className="mr-2 h-4 w-4" />
-                  LinkedIn Profile
-                </a>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/connect">
-                  <Mail className="mr-2 h-4 w-4" />
-                  Get in Touch
-                </Link>
-              </Button>
+              <a
+                className="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md border bg-background px-4 py-2 font-medium text-sm text-foreground shadow-xs transition-all hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-[>svg]:px-3"
+                data-slot="button"
+                href="https://www.linkedin.com/in/pauljphilp/"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <span>LinkedIn Profile</span>
+              </a>
+              <Link
+                className="inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md border bg-background px-4 py-2 font-medium text-sm text-foreground shadow-xs transition-all hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-[>svg]:px-3"
+                data-slot="button"
+                href="/connect"
+              >
+                <span>Get in touch</span>
+              </Link>
             </div>
           </div>
         </section>

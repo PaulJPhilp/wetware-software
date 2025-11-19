@@ -37,7 +37,9 @@ export function calculateLabelPosition(
 
   // Check for collision with other stations
   const collides = allStops.some((otherStop) => {
-    if (otherStop.id === stop.id) return false;
+    if (otherStop.id === stop.id) {
+      return false;
+    }
     const distance = Math.sqrt((position.x - otherStop.x) ** 2 + (position.y - otherStop.y) ** 2);
     return distance < theme.collisionThreshold;
   });

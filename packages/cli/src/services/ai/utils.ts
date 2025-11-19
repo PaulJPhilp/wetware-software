@@ -1,10 +1,9 @@
-import * as Console from "effect/Console";
-import * as Effect from "effect/Effect";
+import { Console, Effect } from "effect";
 import { pipe } from "effect/Function";
 
 /**
  * AI Service Utilities
- * 
+ *
  * Helper functions used throughout the AI service.
  */
 
@@ -20,18 +19,8 @@ export const JSON_GENERATION_INSTRUCTIONS = [
 /**
  * Format a complete prompt with system instructions
  */
-export const formatPrompt = (
-  systemPrompt: string,
-  content: string,
-  verbose?: boolean
-): string => {
-  const prompt = [
-    systemPrompt,
-    "",
-    JSON_GENERATION_INSTRUCTIONS,
-    "",
-    content,
-  ].join("\n");
+export const formatPrompt = (systemPrompt: string, content: string, _verbose?: boolean): string => {
+  const prompt = [systemPrompt, "", JSON_GENERATION_INSTRUCTIONS, "", content].join("\n");
 
   return prompt;
 };
@@ -40,32 +29,24 @@ export const formatPrompt = (
  * Log verbose output if enabled
  */
 export const logVerbose = (message: string, verbose?: boolean) =>
-  pipe(
-    verbose ? Console.log(message) : Console.log(""),
-    Effect.asVoid
-  );
+  pipe(verbose ? Console.log(message) : Console.log(""), Effect.asVoid);
 
 /**
  * Safely trim and clean AI response
  */
-export const cleanResponse = (response: string): string => {
-  return response.trim();
-};
+export const cleanResponse = (response: string): string => response.trim();
 
 /**
  * Validate that response looks like JSON
  */
-export const validateJsonResponse = (response: string): Effect.Effect<
-  string,
-  Error
-> => {
+export const validateJsonResponse = (response: string): Effect.Effect<string, Error> => {
   const trimmed = response.trim();
-  
-  if (!trimmed.startsWith("{") || !trimmed.endsWith("}")) {
+
+  if (!(trimmed.startsWith("{") && trimmed.endsWith("}"))) {
     return Effect.fail(
       new Error(`Response does not appear to be JSON: ${trimmed.substring(0, 100)}...`)
     );
   }
-  
+
   return Effect.succeed(trimmed);
 };

@@ -43,7 +43,7 @@ export default async function ArticlesPage() {
                   (a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()
                 )
                 .map((post) => (
-                  <Link className="group block" href={`/posts/${post.slug}`} key={post.id}>
+                  <Link className="group block" href={`/blog/posts/${post.slug}`} key={post.id}>
                     <PostCard post={post} />
                   </Link>
                 ))}
@@ -52,9 +52,7 @@ export default async function ArticlesPage() {
         </div>
       </main>
     );
-  } catch (error) {
-    console.error("Error fetching articles:", error);
-
+  } catch (_error) {
     return (
       <main className="mx-auto max-w-4xl px-4 py-8">
         <div className="space-y-8">

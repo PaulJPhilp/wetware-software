@@ -3,12 +3,10 @@ import * as Effect from "effect/Effect";
 import type { MockInstance } from "vitest";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("effect/Console", () => {
-  return {
-    log: vi.fn(() => Effect.void),
-    error: vi.fn(() => Effect.void),
-  };
-});
+vi.mock("effect/Console", () => ({
+  log: vi.fn(() => Effect.void),
+  error: vi.fn(() => Effect.void),
+}));
 import { Notion } from "../lib/notion";
 import { createNotionMock } from "../test/notionTestUtils";
 import { deleteEntity } from "./delete";

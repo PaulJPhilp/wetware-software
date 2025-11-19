@@ -2,17 +2,25 @@ import fs from "node:fs";
 import path from "node:path";
 import { z } from "zod";
 
+const LINE_SPLIT_REGEX = /\r?\n/;
+
 // Load .env files locally so prebuild can validate env vars before Next.js loads them
 function loadEnvFile(filePath) {
   try {
-    if (!fs.existsSync(filePath)) return 0;
+    if (!fs.existsSync(filePath)) {
+      return 0;
+    }
     const content = fs.readFileSync(filePath, "utf8");
     let count = 0;
-    for (const rawLine of content.split(/\r?\n/)) {
+    for (const rawLine of content.split(LINE_SPLIT_REGEX)) {
       const line = rawLine.trim();
-      if (!line || line.startsWith("#")) continue;
+      if (!line || line.startsWith("#")) {
+        continue;
+      }
       const idx = line.indexOf("=");
-      if (idx === -1) continue;
+      if (idx === -1) {
+        continue;
+      }
       const key = line.slice(0, idx).trim();
       let value = line.slice(idx + 1).trim();
       if (

@@ -8,22 +8,22 @@ import { getFocusableElements } from "./keyboard-navigation";
 /**
  * Test results interface
  */
-export interface AccessibilityTestResult {
+export type AccessibilityTestResult = {
   passed: boolean;
   message: string;
   element?: HTMLElement;
   severity: "error" | "warning" | "info";
-}
+};
 
 /**
  * Test suite results
  */
-export interface AccessibilityTestSuite {
+export type AccessibilityTestSuite = {
   name: string;
   results: AccessibilityTestResult[];
   passed: boolean;
   score: number; // 0-100
-}
+};
 
 /**
  * Test if element has proper focus indicators
@@ -388,7 +388,7 @@ export function generateAccessibilityReport(testSuites: AccessibilityTestSuite[]
  * Keyboard testing utilities
  */
 export class KeyboardTester {
-  private element: HTMLElement;
+  private readonly element: HTMLElement;
 
   constructor(element: HTMLElement) {
     this.element = element;

@@ -1,10 +1,10 @@
-import * as Effect from "effect/Effect";
+import { Effect } from "effect";
 import { describe, expect, it } from "vitest";
 import {
-  JSON_GENERATION_INSTRUCTIONS,
-  formatPrompt,
-  cleanResponse,
-  validateJsonResponse,
+    JSON_GENERATION_INSTRUCTIONS,
+    cleanResponse,
+    formatPrompt,
+    validateJsonResponse,
 } from "../utils";
 
 describe("AI utils", () => {
@@ -33,7 +33,7 @@ describe("AI utils", () => {
 
   describe("cleanResponse", () => {
     it("trims whitespace from response", () => {
-      const result = cleanResponse("  \n{\"test\": true}\n  ");
+      const result = cleanResponse('  \n{"test": true}\n  ');
       expect(result).toBe('{"test": true}');
     });
 
@@ -45,16 +45,13 @@ describe("AI utils", () => {
 
   describe("validateJsonResponse", () => {
     it("validates proper JSON response", async () => {
-      const result = await Effect.runPromise(
-        validateJsonResponse('{"valid": true}')
-      );
+      const result = await Effect.runPromise(validateJsonResponse('{"valid": true}'));
       expect(result).toBe('{"valid": true}');
     });
 
     it("fails for non-JSON response", async () => {
       const result = await Effect.runPromise(
-        validateJsonResponse("This is not JSON")
-          .pipe(Effect.flip)
+        validateJsonResponse("This is not JSON").pipe(Effect.flip)
       );
       expect(result).toBeInstanceOf(Error);
       expect(result.message).toContain("does not appear to be JSON");
@@ -62,8 +59,7 @@ describe("AI utils", () => {
 
     it("fails for malformed JSON", async () => {
       const result = await Effect.runPromise(
-        validateJsonResponse("{incomplete json")
-          .pipe(Effect.flip)
+        validateJsonResponse("{incomplete json").pipe(Effect.flip)
       );
       expect(result).toBeInstanceOf(Error);
     });

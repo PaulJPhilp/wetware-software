@@ -8,9 +8,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-interface ProjectPageProps {
+type ProjectPageProps = {
   params: Promise<{ id: string }>;
-}
+};
 
 const statusConfig = {
   active: {

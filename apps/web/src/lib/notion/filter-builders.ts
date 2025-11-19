@@ -7,22 +7,22 @@
 import type { ContentType } from "@wetware/shared";
 
 // Base filter types
-export interface NotionFilter {
+export type NotionFilter = {
   property: string;
   [key: string]: unknown;
-}
+};
 
-export interface CompoundFilter {
+export type CompoundFilter = {
   and?: NotionFilter[];
   or?: NotionFilter[];
-}
+};
 
 export type NotionQueryFilter = NotionFilter | CompoundFilter;
 
-export interface NotionSort {
+export type NotionSort = {
   property: string;
   direction: "ascending" | "descending";
-}
+};
 
 /**
  * Common filter builders for reducing duplication

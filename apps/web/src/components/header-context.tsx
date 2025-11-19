@@ -2,10 +2,10 @@
 
 import { createContext, useContext, useState, type ReactNode } from "react";
 
-interface HeaderContextType {
+type HeaderContextType = {
   headerHeight: number;
   setHeaderHeight: (height: number) => void;
-}
+};
 
 const HeaderContext = createContext<HeaderContextType | undefined>(undefined);
 

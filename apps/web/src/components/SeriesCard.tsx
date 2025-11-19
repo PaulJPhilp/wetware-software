@@ -9,7 +9,7 @@ import Link from "next/link";
 import type React from "react";
 import { memo } from "react";
 
-interface SeriesCardProps {
+type SeriesCardProps = {
   /** Series data */
   series: Series;
   /** Card variant for different layouts */
@@ -26,7 +26,7 @@ interface SeriesCardProps {
   priority?: boolean;
   /** Test ID for testing */
   testId?: string;
-}
+};
 
 /**
  * SeriesCard Component
@@ -51,7 +51,7 @@ export const SeriesCard: React.FC<SeriesCardProps> = memo(
       series.imageUrl ||
       (isDark ? series.coverDark || series.coverLight : series.coverLight || series.coverDark) ||
       "/images/series/FriendlyPanda.png";
-    const seriesHref = `/series/${series.slug}`;
+    const seriesHref = `/blog/series/${series.slug}`;
     const articleCount = series.postCount || 0;
 
     // Responsive sizing classes

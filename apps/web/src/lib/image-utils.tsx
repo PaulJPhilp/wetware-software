@@ -3,27 +3,27 @@
 import Image from "next/image";
 // import type { SidebarSeries } from "./types"; // Temporarily commented out
 
-export interface MyUniqueSidebarArticle {
+export type MyUniqueSidebarArticle = {
   title: string;
   href: string; // Required for sidebar links
   partNumber?: number;
-}
+};
 
-export interface MyUniqueSidebarSeries {
+export type MyUniqueSidebarSeries = {
   name: string; // Required for sidebar navigation
   slug?: string;
   coverLight?: string;
   coverDark?: string;
   articles: MyUniqueSidebarArticle[];
-}
+};
 
 /**
  * Describes assets that support both light and dark theme covers.
  */
-export interface ThemeAwareCover {
+export type ThemeAwareCover = {
   coverLight?: string;
   coverDark?: string;
-}
+};
 
 /**
  * Select the correct cover image for the active theme.
@@ -53,7 +53,7 @@ export function getThemeAwareCover(cover: ThemeAwareCover, isDark: boolean): str
 /**
  * Props consumed by `ImageWithFallback`.
  */
-export interface ImageWithFallbackProps {
+export type ImageWithFallbackProps = {
   src: string | undefined;
   alt: string;
   width: number;
@@ -65,11 +65,13 @@ export interface ImageWithFallbackProps {
   onError?: () => void;
   placeholderClassName?: string;
   showPlaceholder?: boolean;
-}
+};
 
 // Normalize image srcs coming from Notion text or simple filenames to local public paths
 export function normalizeImageSrc(src: string | undefined): string | undefined {
-  if (!src) return src;
+  if (!src) {
+    return src;
+  }
   try {
     // Rewrite Notion-hosted placeholder paths to local public images
     if (
@@ -80,9 +82,13 @@ export function normalizeImageSrc(src: string | undefined): string | undefined {
       return `/images/${last}`;
     }
     // Already absolute http(s) URL: leave as-is
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
+    if (src.startsWith("http://") || src.startsWith("https://")) {
+      return src;
+    }
     // If it already starts with /images, keep
-    if (src.startsWith("/images/")) return src;
+    if (src.startsWith("/images/")) {
+      return src;
+    }
     // If it's a root path like "/file.svg", rewrite to "/images/file.svg"
     if (src.startsWith("/") && !src.slice(1).includes("/")) {
       return `/images${src}`;
@@ -101,7 +107,9 @@ export function normalizeImageSrc(src: string | undefined): string | undefined {
 export const isNextImageAllowed = (url: string): boolean => {
   try {
     const u = new URL(url);
-    if (u.protocol !== "https:") return false;
+    if (u.protocol !== "https:") {
+      return false;
+    }
     const host = u.hostname.toLowerCase();
     return (
       host === "prod-files-secure.s3.us-west-2.amazonaws.com" ||

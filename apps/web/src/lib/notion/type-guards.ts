@@ -8,74 +8,74 @@
 export type PropertyValueMap = Record<string, unknown>;
 
 // Notion property type interfaces
-export interface NotionTitleProperty {
+export type NotionTitleProperty = {
   type: "title";
   title: Array<{ plain_text: string }>;
-}
+};
 
-export interface NotionRichTextProperty {
+export type NotionRichTextProperty = {
   type: "rich_text";
   rich_text: Array<{ plain_text: string }>;
-}
+};
 
-export interface NotionSelectProperty {
+export type NotionSelectProperty = {
   type: "select";
   select: { name: string } | null;
-}
+};
 
-export interface NotionStatusProperty {
+export type NotionStatusProperty = {
   type: "status";
   status: { name: string } | null;
-}
+};
 
-export interface NotionMultiSelectProperty {
+export type NotionMultiSelectProperty = {
   type: "multi_select";
   multi_select: Array<{ name: string; color?: string }>;
-}
+};
 
-export interface NotionDateProperty {
+export type NotionDateProperty = {
   type: "date";
   date: { start: string; end?: string | null } | null;
-}
+};
 
-export interface NotionNumberProperty {
+export type NotionNumberProperty = {
   type: "number";
   number: number | null;
-}
+};
 
-export interface NotionCheckboxProperty {
+export type NotionCheckboxProperty = {
   type: "checkbox";
   checkbox: boolean;
-}
+};
 
-export interface NotionRelationProperty {
+export type NotionRelationProperty = {
   type: "relation";
   relation: Array<{ id: string }>;
-}
+};
 
-export interface NotionFilesProperty {
+export type NotionFilesProperty = {
   type: "files";
   files: Array<{
     type: "file" | "external";
     file?: { url: string };
     external?: { url: string };
   }>;
-}
+};
 
-export interface NotionUrlProperty {
+export type NotionUrlProperty = {
   type: "url";
   url: string | null;
-}
+};
 
-export interface NotionRollupProperty {
+export type NotionRollupProperty = {
   type: "rollup";
   rollup:
     | {
         type: "array";
-        array: Array<unknown>;
+        array: unknown[];
       }
     | { type: string };
-}
+};
 
 // Type guard functions
 export function isValidTitleProperty(prop: unknown): prop is NotionTitleProperty {

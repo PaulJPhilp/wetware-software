@@ -1,21 +1,20 @@
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import type { LanguageModel } from "ai";
 import { generateText } from "ai";
-import * as Effect from "effect/Effect";
+import { Effect, Layer } from "effect";
 import { pipe } from "effect/Function";
-import * as Layer from "effect/Layer";
 
-import { AIService, AIServiceTypeId } from "./api";
+import { EnvService } from "../../lib/env";
+import { type AIService, AIServiceTypeId } from "./api";
 import { AICallError } from "./errors";
 import { cleanResponse, formatPrompt, logVerbose } from "./utils";
-import { EnvService } from "../../lib/env";
 
 /**
  * AI Service Implementation
- * 
+ *
  * Provides AI-powered text generation using Google's Gemini model.
  */
-export const AIService = Effect.Service<AIService>()("AIService", {
+export const AIServiceImpl = Effect.Service<AIService>()("AIService", {
   succeed: Effect.gen(function* () {
     // Get environment configuration
     const env = yield* EnvService;
@@ -28,7 +27,7 @@ export const AIService = Effect.Service<AIService>()("AIService", {
 
     return {
       [AIServiceTypeId]: AIServiceTypeId,
-      
+
       generateResourceJson: ({ prompt, resourceBlock, verbose }) =>
         pipe(
           Effect.tryPromise({
@@ -77,7 +76,7 @@ export const AIService = Effect.Service<AIService>()("AIService", {
           Effect.tap(() => logVerbose("AI series response received", verbose))
         ),
     };
-  })
+  }),
 });
 
-export const AIServiceLive = Layer.effect(AIService, AIService);
+export const AIServiceLive = Layer.effect(AIServiceImpl, AIServiceImpl);

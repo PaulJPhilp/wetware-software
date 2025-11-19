@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
 
-interface FigureProps {
+type FigureProps = {
   children: React.ReactNode;
   caption?: string;
   className?: string;
-}
+};
 
 export function Figure({ children, caption, className }: FigureProps) {
   return (

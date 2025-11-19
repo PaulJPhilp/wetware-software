@@ -90,7 +90,7 @@ describe("Individual Property Parsers", () => {
       const pageWithoutSeries = createMockPage();
       // Remove Series property by overriding
       const properties = { ...pageWithoutSeries.properties };
-      delete (properties as Record<string, unknown>).Series;
+      (properties as Record<string, unknown>).Series = undefined;
       pageWithoutSeries.properties = properties as typeof pageWithoutSeries.properties;
 
       const result = parsePostSeries(pageWithoutSeries);

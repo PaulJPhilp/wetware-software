@@ -7,9 +7,9 @@ import { SeriesSection } from "./series";
  * Server component that fetches series data from Notion
  * and renders it using the SeriesSection component
  */
-interface NotionSeriesProps {
+type NotionSeriesProps = {
   limit?: number;
-}
+};
 
 export async function NotionSeries({ limit = 3 }: NotionSeriesProps) {
   try {

@@ -50,7 +50,9 @@ export const convertRawToTyped = (raw: RawCliEnv): CliEnv => ({
 /**
  * Helper function to get environment variables with defaults
  */
-export const getEnvWithDefaults = (env: CliEnv): Omit<CliEnv, "NODE_ENV" | "DEBUG"> & {
+export const getEnvWithDefaults = (
+  env: CliEnv
+): Omit<CliEnv, "NODE_ENV" | "DEBUG"> & {
   NODE_ENV: "development" | "production" | "test";
   DEBUG: boolean;
 } => ({

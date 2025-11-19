@@ -16,17 +16,17 @@ export type SeriesStatus = "Active" | "Completed" | "Draft";
 /**
  * Base Notion client configuration
  */
-export interface NotionConfig {
+export type NotionConfig = {
   apiKey: string;
   blogPostsDatabaseId: string;
   seriesDatabaseId: string;
   resourcesDatabaseId?: string;
-}
+};
 
 /**
  * Series data structure used across web and CLI
  */
-export interface Series {
+export type Series = {
   id: string;
   name: string;
   slug: string;
@@ -39,12 +39,12 @@ export interface Series {
   coverDark?: string;
   postCount: number;
   publishedDate?: string;
-}
+};
 
 /**
  * Post/Article data structure
  */
-export interface Post {
+export type Post = {
   id: string;
   name: string;
   slug: string;
@@ -72,12 +72,12 @@ export interface Post {
   skills?: string[];
   currentFocus?: string[];
   blogTopics?: string[];
-}
+};
 
 /**
  * Resource data structure for CLI
  */
-export interface Resource {
+export type Resource = {
   id: string;
   url?: string;
   name: string;
@@ -89,12 +89,12 @@ export interface Resource {
   tags?: string[];
   readTimeMinutes?: number | null;
   seriesName?: string | null;
-}
+};
 
 /**
  * Source Entity data structure for CLI
  */
-export interface SourceEntity {
+export type SourceEntity = {
   id: string;
   url?: string;
   name: string;
@@ -102,4 +102,4 @@ export interface SourceEntity {
   description?: string | null;
   endorsement?: string | null;
   focusArea?: string[];
-}
+};

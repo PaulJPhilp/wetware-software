@@ -1,4 +1,4 @@
-export interface Theme {
+export type Theme = {
   lineWidth: number;
   stationRadius: number;
   interchangeRadius: number;
@@ -10,7 +10,7 @@ export interface Theme {
     text: string;
     lineDefault: string;
   };
-}
+};
 
 export const defaultTheme: Theme = {
   lineWidth: 4,

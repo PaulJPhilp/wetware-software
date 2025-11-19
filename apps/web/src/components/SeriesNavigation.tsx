@@ -3,10 +3,10 @@ import type { Post } from "@/lib/notion-utils";
 import { ChevronLeft, ChevronRight, List } from "lucide-react";
 import Link from "next/link";
 
-interface SeriesNavigationProps {
+type SeriesNavigationProps = {
   currentPost: Post;
   seriesPosts: Post[];
-}
+};
 
 export function SeriesNavigation({ currentPost, seriesPosts }: SeriesNavigationProps) {
   if (!(currentPost.seriesId && currentPost.seriesName) || seriesPosts.length <= 1) {
@@ -30,7 +30,7 @@ export function SeriesNavigation({ currentPost, seriesPosts }: SeriesNavigationP
             <div>
               <Link
                 className="font-semibold text-lg transition-colors hover:text-orange"
-                href={`/series/${currentPost.seriesName?.toLowerCase().replace(/\s+/g, "-")}`}
+                href={`/blog/series/${currentPost.seriesName?.toLowerCase().replace(/\s+/g, "-")}`}
               >
                 {currentPost.seriesName}
               </Link>
@@ -49,7 +49,7 @@ export function SeriesNavigation({ currentPost, seriesPosts }: SeriesNavigationP
           {previousPost ? (
             <Link
               className="flex max-w-[45%] items-center gap-2 rounded-lg border border-charcoal/20 p-3 transition-colors hover:bg-charcoal/5"
-              href={`/posts/${previousPost.slug}`}
+              href={`/blog/posts/${previousPost.slug}`}
             >
               <ChevronLeft className="h-4 w-4 text-orange" />
               <div className="text-left">
@@ -64,7 +64,7 @@ export function SeriesNavigation({ currentPost, seriesPosts }: SeriesNavigationP
           {nextPost ? (
             <Link
               className="flex max-w-[45%] items-center gap-2 rounded-lg border border-charcoal/20 p-3 transition-colors hover:bg-charcoal/5"
-              href={`/posts/${nextPost.slug}`}
+              href={`/blog/posts/${nextPost.slug}`}
             >
               <div className="text-right">
                 <p className="text-charcoal/60 text-xs">Next</p>
@@ -88,7 +88,7 @@ export function SeriesNavigation({ currentPost, seriesPosts }: SeriesNavigationP
                     ? "bg-orange/10 font-medium text-orange"
                     : "text-charcoal/80 hover:bg-charcoal/5"
                 }`}
-                href={`/posts/${post.slug}`}
+                href={`/blog/posts/${post.slug}`}
                 key={post.id}
               >
                 <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-charcoal/10 text-xs">

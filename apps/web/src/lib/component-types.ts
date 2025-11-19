@@ -8,42 +8,42 @@ import type { ReactNode } from "react";
 /**
  * Base props that most components should accept
  */
-export interface BaseComponentProps {
+export type BaseComponentProps = {
   /** Additional CSS classes to apply */
   className?: string;
   /** Child components */
   children?: ReactNode;
   /** Test ID for testing purposes */
   testId?: string;
-}
+};
 
 /**
  * Props for components that can be disabled
  */
-export interface DisableableProps {
+export type DisableableProps = {
   /** Whether the component is disabled */
   disabled?: boolean;
-}
+};
 
 /**
  * Props for components that can show loading states
  */
-export interface LoadingProps {
+export type LoadingProps = {
   /** Whether the component is in a loading state */
   isLoading?: boolean;
   /** Loading text or element to display */
   loadingText?: string;
-}
+};
 
 /**
  * Props for components that handle click events
  */
-export interface ClickableProps {
+export type ClickableProps = {
   /** Click event handler */
   onClick?: () => void;
   /** Whether the component is clickable */
   clickable?: boolean;
-}
+};
 
 /**
  * Props for card-like components
@@ -91,7 +91,7 @@ export interface NavigationProps extends BaseComponentProps {
   items?: NavigationItem[];
 }
 
-export interface NavigationItem {
+export type NavigationItem = {
   /** Display label */
   label: string;
   /** Link href */
@@ -100,7 +100,7 @@ export interface NavigationItem {
   external?: boolean;
   /** Icon component */
   icon?: ReactNode;
-}
+};
 
 /**
  * Common size variants for components
@@ -122,18 +122,18 @@ export type ComponentVariant =
 /**
  * Props for components with size variants
  */
-export interface SizedProps {
+export type SizedProps = {
   /** Size variant */
   size?: ComponentSize;
-}
+};
 
 /**
  * Props for components with color variants
  */
-export interface VariantProps {
+export type VariantProps = {
   /** Color variant */
   variant?: ComponentVariant;
-}
+};
 
 /**
  * Utility type to make certain props required

@@ -46,7 +46,9 @@ export function useFocusTrap(isActive: boolean) {
   const lastFocusedElement = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    if (!(isActive && containerRef.current)) return;
+    if (!(isActive && containerRef.current)) {
+      return;
+    }
 
     // Store the currently focused element
     lastFocusedElement.current = document.activeElement as HTMLElement;
@@ -54,7 +56,9 @@ export function useFocusTrap(isActive: boolean) {
     const container = containerRef.current;
     const focusableElements = getFocusableElements(container);
 
-    if (focusableElements.length === 0) return;
+    if (focusableElements.length === 0) {
+      return;
+    }
 
     // Focus the first focusable element
     const firstElement = focusableElements[0];
@@ -63,10 +67,12 @@ export function useFocusTrap(isActive: boolean) {
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== KEYS.TAB) return;
+      if (event.key !== KEYS.TAB) {
+        return;
+      }
 
       const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
+      const lastElement = focusableElements.at(-1);
 
       if (event.shiftKey) {
         // Shift + Tab: focus previous element
@@ -115,7 +121,9 @@ export function useArrowNavigation<T extends HTMLElement>(
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (!isActive || items.length === 0) return;
+      if (!isActive || items.length === 0) {
+        return;
+      }
 
       const isVertical = orientation === "vertical" || orientation === "both";
       const isHorizontal = orientation === "horizontal" || orientation === "both";
@@ -216,7 +224,9 @@ export function useArrowNavigation<T extends HTMLElement>(
  */
 export function useEscapeKey(callback: () => void, isActive = true) {
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive) {
+      return;
+    }
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === KEYS.ESCAPE) {
@@ -237,7 +247,9 @@ export function useClickOutside<T extends HTMLElement>(callback: () => void, isA
   const ref = useRef<T>(null);
 
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive) {
+      return;
+    }
 
     const handleClick = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {

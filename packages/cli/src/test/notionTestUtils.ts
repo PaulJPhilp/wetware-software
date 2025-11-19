@@ -1,4 +1,4 @@
-import * as Effect from "effect/Effect";
+import { Effect } from "effect";
 import type { NotionService } from "../lib/notion";
 
 export function notImplementedEffect<A>(methodName: string): Effect.Effect<A, Error> {

@@ -1,12 +1,10 @@
-import * as Args from "@effect/cli/Args";
-import * as Command from "@effect/cli/Command";
-import * as Options from "@effect/cli/Options";
+import { Args, Command, Options } from "@effect/cli";
 import { FileSystem } from "@effect/platform/FileSystem";
 import * as Console from "effect/Console";
 import * as Effect from "effect/Effect";
 import { pipe } from "effect/Function";
 import * as Option from "effect/Option";
-import * as NodePath from "node:path";
+import { join } from "node:path";
 import { OpenAI } from "../lib/ai";
 import { Notion } from "../lib/notion";
 import { buildSourceEntitySchema } from "../lib/sourceEntitySchema";
@@ -38,9 +36,9 @@ export const sourceCommand = pipe(
   )
 );
 
-export interface RunAddSourceOptions {
+export type RunAddSourceOptions = {
   promptOverride?: string;
-}
+};
 
 export function handler(
   sourceName: string,
@@ -52,7 +50,7 @@ export function handler(
     const ai = yield* OpenAI;
     const notion = yield* Notion;
 
-    const promptPath = NodePath.join(
+    const promptPath = join(
       process.cwd(),
       "packages",
       "cli",

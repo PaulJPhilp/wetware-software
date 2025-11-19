@@ -81,24 +81,36 @@ export function PostCard({
   // Convert maxWidth values to Tailwind classes or custom styles
   const getMaxWidthClasses = () => {
     const classes = [];
-    if (maxWidth.base) classes.push(`max-w-[${maxWidth.base}]`);
-    if (maxWidth.md) classes.push(`md:max-w-[${maxWidth.md}]`);
-    if (maxWidth.lg) classes.push(`lg:max-w-[${maxWidth.lg}]`);
+    if (maxWidth.base) {
+      classes.push(`max-w-[${maxWidth.base}]`);
+    }
+    if (maxWidth.md) {
+      classes.push(`md:max-w-[${maxWidth.md}]`);
+    }
+    if (maxWidth.lg) {
+      classes.push(`lg:max-w-[${maxWidth.lg}]`);
+    }
     return classes.join(" ");
   };
 
   // Generate accessible card label
   const getCardAriaLabel = () => {
-    if (ariaLabel) return ariaLabel;
+    if (ariaLabel) {
+      return ariaLabel;
+    }
 
     const parts = [`Post: ${post.name}`];
-    if (post.focusArea) parts.push(`Focus area: ${post.focusArea}`);
+    if (post.focusArea) {
+      parts.push(`Focus area: ${post.focusArea}`);
+    }
     if (showDescription && post.description) {
       parts.push(
         `Description: ${post.description.slice(0, 100)}${post.description.length > 100 ? "..." : ""}`
       );
     }
-    if (post.publishDate) parts.push(`Published: ${post.publishDate}`);
+    if (post.publishDate) {
+      parts.push(`Published: ${post.publishDate}`);
+    }
 
     return parts.join(". ");
   };
@@ -128,12 +140,16 @@ export function PostCard({
 
   // Generate dynamic classes for line clamping
   const getTitleClampClass = () => {
-    if (titleLineClamp === 0) return "";
+    if (titleLineClamp === 0) {
+      return "";
+    }
     return `line-clamp-${titleLineClamp}`;
   };
 
   const getDescriptionClampClass = () => {
-    if (descriptionLineClamp === 0) return "";
+    if (descriptionLineClamp === 0) {
+      return "";
+    }
     switch (descriptionLineClamp) {
       case 1:
         return "line-clamp-1";

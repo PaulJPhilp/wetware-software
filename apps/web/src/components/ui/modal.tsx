@@ -10,10 +10,10 @@ import { X } from "lucide-react";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 
-interface ModalContextValue {
+type ModalContextValue = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-}
+};
 
 const ModalContext = createContext<ModalContextValue | null>(null);
 
@@ -25,14 +25,14 @@ function useModal() {
   return context;
 }
 
-interface ModalProps {
+type ModalProps = {
   children: ReactNode;
   defaultOpen?: boolean;
   open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-}
+  onOpenChangeAction?: (open: boolean) => void;
+};
 
-export function Modal({ children, defaultOpen = false, open, onOpenChange }: ModalProps) {
+export function Modal({ children, defaultOpen = false, open, onOpenChangeAction }: ModalProps) {
   const [isOpenState, setIsOpenState] = useState(defaultOpen);
   const isControlled = open !== undefined;
   const isOpen = isControlled ? open : isOpenState;
@@ -41,7 +41,7 @@ export function Modal({ children, defaultOpen = false, open, onOpenChange }: Mod
     if (!isControlled) {
       setIsOpenState(newOpen);
     }
-    onOpenChange?.(newOpen);
+    onOpenChangeAction?.(newOpen);
 
     // Announce to screen readers
     announceToScreenReader(newOpen ? "Dialog opened" : "Dialog closed", "assertive");
@@ -62,11 +62,11 @@ export function Modal({ children, defaultOpen = false, open, onOpenChange }: Mod
   return <ModalContext.Provider value={{ isOpen, setIsOpen }}>{children}</ModalContext.Provider>;
 }
 
-interface ModalTriggerProps {
+type ModalTriggerProps = {
   children: ReactNode;
   className?: string;
   asChild?: boolean;
-}
+};
 
 export function ModalTrigger({ children, className, asChild = false }: ModalTriggerProps) {
   const { setIsOpen } = useModal();
@@ -98,13 +98,15 @@ export function ModalTrigger({ children, className, asChild = false }: ModalTrig
   );
 }
 
-interface ModalContentProps {
+type ModalContentProps = {
   children: ReactNode;
   className?: string;
   showCloseButton?: boolean;
   closeOnOverlayClick?: boolean;
   size?: "sm" | "md" | "lg" | "xl" | "full";
-}
+  alignment?: "center" | "top";
+  insetClass?: string;
+};
 
 export function ModalContent({
   children,
@@ -112,6 +114,8 @@ export function ModalContent({
   showCloseButton = true,
   closeOnOverlayClick = true,
   size = "md",
+  alignment = "center",
+  insetClass = "inset-0",
 }: ModalContentProps) {
   const { isOpen, setIsOpen } = useModal();
 
@@ -129,7 +133,9 @@ export function ModalContent({
   };
 
   const handleOverlayKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (!closeOnOverlayClick) return;
+    if (!closeOnOverlayClick) {
+      return;
+    }
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       setIsOpen(false);
@@ -149,8 +155,13 @@ export function ModalContent({
     return null;
   }
 
+  const containerClasses =
+    alignment === "top"
+      ? "items-start justify-center pt-6 pb-6"
+      : "items-center justify-center p-4";
+
   const modalContent = (
-    <div className="fixed inset-0 z-modal-backdrop flex items-center justify-center bg-black/50 p-4">
+    <div className={cn("fixed z-modal-backdrop flex bg-black/40 backdrop-blur-sm", insetClass, containerClasses)}>
       <button
         aria-label="Dismiss dialog"
         className="absolute inset-0"
@@ -192,10 +203,10 @@ export function ModalContent({
   return null;
 }
 
-interface ModalHeaderProps {
+type ModalHeaderProps = {
   children: ReactNode;
   className?: string;
-}
+};
 
 export function ModalHeader({ children, className }: ModalHeaderProps) {
   return (
@@ -205,10 +216,10 @@ export function ModalHeader({ children, className }: ModalHeaderProps) {
   );
 }
 
-interface ModalTitleProps {
+type ModalTitleProps = {
   children: ReactNode;
   className?: string;
-}
+};
 
 import { useId } from "react";
 
@@ -221,28 +232,28 @@ export function ModalTitle({ children, className }: ModalTitleProps) {
   );
 }
 
-interface ModalDescriptionProps {
+type ModalDescriptionProps = {
   children: ReactNode;
   className?: string;
-}
+};
 
 export function ModalDescription({ children, className }: ModalDescriptionProps) {
   return <p className={cn("text-muted-foreground text-sm", className)}>{children}</p>;
 }
 
-interface ModalBodyProps {
+type ModalBodyProps = {
   children: ReactNode;
   className?: string;
-}
+};
 
 export function ModalBody({ children, className }: ModalBodyProps) {
   return <div className={cn("py-4", className)}>{children}</div>;
 }
 
-interface ModalFooterProps {
+type ModalFooterProps = {
   children: ReactNode;
   className?: string;
-}
+};
 
 export function ModalFooter({ children, className }: ModalFooterProps) {
   return (
@@ -252,11 +263,11 @@ export function ModalFooter({ children, className }: ModalFooterProps) {
   );
 }
 
-interface ModalCloseProps {
+type ModalCloseProps = {
   children: ReactNode;
   className?: string;
   asChild?: boolean;
-}
+};
 
 export function ModalClose({ children, className, asChild = false }: ModalCloseProps) {
   const { setIsOpen } = useModal();

@@ -1,13 +1,14 @@
 "use client";
 
+import { EmailContactDialog } from "@/components/EmailContactDialog";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import {
-  KEYS,
-  announceToScreenReader,
-  getFocusableElements,
-  useArrowNavigation,
-  useClickOutside,
-  useEscapeKey,
+    KEYS,
+    announceToScreenReader,
+    getFocusableElements,
+    useArrowNavigation,
+    useClickOutside,
+    useEscapeKey,
 } from "@/lib/keyboard-navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -43,7 +44,9 @@ export function Header() {
 
   useEffect(() => {
     const el = headerRef.current;
-    if (!el) return;
+    if (!el) {
+      return;
+    }
     const setHeightFromEl = () => {
       const newHeight = Math.round(el.offsetHeight || 28);
       setContextHeaderHeight(newHeight);
@@ -116,6 +119,8 @@ export function Header() {
           event.preventDefault();
           setContentOpen(false);
         }
+        break;
+      default:
         break;
     }
   };
@@ -197,7 +202,7 @@ export function Header() {
               >
                 <Link
                   className="block px-1.5 py-1 text-popover-foreground text-xs transition-colors hover:bg-orange/10 hover:text-orange focus:bg-orange/10 focus:text-orange focus:outline-none"
-                  href="/essays"
+                  href="/blog/essays"
                   onClick={() => setContentOpen(false)}
                   role="menuitem"
                   tabIndex={-1}
@@ -206,7 +211,7 @@ export function Header() {
                 </Link>
                 <Link
                   className="block px-1.5 py-1 text-popover-foreground text-xs transition-colors hover:bg-orange/10 hover:text-orange focus:bg-orange/10 focus:text-orange focus:outline-none"
-                  href="/articles"
+                  href="/blog/articles"
                   onClick={() => setContentOpen(false)}
                   role="menuitem"
                   tabIndex={-1}
@@ -216,12 +221,21 @@ export function Header() {
               </div>
             )}
           </div>
-          <Link className={NAV_LINK_CLASS} href="/resources">
+          <Link className={NAV_LINK_CLASS} href="/blog/resources">
             Resources
           </Link>
-          <Link className={NAV_LINK_CLASS} href="/connect">
-            Connect
-          </Link>
+          <EmailContactDialog
+            renderTriggerAction={({ open }) => (
+              <button
+                className={`${NAV_LINK_CLASS} inline border-0 bg-transparent p-0`}
+                onClick={open}
+                type="button"
+              >
+                Connect
+              </button>
+            )}
+            triggerLabel="Connect"
+          />
           <ThemeToggle className="ml-2" />
         </div>
       </nav>

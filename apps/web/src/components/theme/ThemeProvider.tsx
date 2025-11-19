@@ -3,13 +3,13 @@
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { ReactNode } from "react";
 
-export interface ThemeProviderProps {
+export type ThemeProviderProps = {
   attribute?: "class" | "data-theme";
   defaultTheme?: "light" | "dark" | "system";
   enableSystem?: boolean;
   disableTransitionOnChange?: boolean;
   children: ReactNode;
-}
+};
 
 export function ThemeProvider({
   attribute = "class",

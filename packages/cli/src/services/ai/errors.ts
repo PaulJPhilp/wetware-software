@@ -1,8 +1,6 @@
-import * as Effect from "effect/Effect";
-
 /**
  * AI Service Errors
- * 
+ *
  * Custom error types for AI service operations.
  */
 
@@ -10,11 +8,16 @@ import * as Effect from "effect/Effect";
  * Base error class for AI service operations
  */
 export class AIServiceError extends Error {
-  readonly _tag = "AIServiceError";
-  
-  constructor(message: string, public readonly cause?: unknown) {
+  readonly _tag: string = "AIServiceError";
+  readonly cause?: unknown;
+
+  constructor(
+    message: string,
+    cause?: unknown
+  ) {
     super(message);
     this.name = "AIServiceError";
+    this.cause = cause;
   }
 }
 
@@ -22,11 +25,13 @@ export class AIServiceError extends Error {
  * Error thrown when AI API call fails
  */
 export class AICallError extends AIServiceError {
-  readonly _tag = "AICallError";
-  
-  constructor(message: string, public readonly originalError: unknown) {
+  override readonly _tag = "AICallError";
+  readonly originalError: unknown;
+
+  constructor(message: string, originalError?: unknown) {
     super(`AI call failed: ${message}`);
     this.name = "AICallError";
+    this.originalError = originalError;
   }
 }
 
@@ -34,8 +39,8 @@ export class AICallError extends AIServiceError {
  * Error thrown when AI configuration is missing or invalid
  */
 export class AIConfigError extends AIServiceError {
-  readonly _tag = "AIConfigError";
-  
+  override readonly _tag = "AIConfigError";
+
   constructor(message: string) {
     super(`AI configuration error: ${message}`);
     this.name = "AIConfigError";
@@ -46,10 +51,12 @@ export class AIConfigError extends AIServiceError {
  * Error thrown when AI response is invalid or malformed
  */
 export class AIResponseError extends AIServiceError {
-  readonly _tag = "AIResponseError";
-  
-  constructor(message: string, public readonly response?: string) {
+  override readonly _tag = "AIResponseError";
+  readonly response?: string;
+
+  constructor(message: string, response?: string) {
     super(`AI response error: ${message}`);
     this.name = "AIResponseError";
+    this.response = response;
   }
 }

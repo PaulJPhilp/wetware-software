@@ -7,12 +7,12 @@ const variants = {
   success: "border-orange/60 bg-orange/5",
 } as const;
 
-interface CalloutProps {
+type CalloutProps = {
   title?: string;
   children: React.ReactNode;
   variant?: keyof typeof variants;
   className?: string;
-}
+};
 
 export function Callout({ title, children, variant = "info", className }: CalloutProps) {
   return (

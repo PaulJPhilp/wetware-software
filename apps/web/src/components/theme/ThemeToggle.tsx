@@ -5,9 +5,9 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-export interface ThemeToggleProps {
+export type ThemeToggleProps = {
   className?: string;
-}
+};
 
 export function ThemeToggle({ className = "" }: ThemeToggleProps) {
   const { theme, setTheme, systemTheme } = useTheme();

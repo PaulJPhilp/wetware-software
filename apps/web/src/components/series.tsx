@@ -38,7 +38,7 @@ const SimpleArticleList: React.FC<{ articles: Series["articles"] }> = ({ article
           <li key={article.id}>
             <Link
               className="text-muted-foreground transition-colors hover:text-orange hover:underline"
-              href={article.href ?? `/posts/${article.slug}`}
+              href={article.href ?? `/blog/posts/${article.slug}`}
             >
               {article.title}
             </Link>

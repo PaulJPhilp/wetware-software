@@ -7,26 +7,28 @@
 
 import { Modal, ModalBody, ModalContent, ModalHeader, ModalTitle } from "@/components/ui/modal";
 import {
-  KEYS,
-  announceToScreenReader,
-  debounce,
-  useArrowNavigation,
+    KEYS,
+    announceToScreenReader,
+    debounce,
+    useArrowNavigation,
 } from "@/lib/keyboard-navigation";
 import { Calendar, FileText, Search, User } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 
-interface SearchResult {
+type SearchResult = {
   id: string;
   title: string;
   type: "post" | "project" | "series" | "page";
   url: string;
   excerpt?: string;
   date?: string;
-}
+};
 
 // Mock search function - replace with real search implementation
 const mockSearch = async (query: string): Promise<SearchResult[]> => {
-  if (!query.trim()) return [];
+  if (!query.trim()) {
+    return [];
+  }
 
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 300));
@@ -36,7 +38,7 @@ const mockSearch = async (query: string): Promise<SearchResult[]> => {
       id: "1",
       title: `Sample Post about ${query}`,
       type: "post" as const,
-      url: "/posts/sample-post",
+      url: "/blog/posts/sample-post",
       excerpt: `This is a sample post that mentions ${query} in the content...`,
       date: "2024-01-15",
     },
@@ -51,16 +53,16 @@ const mockSearch = async (query: string): Promise<SearchResult[]> => {
       id: "3",
       title: `${query} Series`,
       type: "series" as const,
-      url: "/series/sample-series",
+      url: "/blog/series/sample-series",
       excerpt: `A comprehensive series covering ${query} topics...`,
     },
   ].filter(() => Math.random() > 0.3); // Randomly filter results
 };
 
-interface SearchModalProps {
+type SearchModalProps = {
   isOpen: boolean;
   onCloseAction: () => void;
-}
+};
 
 export function SearchModal({ isOpen, onCloseAction }: SearchModalProps) {
   const [query, setQuery] = useState("");
@@ -168,6 +170,8 @@ export function SearchModal({ isOpen, onCloseAction }: SearchModalProps) {
           onCloseAction();
         }
         break;
+      default:
+        break;
     }
   };
 
@@ -185,7 +189,7 @@ export function SearchModal({ isOpen, onCloseAction }: SearchModalProps) {
   };
 
   return (
-    <Modal onOpenChange={(open) => !open && onCloseAction()} open={isOpen}>
+    <Modal onOpenChangeAction={(open) => !open && onCloseAction()} open={isOpen}>
       <ModalContent closeOnOverlayClick={true} showCloseButton={true} size="lg">
         <ModalHeader>
           <ModalTitle>Search</ModalTitle>

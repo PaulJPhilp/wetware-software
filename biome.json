@@ -12,17 +12,22 @@
       "suspicious": {
         "noExplicitAny": "error",
         "noUnknownAtRules": "off",
-        "useAwait": "error"
+        "useAwait": "error",
+        "noConsole": "off"
       },
       "style": {
         "useImportType": "error",
-        "useFilenamingConvention": "error",
+        "useFilenamingConvention": "off",
         "noNonNullAssertion": "warn",
-        "noUselessElse": "error"
+        "noUselessElse": "error",
+        "noMagicNumbers": "off"
       },
       "complexity": {
         "useSimpleNumberKeys": "error",
         "useOptionalChain": "error"
+      },
+      "performance": {
+        "noBarrelFile": "off"
       }
     }
   },
