@@ -1,0 +1,17 @@
+[build]
+  command = "bun run build:web"
+  functions = "apps/web/.netlify/functions"
+  publish = "apps/web/.next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  BUN_VERSION = "1.2.23"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[dev]
+  command = "bun run dev:web"
+  port = 3000

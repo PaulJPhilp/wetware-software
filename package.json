@@ -2,7 +2,7 @@
   "name": "wetware-software",
   "version": "0.2.0",
   "private": true,
-  "packageManager": "bun@1.2.23",
+  "packageManager": "bun@1.x",
   "workspaces": [
     "apps/*",
     "packages/*",
@@ -23,16 +23,6 @@
     "check": "bunx ultracite check apps/ packages/",
     "bootstrap": "bun install"
   },
-  "dependencies": {
-    "@types/react-syntax-highlighter": "^15.5.13",
-    "effect-env": "^0.3.0",
-    "react-syntax-highlighter": "^16.1.0",
-    "tailwindcss-fluid-typography": "^1.0.5",
-    "vercel": "^48.10.2"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "2.3.0",
-    "typescript": "^5.9.3",
-    "ultracite": "6.0.4"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }
