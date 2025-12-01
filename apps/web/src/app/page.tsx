@@ -14,21 +14,20 @@ export default function Home() {
               <span className="text-primary">Sound AI systems</span> — from prototype to production.
             </h1>
             <p className="text-lg text-muted-foreground">
-              Greybeard engineer. Next‑gen AI stack for real products.
+              I transform early-stage velocity into disciplined, scalable execution.
             </p>
             <p className="text-base text-muted-foreground">
-              TypeScript, Effect, Next.js, Vercel AI SDK — modern AI 
-              systems you can ship, observe, and trust in production.
+              Greybeard engineer with a next‑gen AI stack (TypeScript, Effect), building AI architectures you can trust.
             </p>
           </header>
 
           <div className="relative mt-4">
             <Image
               alt="Stack of coloured bricks labeled TS, Effect, React, Next.js, Tailwind CSS, and AI SDK, representing Paul Philp's modern tech stack."
-              className="h-auto w-full max-w-[200px] md:max-w-[260px] opacity-90"
+              className="h-auto w-full max-w-[300px] md:max-w-[390px] opacity-90"
               height={80}
               loading="lazy"
-              sizes="(min-width: 768px) 260px, 200px"
+              sizes="(min-width: 768px) 390px, 300px"
               src="/images/tech_stack.png"
               width={256}
             />
@@ -47,6 +46,68 @@ export default function Home() {
               width={960}
             />
           </div>
+        </div>
+      </section>
+
+      {/* Philosophy Section */}
+      <section className="mt-16 space-y-8">
+        <header className="max-w-xl space-y-2">
+          <h2 className="font-bold font-sans text-2xl text-foreground sm:text-3xl">My Philosophy: Smooth {">"}{">"}{">"} Chaos</h2>
+          <p className="text-muted-foreground text-sm sm:text-base">
+            I’ve shipped systems long enough to know that initial velocity often leads to hidden complexity. My entire approach is about preventing that.
+          </p>
+        </header>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          <article className="flex flex-col rounded-lg border border-subtle bg-elevated p-5 shadow-xs">
+            <div className="mb-4 aspect-[4/3] overflow-hidden rounded-md border border-subtle bg-background">
+              <Image
+                alt="Team of engineers collaboratively working on a clean, organized whiteboard. Whiteboard header shows 'Smooth' and tasks are clearly prioritized. Desks are tidy, reflecting a calm and productive environment."
+                className="h-full w-full object-cover"
+                height={640}
+                loading="lazy"
+                src="/images/smooth_team.png"
+                width={960}
+              />
+            </div>
+            <div className="space-y-0.5">
+              <h3 className="font-sans font-semibold text-base text-foreground">Smooth: Disciplined Velocity</h3>
+            </div>
+            <p className="mt-3 text-muted-foreground text-sm">
+              This is where speed emerges from clarity, not chaos. Systems are built with explicit contracts, robust error handling, and predictable behavior. AI tools amplify productivity within guardrails, enabling the team to move fast without breaking down.
+            </p>
+            <ul className="mt-4 space-y-1 text-muted-foreground text-sm">
+              <li>• Clear domain models &amp; schemas</li>
+              <li>• Explicit error channels &amp; resource management</li>
+              <li>• AI-assisted dev with validation loops</li>
+              <li>• Observable systems for proactive debugging</li>
+            </ul>
+          </article>
+
+          <article className="flex flex-col rounded-lg border border-border bg-card p-5 shadow-xs">
+            <div className="mb-4 aspect-[4/3] overflow-hidden rounded-md border border-subtle bg-background">
+              <Image
+                alt="Team of engineers stressed and surrounded by clutter, facing a whiteboard with 'CHAOS' written prominently. Desks are messy with energy drink cans, reflecting a high-pressure, unorganized environment."
+                className="h-full w-full object-cover"
+                height={640}
+                loading="lazy"
+                src="/images/chaos_team.png"
+                width={960}
+              />
+            </div>
+            <div className="space-y-0.5">
+              <h3 className="font-sans font-semibold text-base text-foreground">Chaos: Hidden Costs &amp; Burnout</h3>
+            </div>
+            <p className="mt-3 text-muted-foreground text-sm">
+              Without sound architecture, early velocity quickly turns into technical debt. Systems are brittle, debugging is constant, and features are slow to ship. Teams spend more time fighting complexity than building product, leading to burnout and missed deadlines.
+            </p>
+            <ul className="mt-4 space-y-1 text-muted-foreground text-sm">
+              <li>• Ambiguous types &amp; implicit state</li>
+              <li>• Unhandled exceptions &amp; resource leaks</li>
+              <li>• Unverified AI code causing subtle bugs</li>
+              <li>• Reactive firefighting in complex systems</li>
+            </ul>
+          </article>
         </div>
       </section>
 
@@ -80,7 +141,7 @@ export default function Home() {
             </div>
             <p className="mt-3 text-muted-foreground text-sm">
               No surprises. No excuses. Steady delivery from first prototype to
-              production — with clear trade‑offs and no hidden chaos.
+              production — with clear trade‑offs and <strong>preventing the hidden chaos</strong> often found in early systems.
             </p>
           </article>
 
@@ -106,7 +167,7 @@ export default function Home() {
             <p className="mt-3 text-muted-foreground text-sm">
               Senior AI engineering leadership that raises the bar on design,
               code quality, and AI‑assisted workflows — so your whole team
-              ships more, with fewer regressions.
+              ships more, with fewer regressions, <strong>transforming chaotic sprints into predictable progress.</strong>
             </p>
           </article>
 
@@ -131,7 +192,7 @@ export default function Home() {
             </div>
             <p className="mt-3 text-muted-foreground text-sm">
               Effect‑powered backends and modern TypeScript that are quick to
-              launch, observable in production, and predictable under load.
+              launch, observable in production, and predictable under load, <strong>effectively turning chaos into disciplined outcomes.</strong>
             </p>
           </article>
         </div>
