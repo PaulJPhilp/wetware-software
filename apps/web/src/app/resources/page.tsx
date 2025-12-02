@@ -25,7 +25,7 @@ export default function ResourcesPage() {
 
       {/* Resource Categories */}
       {CURATED_RESOURCES.map((category) => (
-        <section className="space-y-6" key={category.title}>
+        <section key={category.title} className="space-y-6">
           <div className="space-y-2">
             <h2 className="font-bold text-2xl text-foreground">{category.title}</h2>
             <p className="text-base text-muted-foreground leading-relaxed">
@@ -35,8 +35,8 @@ export default function ResourcesPage() {
 
           {category.resources.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {category.resources.map((resource, index) => (
-                <ResourceCard key={resource.url} resource={resource} index={index} />
+              {category.resources.map((resource) => (
+                <ResourceCard key={resource.url} resource={resource} />
               ))}
             </div>
           ) : (
@@ -51,3 +51,4 @@ export default function ResourcesPage() {
     </div>
   );
 }
+
