@@ -3,6 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import type { CardComponentProps } from "@/lib/component-types";
 import type { Resource } from "@/lib/data/resourceTypes";
 import { ExternalLink } from "lucide-react";
+import { WhatsNewBadge } from "./WhatsNewBadge";
 
 interface ResourceCardProps extends CardComponentProps {
   /** Resource data to display */
@@ -55,14 +56,19 @@ export function ResourceCard({
           <CardTitle className="line-clamp-2 font-bold text-lg transition-colors duration-200 group-hover:text-primary/90">
             {resource.title}
           </CardTitle>
-          {resource.type && (
-            <Badge
-              className="shrink-0 bg-primary/10 px-2 py-1 text-primary text-xs transition-all duration-200 group-hover:scale-105 group-hover:bg-primary/20"
-              variant="outline"
-            >
-              {resource.type}
-            </Badge>
-          )}
+          <div className="flex items-center gap-2 shrink-0">
+            {resource.githubRepo && (
+              <WhatsNewBadge githubRepo={resource.githubRepo} />
+            )}
+            {resource.type && (
+              <Badge
+                className="bg-primary/10 px-2 py-1 text-primary text-xs transition-all duration-200 group-hover:scale-105 group-hover:bg-primary/20"
+                variant="outline"
+              >
+                {resource.type}
+              </Badge>
+            )}
+          </div>
         </div>
 
         <p className="line-clamp-3 text-muted-foreground text-sm leading-snug transition-colors duration-200 group-hover:text-foreground/80">

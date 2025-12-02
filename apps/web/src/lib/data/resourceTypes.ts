@@ -4,6 +4,8 @@ export interface Resource {
   description: string;
   authorSource?: string;
   type?: string;
+  /** GitHub repository in format "owner/repo" for release checking */
+  githubRepo?: string;
 }
 
 export interface ResourceCategory {

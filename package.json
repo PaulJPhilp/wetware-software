@@ -23,6 +23,8 @@
     "check": "bunx ultracite check apps/ packages/",
     "bootstrap": "bun install"
   },
-  "dependencies": {},
+  "dependencies": {
+    "vercel": "^48.12.0"
+  },
   "devDependencies": {}
 }

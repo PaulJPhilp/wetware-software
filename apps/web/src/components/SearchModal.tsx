@@ -18,7 +18,7 @@ import { useEffect, useId, useRef, useState } from "react";
 type SearchResult = {
   id: string;
   title: string;
-  type: "post" | "project" | "series" | "page";
+  type: "post" | "series" | "page";
   url: string;
   excerpt?: string;
   date?: string;
@@ -44,13 +44,6 @@ const mockSearch = async (query: string): Promise<SearchResult[]> => {
     },
     {
       id: "2",
-      title: `Project: ${query} Implementation`,
-      type: "project" as const,
-      url: "/projects/sample-project",
-      excerpt: `A project that implements ${query} functionality...`,
-    },
-    {
-      id: "3",
       title: `${query} Series`,
       type: "series" as const,
       url: "/blog/series/sample-series",
@@ -179,8 +172,6 @@ export function SearchModal({ isOpen, onCloseAction }: SearchModalProps) {
     switch (type) {
       case "post":
         return <FileText className="h-4 w-4" />;
-      case "project":
-        return <User className="h-4 w-4" />;
       case "series":
         return <Calendar className="h-4 w-4" />;
       default:
@@ -206,7 +197,7 @@ export function SearchModal({ isOpen, onCloseAction }: SearchModalProps) {
                 className="w-full rounded-lg border border-border bg-background py-2 pr-4 pl-10 text-foreground transition-colors placeholder:text-muted-foreground focus:border-orange focus:outline-none focus:ring-2 focus:ring-orange"
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleInputKeyDown}
-                placeholder="Search posts, projects, and series..."
+                placeholder="Search posts, series, and pages..."
                 ref={inputRef}
                 type="text"
                 value={query}
@@ -295,7 +286,7 @@ export function SearchModal({ isOpen, onCloseAction }: SearchModalProps) {
                 <Search className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
                 <h3 className="mb-2 font-medium text-foreground">Start typing to search</h3>
                 <p className="text-muted-foreground text-sm">
-                  Search through posts, projects, series, and pages.
+                  Search through posts, series, and pages.
                 </p>
               </div>
             )}

@@ -31,6 +31,16 @@ export const CURATED_RESOURCES: ResourceCategory[] = [
         type: "Interactive Tool",
         authorSource: "Effect Team",
       },
+      // Libraries
+      {
+        title: "effect-json",
+        url: "https://github.com/PaulJPhilp/effect-json",
+        description:
+          "Type-safe and sound JSON parsing and stringification with Effect. Provides robust error handling for JSON operations with full type safety, schema validation, and composable operations that integrate seamlessly with Effect pipelines.",
+        type: "Library",
+        authorSource: "PaulJPhilp",
+        githubRepo: "PaulJPhilp/effect-json",
+      },
       // Tutorials and Blog Posts
       {
         title: "A Gentle Introduction to Effect TS",
